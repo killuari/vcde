@@ -56,9 +56,10 @@ Wir wollen die Möglichkeiten von Quarto und Web-Technologien nutzen, um die abs
 ::: {.panel-tabset}
 
 ### Eingebettete Shadertoy-Demos
-Wir binden interaktive WebGL-Shader (via Shadertoy) direkt in Quarto ein. Nutzer können so den Einfluss von Parametern testen. Zum Beispiel:
-- Slider zur Anpassung des Radius einer SDF-Kugel.
-- Echtzeit-Veränderung der Position einer Lichtquelle im Shader.
+Wir binden interaktive WebGL-Shader (via Shadertoy) direkt in Quarto ein. Studierende können so den Einfluss von Parametern testen. Zum Beispiel:
+
+* **Slider:** Anpassung des Radius einer SDF-Kugel.
+* **Interaktion:** Echtzeit-Veränderung der Lichtquelle.
 
 :::
 
