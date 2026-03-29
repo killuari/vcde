@@ -25,7 +25,7 @@
     "href": "index.html#geplante-interaktive-inhalte",
     "title": "Konzeptskizze: SDF-Rendering via Ray Marching",
     "section": "3. Geplante interaktive Inhalte",
-    "text": "3. Geplante interaktive Inhalte\nWir wollen die Möglichkeiten von Quarto und Web-Technologien nutzen, um die abstrakte Mathematik greifbar zu machen.\n\nEingebettete Shadertoy-Demos\n\n\nWir binden interaktive WebGL-Shader (via Shadertoy) direkt in Quarto ein. Nutzer können so den Einfluss von Parametern testen. Zum Beispiel: - Slider zur Anpassung des Radius einer SDF-Kugel. - Echtzeit-Veränderung der Position einer Lichtquelle im Shader."
+    "text": "3. Geplante interaktive Inhalte\nWir wollen die Möglichkeiten von Quarto und Web-Technologien nutzen, um die abstrakte Mathematik greifbar zu machen.\n\nEingebettete Shadertoy-Demos\n\n\nWir binden interaktive WebGL-Shader (via Shadertoy) direkt in Quarto ein. Studierende können so den Einfluss von Parametern testen. Zum Beispiel:\n\nSlider: Anpassung des Radius einer SDF-Kugel.\nInteraktion: Echtzeit-Veränderung der Lichtquelle."
   },
   {
     "objectID": "index.html#erste-ideen-für-x",
