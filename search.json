@@ -2,22 +2,36 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "My Awesome Paper Title",
+    "title": "Konzeptskizze: SDF-Rendering via Ray Marching",
     "section": "",
-    "text": "Nach Knuth (1984) ist TeX… This is a single-file Quarto website hosted on GitHub Pages. It combines Markdown text, LaTeX math, and interactive 3D elements.\n\nimport numpy as np\nimport matplotlib.pyplot as plt\n\nr = np.arange(0, 2, 0.01)\ntheta = 2 * np.pi * r\nfig, ax = plt.subplots(\n  subplot_kw = {'projection': 'polar'} \n)\nax.plot(theta, r)\nax.set_rticks([0.5, 1, 1.5, 2])\nax.grid(True)\nplt.show()\n\n\n\n\n\n\n\nFigure 1: A line plot on a polar axis"
+    "text": "NoteAbstimmungstermin\n\n\n\nDieses Dokument dient als Konzeptskizze für den ersten Abstimmungstermin und skizziert den inhaltlichen Fokus, die Grobstruktur, geplante Interaktionen sowie Ideen für die freie Ergänzung (“X”)."
   },
   {
-    "objectID": "index.html#abstract",
-    "href": "index.html#abstract",
-    "title": "My Awesome Paper Title",
-    "section": "",
-    "text": "Nach Knuth (1984) ist TeX… This is a single-file Quarto website hosted on GitHub Pages. It combines Markdown text, LaTeX math, and interactive 3D elements.\n\nimport numpy as np\nimport matplotlib.pyplot as plt\n\nr = np.arange(0, 2, 0.01)\ntheta = 2 * np.pi * r\nfig, ax = plt.subplots(\n  subplot_kw = {'projection': 'polar'} \n)\nax.plot(theta, r)\nax.set_rticks([0.5, 1, 1.5, 2])\nax.grid(True)\nplt.show()\n\n\n\n\n\n\n\nFigure 1: A line plot on a polar axis"
+    "objectID": "index.html#inhaltlicher-fokus",
+    "href": "index.html#inhaltlicher-fokus",
+    "title": "Konzeptskizze: SDF-Rendering via Ray Marching",
+    "section": "1 1. Inhaltlicher Fokus",
+    "text": "1 1. Inhaltlicher Fokus\nDer Fokus unserer Webseite liegt auf dem Paradigmenwechsel bei der Geometrierepräsentation in der Echtzeit-Computergrafik. Anstatt Objekte explizit durch Polygone (Dreiecksnetze) zu definieren, wie es in der klassischen Rasterisierung der Fall ist, betrachten wir die implizite Modellierung mittels Signed Distance Functions (SDFs).\nWir werden erklären, wie diese mathematischen Distanzfelder genutzt werden, um Oberflächen direkt auf der GPU zu berechnen. Den Kern bildet dabei der Ray Marching Algorithmus (speziell Sphere Tracing), der die SDFs abtastet, um Schnittpunkte von Sichtstrahlen mit der Geometrie zu finden. Der Fokus liegt auf der Vermittlung der Intuition hinter der Mathematik und der praktischen Umsetzung in GLSL (Shadertoy)."
   },
   {
-    "objectID": "index.html#methodology",
-    "href": "index.html#methodology",
-    "title": "My Awesome Paper Title",
-    "section": "Methodology",
-    "text": "Methodology\nYou can include complex math like \\[E = mc^2\\] and immediately follow it with an interactive 3D figure to visualize your results."
+    "objectID": "index.html#grobstruktur-der-webseite",
+    "href": "index.html#grobstruktur-der-webseite",
+    "title": "Konzeptskizze: SDF-Rendering via Ray Marching",
+    "section": "2 2. Grobstruktur der Webseite",
+    "text": "2 2. Grobstruktur der Webseite\nDie Webseite wird sich an der geforderten Struktur orientieren und Vorlesungsinhalte (wie das klassische Ray Tracing) als Vergleichsbasis referenzieren.\n\nEinführung: Warum SDFs und Ray Marching?\n\nMotivation: Grenzen polygonaler Netze.\nUse-Cases: Demoszene, Fraktale, volumetrische Effekte (Wolken), moderne Game-Engines (z.B. in der Unreal Engine für bestimmte Berechnungen).\nHistorischer Kontext.\n\nTheoretischer Hintergrund & Methode\n\nWas ist eine SDF? Definition und einfache Beispiele (z.B. Kugel: \\(f(\\mathbf{p}) = \\|\\mathbf{p}\\| - r\\)).\nDer Algorithmus: Wie funktioniert Sphere Tracing? (Schrittweises Herantasten an die Oberfläche ohne diese zu überspringen).\nDer Code: Grundlegender Aufbau eines Fragment Shaders in GLSL.\n\nVerwandte Methoden (Vergleich)\n\nRasterisierung (Vorlesungsbezug) vs. klassisches Ray Tracing (Vorlesungsbezug) vs. Ray Marching.\nVergleichstabelle: Vor- und Nachteile (z.B. Performance, Speicherverbrauch, Handhabung von komplexer Topologie).\n\nInteraktive Inhalte\n\nSiehe Abschnitt 3 dieser Konzeptskizze.\n\nX - [Titel der gewählten Ergänzung]\n\nSiehe Abschnitt 4 dieser Konzeptskizze.\n\nFazit"
+  },
+  {
+    "objectID": "index.html#geplante-interaktive-inhalte",
+    "href": "index.html#geplante-interaktive-inhalte",
+    "title": "Konzeptskizze: SDF-Rendering via Ray Marching",
+    "section": "3 3. Geplante interaktive Inhalte",
+    "text": "3 3. Geplante interaktive Inhalte\nWir wollen die Möglichkeiten von Quarto und Web-Technologien nutzen, um die abstrakte Mathematik greifbar zu machen.\n\nEingebettete Shadertoy-Demos\n\n\nWir binden interaktive WebGL-Shader (via Shadertoy) direkt in Quarto ein. Nutzer können so den Einfluss von Parametern testen. Zum Beispiel: - Slider zur Anpassung des Radius einer SDF-Kugel. - Echtzeit-Veränderung der Position einer Lichtquelle im Shader."
+  },
+  {
+    "objectID": "index.html#erste-ideen-für-x",
+    "href": "index.html#erste-ideen-für-x",
+    "title": "Konzeptskizze: SDF-Rendering via Ray Marching",
+    "section": "4 4. Erste Ideen für “X”",
+    "text": "4 4. Erste Ideen für “X”\n\nIdee 1: Constructive Solid Geometry (CSG)\n\nWarum: Es zeigt die größte Stärke von SDFs. Durch simple mathematische Operationen (Minimum, Maximum, Subtraktion) können aus einfachen Grundformen komplexe Objekte (z.B. ein ausgehöhlter Würfel) gebaut werden.\nUmsetzung: Ein interaktiver Block, der Union, Intersection und Difference visualisiert.\n\nIdee 2: “Gratis” Effekte: Soft Shadows & Ambient Occlusion\n\nWarum: Bei polygonalem Rendering sind weiche Schatten schwer. Beim Ray Marching von SDFs bekommt man durch das Wissen über die Distanz zur nächsten Oberfläche Effekte wie Soft Shadows fast geschenkt.\nUmsetzung: Mathematische Erklärung des Tricks und ein Vorher/Nachher-Shader-Vergleich.\n\nIdee 3: 3D Fraktale (Das Mandelbulb)\n\nWarum: Ein perfektes Beispiel für Geometrie mit unendlichem Detailgrad, die mit Polygonen absolut unmöglich zu rendern wäre.\nUmsetzung: Kurzer Exkurs in die Mathematik eines 3D-Fraktals und ein Shadertoy-Embed zum selbst Erkunden."
   }
 ]
