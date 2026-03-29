@@ -1,78 +1,75 @@
 ---
-title: "My Awesome Paper Title"
-author: "Your Name"
-format:
+title: "Konzeptskizze: SDF-Rendering via Ray Marching"
+author: "Luis Kahles, Tobias Jäkel, Moritz Potthoff"
+format: 
   html:
+    toc: true
+    toc-depth: 2
+    number-sections: true
     theme: cosmo
-jupyter: python3
-bibliography: references.bib
 ---
 
-## Abstract
-Nach @knuth1984 ist TeX...
-This is a single-file Quarto website hosted on GitHub Pages. It combines Markdown text, LaTeX math, and interactive 3D elements.
+::: {.callout-note}
+## Abstimmungstermin
+Dieses Dokument dient als Konzeptskizze für den ersten Abstimmungstermin und skizziert den inhaltlichen Fokus, die Grobstruktur, geplante Interaktionen sowie Ideen für die freie Ergänzung ("X").
+:::
 
-```{python}
-#| label: fig-polar
-#| fig-cap: "A line plot on a polar axis"
+## 1. Inhaltlicher Fokus
 
-import numpy as np
-import matplotlib.pyplot as plt
+Der Fokus unserer Webseite liegt auf dem Paradigmenwechsel bei der Geometrierepräsentation in der Echtzeit-Computergrafik. Anstatt Objekte explizit durch Polygone (Dreiecksnetze) zu definieren, wie es in der klassischen Rasterisierung der Fall ist, betrachten wir die **implizite Modellierung mittels Signed Distance Functions (SDFs)**. 
 
-r = np.arange(0, 2, 0.01)
-theta = 2 * np.pi * r
-fig, ax = plt.subplots(
-  subplot_kw = {'projection': 'polar'} 
-)
-ax.plot(theta, r)
-ax.set_rticks([0.5, 1, 1.5, 2])
-ax.grid(True)
-plt.show()
-```
+Wir werden erklären, wie diese mathematischen Distanzfelder genutzt werden, um Oberflächen direkt auf der GPU zu berechnen. Den Kern bildet dabei der **Ray Marching Algorithmus** (speziell *Sphere Tracing*), der die SDFs abtastet, um Schnittpunkte von Sichtstrahlen mit der Geometrie zu finden. Der Fokus liegt auf der Vermittlung der Intuition hinter der Mathematik und der praktischen Umsetzung in GLSL (Shadertoy).
 
-## Methodology
-You can include complex math like $$E = mc^2$$ and immediately follow it with an interactive 3D figure to visualize your results.
 
-```{=html}
+## 2. Grobstruktur der Webseite
 
-<script src="https://cdn.babylonjs.com/babylon.js"></script>
+Die Webseite wird sich an der geforderten Struktur orientieren und Vorlesungsinhalte (wie das klassische Ray Tracing) als Vergleichsbasis referenzieren.
 
-<div style="width: 100%; height: 400px; position: relative; margin: 20px 0;">
-    <canvas id="renderCanvas" style="width: 100%; height: 100%; touch-action: none; border: 1px solid #ddd; display: block; border-radius: 8px;"></canvas>
-</div>
+1. **Einführung: Warum SDFs und Ray Marching?**
+   - Motivation: Grenzen polygonaler Netze.
+   - Use-Cases: Demoszene, Fraktale, volumetrische Effekte (Wolken), moderne Game-Engines (z.B. in der Unreal Engine für bestimmte Berechnungen).
+   - Historischer Kontext.
 
-<script>
-    window.addEventListener('DOMContentLoaded', function() {
-        const canvas = document.getElementById("renderCanvas");
-        if (!canvas) return;
+2. **Theoretischer Hintergrund & Methode**
+   - **Was ist eine SDF?** Definition und einfache Beispiele (z.B. Kugel: $f(\mathbf{p}) = \|\mathbf{p}\| - r$).
+   - **Der Algorithmus:** Wie funktioniert Sphere Tracing? (Schrittweises Herantasten an die Oberfläche ohne diese zu überspringen).
+   - **Der Code:** Grundlegender Aufbau eines Fragment Shaders in GLSL.
 
-        const engine = new BABYLON.Engine(canvas, true);
+3. **Verwandte Methoden (Vergleich)**
+   - Rasterisierung (Vorlesungsbezug) vs. klassisches Ray Tracing (Vorlesungsbezug) vs. Ray Marching.
+   - Vergleichstabelle: Vor- und Nachteile (z.B. Performance, Speicherverbrauch, Handhabung von komplexer Topologie).
 
-        const createScene = function () {
-            const scene = new BABYLON.Scene(engine);
-            scene.clearColor = new BABYLON.Color3(0.95, 0.95, 0.95);
+4. **Interaktive Inhalte**
+   - *Siehe Abschnitt 3 dieser Konzeptskizze.*
 
-            const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI/4, Math.PI/3, 5, BABYLON.Vector3.Zero(), scene);
-            camera.attachControl(canvas, true);
+5. **X - [Titel der gewählten Ergänzung]**
+   - *Siehe Abschnitt 4 dieser Konzeptskizze.*
 
-            const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
-            
-            const box = BABYLON.MeshBuilder.CreateBox("box", {size: 1.5}, scene);
-            const material = new BABYLON.StandardMaterial("mat", scene);
-            material.diffuseColor = new BABYLON.Color3(0.1, 0.4, 0.8);
-            box.material = material;
+6. **Fazit**
 
-            scene.registerBeforeRender(function () {
-                box.rotation.y += 0.01;
-                box.rotation.x += 0.005;
-            });
 
-            return scene;
-        };
+## 3. Geplante interaktive Inhalte
 
-        const scene = createScene();
-        engine.runRenderLoop(() => scene.render());
-        window.addEventListener("resize", () => engine.resize());
-    });
-</script>
-```
+Wir wollen die Möglichkeiten von Quarto und Web-Technologien nutzen, um die abstrakte Mathematik greifbar zu machen.
+
+::: {.panel-tabset}
+
+### Eingebettete Shadertoy-Demos
+Wir binden interaktive WebGL-Shader (via Shadertoy) direkt in Quarto ein. Nutzer können so den Einfluss von Parametern testen. Zum Beispiel:
+- Slider zur Anpassung des Radius einer SDF-Kugel.
+- Echtzeit-Veränderung der Position einer Lichtquelle im Shader.
+
+:::
+
+
+## 4. Erste Ideen für "X"
+
+* **Idee 1: Constructive Solid Geometry (CSG)**
+    * *Warum:* Es zeigt die größte Stärke von SDFs. Durch simple mathematische Operationen (Minimum, Maximum, Subtraktion) können aus einfachen Grundformen komplexe Objekte (z.B. ein ausgehöhlter Würfel) gebaut werden.
+    * *Umsetzung:* Ein interaktiver Block, der `Union`, `Intersection` und `Difference` visualisiert.
+* **Idee 2: "Gratis" Effekte: Soft Shadows & Ambient Occlusion**
+    * *Warum:* Bei polygonalem Rendering sind weiche Schatten schwer. Beim Ray Marching von SDFs bekommt man durch das Wissen über die Distanz zur nächsten Oberfläche Effekte wie Soft Shadows fast geschenkt.
+    * *Umsetzung:* Mathematische Erklärung des Tricks und ein Vorher/Nachher-Shader-Vergleich.
+* **Idee 3: 3D Fraktale (Das Mandelbulb)**
+    * *Warum:* Ein perfektes Beispiel für Geometrie mit unendlichem Detailgrad, die mit Polygonen absolut unmöglich zu rendern wäre.
+    * *Umsetzung:* Kurzer Exkurs in die Mathematik eines 3D-Fraktals und ein Shadertoy-Embed zum selbst Erkunden.
