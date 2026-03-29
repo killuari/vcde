@@ -3,6 +3,8 @@ title: "Konzeptskizze: SDF-Rendering via Ray Marching"
 author: "Luis Kahles, Tobias Jäkel, Moritz Potthoff"
 format: 
   html:
+    toc: true
+    toc-depth: 2
     theme: cosmo
 jupyter: python3
 bibliography: references.bib
