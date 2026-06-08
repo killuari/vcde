@@ -65,6 +65,152 @@ Wir binden interaktive WebGL-Shader (via Shadertoy) direkt in Quarto ein. Studie
 :::
 
 
+## Interaktive SDF-Demo: Kugel
+
+```{=html}
+<script src="https://cdn.jsdelivr.net/npm/glslCanvas@0.2.6/dist/GlslCanvas.min.js"></script>
+
+<!-- Layout: Canvas links, Slider rechts -->
+<div style="display:flex; flex-wrap:wrap; gap:2rem; align-items:flex-start; margin:1.5rem 0;">
+
+  <canvas id="sphere-canvas" width="450" height="450"
+          style="border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,0.4);">
+  </canvas>
+
+  <div style="display:flex; flex-direction:column; gap:1.8rem; min-width:220px; padding-top:0.5rem;">
+
+    <div>
+      <label><strong> Kugelradius</strong>: <span id="val-radius">0.60</span></label><br>
+      <input type="range" id="sl-radius" min="0.1" max="1.3" step="0.01" value="0.6"
+             style="width:100%; margin-top:0.4rem;">
+    </div>
+
+    <div>
+      <label><strong> Lichthöhe</strong>: <span id="val-light">3.0</span></label><br>
+      <input type="range" id="sl-light" min="0.5" max="6.0" step="0.1" value="3.0"
+             style="width:100%; margin-top:0.4rem;">
+    </div>
+
+    <div>
+      <label><strong> Glanzgrad</strong>: <span id="val-shine">32</span></label><br>
+      <input type="range" id="sl-shine" min="2" max="256" step="1" value="32"
+             style="width:100%; margin-top:0.4rem;">
+    </div>
+
+  </div>
+</div>
+
+<!-- GLSL Shader (wird nicht als JS ausgeführt) -->
+<script id="frag-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+uniform vec2  u_resolution;
+uniform float u_time;
+uniform float u_radius;        // Slider 1
+uniform float u_light_height;  // Slider 2
+uniform float u_shininess;     // Slider 3
+
+// --- SDF ---
+float sdSphere(vec3 p, float r) {
+    return length(p) - r;
+}
+
+float map(vec3 p) {
+    return sdSphere(p, u_radius);
+}
+
+// Normale via zentrale Differenzen
+vec3 calcNormal(vec3 p) {
+    vec2 e = vec2(0.001, 0.0);
+    return normalize(vec3(
+        map(p + e.xyy) - map(p - e.xyy),
+        map(p + e.yxy) - map(p - e.yxy),
+        map(p + e.yyx) - map(p - e.yyx)
+    ));
+}
+
+// --- Sphere Tracing ---
+float rayMarch(vec3 ro, vec3 rd) {
+    float t = 0.0;
+    for (int i = 0; i < 100; i++) {
+        float d = map(ro + t * rd);
+        if (d < 0.001) return t;   // Treffer
+        if (t > 20.0)  break;      // Zu weit weg
+        t += d;                    // Sicherer Schritt
+    }
+    return -1.0; // kein Treffer
+}
+
+void main() {
+    // UV: (-0.5 .. 0.5) mit korrektem Seitenverhältnis
+    vec2 uv = (gl_FragCoord.xy - 0.5 * u_resolution) / u_resolution.y;
+
+    // Kamera
+    vec3 ro = vec3(0.0, 0.0, 3.0);
+    vec3 rd = normalize(vec3(uv, -1.5));
+
+    // Hintergrundfarbe (dunkles Blaugrau)
+    vec3 col = vec3(0.05, 0.07, 0.13);
+
+    float t = rayMarch(ro, rd);
+
+    if (t > 0.0) {
+        vec3 pos = ro + t * rd;
+        vec3 nor = calcNormal(pos);
+
+        // Lichtquelle von oben
+        vec3 lightPos = vec3(1.0, u_light_height, 2.5);
+        vec3 lightDir = normalize(lightPos - pos);
+        vec3 viewDir  = normalize(ro - pos);
+        vec3 halfDir  = normalize(lightDir + viewDir); // Blinn-Phong
+
+        // Beleuchtungskomponenten
+        float amb  = 0.12;
+        float diff = max(dot(nor, lightDir), 0.0);
+        float spec = pow(max(dot(nor, halfDir), 0.0), u_shininess);
+
+        // Hellblaue Kugelfarbe
+        vec3 baseColor = vec3(0.35, 0.72, 1.0);
+
+        col  = baseColor * (amb + diff * 0.88);
+        col += vec3(1.0) * spec * 0.65;
+    }
+
+    // Gamma-Korrektur
+    col = pow(clamp(col, 0.0, 1.0), vec3(0.4545));
+    gl_FragColor = vec4(col, 1.0);
+}
+</script>
+
+<script>
+(function () {
+    const canvas  = document.getElementById('sphere-canvas');
+    const shader  = document.getElementById('frag-shader').textContent;
+    const sandbox = new GlslCanvas(canvas);
+    sandbox.load(shader);
+
+    // Startwerte setzen
+    sandbox.setUniform('u_radius',       0.6);
+    sandbox.setUniform('u_light_height', 3.0);
+    sandbox.setUniform('u_shininess',    32.0);
+
+    // Slider verbinden
+    function bind(sliderId, displayId, uniformName, decimals) {
+        document.getElementById(sliderId).addEventListener('input', function () {
+            const v = parseFloat(this.value);
+            sandbox.setUniform(uniformName, v);
+            document.getElementById(displayId).textContent = v.toFixed(decimals);
+        });
+    }
+
+    bind('sl-radius', 'val-radius', 'u_radius',       2);
+    bind('sl-light',  'val-light',  'u_light_height', 1);
+    bind('sl-shine',  'val-shine',  'u_shininess',    0);
+})();
+</script>
+```
+
+
 ## 4. Erste Ideen für "X"
 
 * **Idee 1: Constructive Solid Geometry (CSG)**
