@@ -1,6 +1,11 @@
 ---
 title: "Theoretischer Hintergrund & Methoden"
 author: "Tobias Jäkel"
+format: 
+  html:
+    toc: true
+    toc-depth: 2
+    theme: default
 ---
 
 # Signed Distance Functions
@@ -203,5 +208,3 @@ Distance Functions, Inigo Quilez, https://iquilezles.org/articles/distfunctions/
 Ray Marching, Inigo Quilez, https://iquilezles.org/articles/raymarchingdf/
 
 Ray Marching and Signed Distance Functions, Jamie Wong, https://jamie-wong.com/2016/07/15/ray-marching-signed-distance-functions/
-
-Signed Distance Function, Wikipedia, https://en.wikipedia.org/wiki/Signed_distance_function
