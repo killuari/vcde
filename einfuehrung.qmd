@@ -1,0 +1,89 @@
+---
+title: "Einführung"
+---
+
+# Einführung
+
+## Motivation
+
+### Klassische Darstellung von 3D-Geometrie
+
+In der Computergrafik werden dreidimensionale Objekte meist durch polygonale Netze beschrieben. Dabei wird die Oberfläche eines Modells durch eine Vielzahl kleiner Dreiecke approximiert. Diese Form der Geometrierepräsentation hat sich über viele Jahrzehnte hinweg etabliert und wird von moderner Grafik-Hardware direkt unterstützt. Aus diesem Grund bilden Polygonnetze die Grundlage nahezu aller heutigen Echtzeit-Rendering-Verfahren.
+
+Ein wesentlicher Vorteil polygonaler Netze liegt in ihrer Flexibilität. Sowohl einfache geometrische Körper als auch komplexe Modelle mit Millionen von Polygonen lassen sich auf diese Weise darstellen. Darüber hinaus existiert ein umfangreiches Ökosystem aus Modellierungswerkzeugen, Dateiformaten und Rendering-Pipelines, das auf dieser Repräsentation basiert.
+
+### Grenzen polygonaler Netze
+
+Trotz ihrer weiten Verbreitung sind Polygonnetze nicht für jede Anwendung die ideale Lösung. Da die Geometrie explizit durch Vertices und Dreiecke beschrieben wird, steigt der Speicherbedarf mit zunehmendem Detailgrad eines Modells. Besonders bei sehr komplexen oder fein strukturierten Oberflächen kann dies zu großen Datenmengen führen.
+
+Auch die Modellierung mathematisch definierter Formen oder prozedural erzeugter Szenen gestaltet sich häufig aufwendiger. Sollen beispielsweise mehrere Grundkörper miteinander kombiniert oder komplexe geometrische Strukturen erzeugt werden, müssen die zugrunde liegenden Meshes entsprechend angepasst werden. Obwohl hierfür etablierte Verfahren existieren, kann die Verarbeitung schnell komplex werden.
+
+Darüber hinaus beschreibt ein Polygonnetz ausschließlich die Oberfläche eines Objekts. Informationen über den umgebenden Raum, beispielsweise Abstände zu Oberflächen oder die Zugehörigkeit eines Punktes zum Inneren oder Äußeren eines Objekts, sind nicht unmittelbar verfügbar und müssen zusätzlich berechnet werden.
+
+### Alternative Geometrierepräsentationen
+
+Um einige dieser Einschränkungen zu umgehen, wurden verschiedene alternative Methoden zur Beschreibung von Geometrie entwickelt. Dazu zählen unter anderem Voxeldarstellungen, Punktwolken sowie implizite Oberflächen. Im Gegensatz zu Polygonnetzen wird die Geometrie hierbei nicht zwangsläufig durch eine Menge von Dreiecken beschrieben.
+
+Signed Distance Functions (SDFs) gehören zu den impliziten Geometrierepräsentationen. Anstatt die Oberfläche eines Objekts direkt zu speichern, wird eine Funktion definiert, die jedem Punkt im Raum einen signierten Abstand zur nächstgelegenen Oberfläche zuordnet. Die eigentliche Geometrie ergibt sich somit indirekt aus dieser Funktion.
+
+Da bei diesem Ansatz keine expliziten Dreiecke vorhanden sind, können klassische Rasterisierungsverfahren nicht unmittelbar angewendet werden. Stattdessen kommen häufig Ray-Marching-Verfahren zum Einsatz. Dabei werden Strahlen schrittweise durch die Szene verfolgt, bis eine Oberfläche gefunden wird. Die in der Signed Distance Function enthaltenen Distanzinformationen ermöglichen dabei eine effiziente Bestimmung der nächsten Schrittweite.
+
+Die Kombination aus Signed Distance Functions und Ray Marching hat sich insbesondere für prozedurale Szenen, mathematische Modelle und experimentelle Rendering-Techniken als interessante Alternative zu klassischen Polygonnetzen etabliert.
+
+## Typische Anwendungsgebiete
+
+### Prozedurale Modellierung
+
+Ein häufiges Einsatzgebiet von Signed Distance Functions ist die prozedurale Erzeugung von Geometrie. Anstatt Objekte manuell zu modellieren und als Polygonnetz zu speichern, werden Formen durch mathematische Funktionen beschrieben und zur Laufzeit generiert. Dadurch lassen sich komplexe Szenen und Modelle mit vergleichsweise wenig Speicheraufwand erzeugen. Typische Beispiele sind Landschaften, Höhlensysteme oder abstrakte, algorithmisch erzeugte Welten und Sci-Fi-Strukturen.
+
+[Beispielbild.png]
+
+### Constructive Solid Geometry
+
+Signed Distance Functions eignen sich besonders gut für Constructive Solid Geometry (CSG). Dabei werden komplexe Objekte aus einfachen Grundkörpern wie Kugeln, Würfeln oder Zylindern zusammengesetzt. Operationen wie Vereinigung, Schnittmenge oder Differenz können direkt auf den zugrunde liegenden Distanzfunktionen formuliert werden. Dies ermöglicht eine flexible und oft sehr elegante Modellierung komplexer Geometrien.
+
+[Beispielbild.png]
+
+### Fraktale und mathematische Strukturen
+
+Ein weiterer Anwendungsbereich ist die Darstellung mathematisch definierter Objekte und Fraktale. Bekannte Beispiele sind die Mandelbulb oder die Mandelbox. Solche Strukturen weisen häufig eine sehr hohe geometrische Komplexität und feine Details auf, die mit klassischen Polygonnetzen nur schwer darstellbar wären. Durch die mathematische Beschreibung der Geometrie eignen sich SDF-basierte Verfahren besonders gut für die Visualisierung solcher Formen.
+
+[Beispielbild.png]
+
+### Echtzeit-Rendering und Demo-Szene
+
+Große Bekanntheit erlangten Signed Distance Functions durch die Demo-Szene und moderne Shader-Programmierung. Da sich komplexe Geometrie direkt im Shader beschreiben lässt, können beeindruckende Szenen mit vergleichsweise wenig Programmcode erzeugt werden. Besonders bei sogenannten 4k- oder 64k-Intros, bei denen die gesamte Anwendung nur wenige Kilobyte groß sein darf, bieten SDFs erhebliche Vorteile gegenüber gespeicherter Polygongeometrie.
+
+[Beispielbild.png]
+
+### Forschung und moderne Anwendungen
+
+Auch in aktuellen Forschungsgebieten spielen Distanzfunktionen eine wichtige Rolle. Sie werden unter anderem für Kollisionsabfragen, Robotik, 3D-Rekonstruktion und Verfahren des Neural Renderings eingesetzt. Insbesondere die Repräsentation von Geometrie durch Distanzfelder hat in den letzten Jahren neue Ansätze zur Erfassung und Rekonstruktion realer Szenen ermöglicht.
+
+[Beispielbild.png]
+
+### Einordnung
+
+Trotz ihrer vielseitigen Einsatzmöglichkeiten haben Signed Distance Functions klassische Polygonnetze bislang nicht ersetzt. Moderne Grafik-Hardware ist weiterhin stark auf die Verarbeitung polygonaler Geometrie optimiert, weshalb Meshes in den meisten Echtzeit-Anwendungen dominieren. SDFs werden daher vor allem in Bereichen eingesetzt, in denen ihre mathematische Beschreibung und die daraus resultierende Flexibilität besondere Vorteile bieten.
+
+## Historischer Überblick
+
+Die Idee, Geometrie durch mathematische Funktionen zu beschreiben, reicht deutlich weiter zurück als moderne Echtzeit-Rendering-Verfahren. Bereits in frühen Arbeiten zu impliziten Oberflächen wurden Formen nicht durch Polygonnetze dargestellt, sondern durch Funktionen definiert, deren Nullstellen die Oberfläche eines Objekts beschreiben. Solche Ansätze wurden vor allem im wissenschaftlichen Umfeld und in der geometrischen Modellierung untersucht.
+
+Im Laufe der Zeit entstand das Konzept von Distanzfunktionen, bei denen nicht nur die Lage einer Oberfläche, sondern auch der Abstand zu ihr beschrieben wird. Daraus entwickelten sich schließlich Signed Distance Functions, die zusätzlich zwischen Punkten innerhalb und außerhalb eines Objekts unterscheiden können. Diese Repräsentation erwies sich als besonders nützlich, da sie neben der Beschreibung der Geometrie auch Informationen über den umgebenden Raum bereitstellt.
+
+Ein entscheidender Meilenstein folgte 1995 mit der Veröffentlichung des Sphere-Tracing-Verfahrens durch John C. Hart. Die grundlegende Idee bestand darin, die in einer Signed Distance Function enthaltenen Abstandsinformationen zu nutzen, um Strahlen effizient durch eine Szene zu verfolgen. Im Gegensatz zu klassischen Verfahren kann dabei die Schrittweite eines Strahls direkt aus der Distanz zur nächsten Oberfläche abgeleitet werden.
+
+Die Kombination aus Signed Distance Functions und Sphere Tracing bildet bis heute die theoretische Grundlage vieler Ray-Marching-Verfahren und stellt einen wichtigen Entwicklungsschritt im Bereich impliziter Geometrierepräsentationen dar.
+
+## Quellenverzeichnis
+
+Sphere Tracing: A Geometric Method for the Antialiased Ray Tracing of Implicit Surfaces, John C. Hart, 1995, https://www.researchgate.net/publication/2792108_Sphere_Tracing_A_Geometric_Method_for_the_Antialiased_Ray_Tracing_of_Implicit_Surfaces
+
+Distance Functions, Inigo Quilez, https://iquilezles.org/articles/distfunctions/
+
+Ray Marching, Inigo Quilez, https://iquilezles.org/articles/raymarchingdf/
+
+Ray Marching and Signed Distance Functions, Jamie Wong, https://jamie-wong.com/2016/07/15/ray-marching-signed-distance-functions/
+
+Signed Distance Function, Wikipedia, https://en.wikipedia.org/wiki/Signed_distance_function
