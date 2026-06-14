@@ -65,7 +65,11 @@ Wir binden interaktive WebGL-Shader (via Shadertoy) direkt in Quarto ein. Studie
 :::
 
 
-## Interaktive SDF-Demo: Kugel
+## Interaktive Demos
+
+::: {.panel-tabset}
+
+## Demo 1
 
 ```{=html}
 <script src="https://cdn.jsdelivr.net/npm/glslCanvas@0.2.6/dist/GlslCanvas.min.js"></script>
@@ -73,35 +77,35 @@ Wir binden interaktive WebGL-Shader (via Shadertoy) direkt in Quarto ein. Studie
 <!-- Layout: Canvas links, Slider rechts -->
 <div style="display:flex; flex-wrap:wrap; gap:2rem; align-items:flex-start; margin:1.5rem 0;">
 
-  <canvas id="sphere-canvas" width="450" height="450"
+  <canvas id="demo1-canvas" width="450" height="450"
           style="border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,0.4);">
   </canvas>
 
   <div style="display:flex; flex-direction:column; gap:1.8rem; min-width:220px; padding-top:0.5rem;">
 
     <div>
-      <label><strong> Kugelradius</strong>: <span id="val-radius">0.60</span></label><br>
-      <input type="range" id="sl-radius" min="0.1" max="1.3" step="0.01" value="0.6"
+      <label><strong> Kugelradius</strong>: <span id="demo1-val-radius">0.60</span></label><br>
+      <input type="range" id="demo1-sl-radius" min="0.1" max="1.3" step="0.01" value="0.6"
              style="width:100%; margin-top:0.4rem;">
     </div>
 
     <div>
-      <label><strong> Lichthöhe</strong>: <span id="val-light">3.0</span></label><br>
-      <input type="range" id="sl-light" min="0.5" max="6.0" step="0.1" value="3.0"
+      <label><strong> Lichthöhe</strong>: <span id="demo1-val-light">3.0</span></label><br>
+      <input type="range" id="demo1-sl-light" min="0.5" max="6.0" step="0.1" value="3.0"
              style="width:100%; margin-top:0.4rem;">
     </div>
 
     <div>
-      <label><strong> Glanzgrad</strong>: <span id="val-shine">32</span></label><br>
-      <input type="range" id="sl-shine" min="2" max="256" step="1" value="32"
+      <label><strong> Glanzgrad</strong>: <span id="demo1-val-shine">32</span></label><br>
+      <input type="range" id="demo1-sl-shine" min="2" max="256" step="1" value="32"
              style="width:100%; margin-top:0.4rem;">
     </div>
 
   </div>
 </div>
 
-<!-- GLSL Shader (wird nicht als JS ausgeführt) -->
-<script id="frag-shader" type="x-shader/x-fragment">
+<!-- GLSL Shader -->
+<script id="demo1-frag-shader" type="x-shader/x-fragment">
 precision mediump float;
 
 uniform vec2  u_resolution;
@@ -184,8 +188,8 @@ void main() {
 
 <script>
 (function () {
-    const canvas  = document.getElementById('sphere-canvas');
-    const shader  = document.getElementById('frag-shader').textContent;
+    const canvas  = document.getElementById('demo1-canvas');
+    const shader  = document.getElementById('demo1-frag-shader').textContent;
     const sandbox = new GlslCanvas(canvas);
     sandbox.load(shader);
 
@@ -203,12 +207,227 @@ void main() {
         });
     }
 
-    bind('sl-radius', 'val-radius', 'u_radius',       2);
-    bind('sl-light',  'val-light',  'u_light_height', 1);
-    bind('sl-shine',  'val-shine',  'u_shininess',    0);
+    bind('demo1-sl-radius', 'demo1-val-radius', 'u_radius',       2);
+    bind('demo1-sl-light',  'demo1-val-light',  'u_light_height', 1);
+    bind('demo1-sl-shine',  'demo1-val-shine',  'u_shininess',    0);
 })();
 </script>
 ```
+
+## SDF-Distanzfeld (2D Heatmap)
+
+```{=html}
+<!-- Form-Auswahl und Canvas-Layout -->
+<div style="margin:1.5rem 0;">
+
+  <div style="display:flex; gap:0.5rem; margin-bottom:1.2rem; flex-wrap:wrap; align-items:center;">
+    <strong>Form:</strong>
+    <button id="demo2-btn-circle"
+            onclick="demo2SetShape('circle')"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #4a90d9;
+                   background:#4a90d9; color:#fff; cursor:pointer; font-size:0.9rem;">Kreis</button>
+    <button id="demo2-btn-rect"
+            onclick="demo2SetShape('rect')"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                   background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Rechteck</button>
+    <button id="demo2-btn-capsule"
+            onclick="demo2SetShape('capsule')"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                   background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Kapsel</button>
+  </div>
+
+  <div style="display:flex; flex-wrap:wrap; gap:2rem; align-items:flex-start;">
+
+    <canvas id="demo2-canvas" width="400" height="400"
+            style="border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,0.25); max-width:100%;">
+    </canvas>
+
+    <div style="display:flex; flex-direction:column; gap:1.5rem; min-width:210px; padding-top:0.5rem;">
+
+      <div>
+        <label><strong id="demo2-label-p1">Radius</strong>: <span id="demo2-val-p1">80</span> px</label><br>
+        <input type="range" id="demo2-sl-p1" min="15" max="170" step="1" value="80"
+               style="width:100%; margin-top:0.4rem;">
+      </div>
+
+      <div id="demo2-p2-group" style="display:none;">
+        <label><strong id="demo2-label-p2">Halbhöhe</strong>: <span id="demo2-val-p2">70</span> px</label><br>
+        <input type="range" id="demo2-sl-p2" min="10" max="170" step="1" value="70"
+               style="width:100%; margin-top:0.4rem;">
+      </div>
+
+      <div>
+        <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+          <input type="checkbox" id="demo2-cb-iso">
+          Iso-Konturlinien anzeigen
+        </label>
+      </div>
+
+      <!-- Legende -->
+      <div style="font-size:0.85rem; line-height:2.0; margin-top:0.5rem;">
+        <div><span style="display:inline-block;width:14px;height:14px;background:#ff3333;
+                          border-radius:3px;vertical-align:middle;margin-right:6px;"></span>d &lt; 0 — innen</div>
+        <div><span style="display:inline-block;width:14px;height:14px;background:#ffffff;
+                          border:1px solid #bbb;border-radius:3px;vertical-align:middle;margin-right:6px;"></span>d = 0 — Oberfläche</div>
+        <div><span style="display:inline-block;width:14px;height:14px;background:#3366ff;
+                          border-radius:3px;vertical-align:middle;margin-right:6px;"></span>d &gt; 0 — außen</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+    const canvas = document.getElementById('demo2-canvas');
+    const ctx    = canvas.getContext('2d');
+
+    let shape   = 'circle';
+    let p1      = 80;   // Radius (Kreis/Kapsel) oder Halbbreite (Rechteck)
+    let p2      = 70;   // Halbhöhe (Rechteck) oder Halbachse (Kapsel)
+    let showIso = false;
+
+    // --- SDF-Funktionen (Pixelkoordinaten) ---
+
+    function sdCircle(px, py, cx, cy, r) {
+        return Math.sqrt((px - cx) ** 2 + (py - cy) ** 2) - r;
+    }
+
+    // Achsenausgerichtete Box
+    function sdBox(px, py, cx, cy, hw, hh) {
+        const dx = Math.abs(px - cx) - hw;
+        const dy = Math.abs(py - cy) - hh;
+        return Math.sqrt(Math.max(dx, 0) ** 2 + Math.max(dy, 0) ** 2)
+               + Math.min(Math.max(dx, dy), 0);
+    }
+
+    // Kapsel = aufgeweitete Linienstrecke
+    function sdCapsule(px, py, ax, ay, bx, by, r) {
+        const pax = px - ax, pay = py - ay;
+        const bax = bx - ax, bay = by - ay;
+        const len2 = bax * bax + bay * bay;
+        const h = len2 > 0 ? Math.max(0, Math.min(1, (pax * bax + pay * bay) / len2)) : 0;
+        const dx = pax - bax * h, dy = pay - bay * h;
+        return Math.sqrt(dx * dx + dy * dy) - r;
+    }
+
+    function render() {
+        const w = canvas.width, h = canvas.height;
+        const imageData = ctx.createImageData(w, h);
+        const data = imageData.data;
+        const cx = w / 2, cy = h / 2;
+        // Normierungsweite: Pixelanzahl bis zur vollen Farbsättigung
+        const norm = w * 0.28;
+
+        for (let py = 0; py < h; py++) {
+            for (let px = 0; px < w; px++) {
+                let d;
+                if (shape === 'circle') {
+                    d = sdCircle(px, py, cx, cy, p1);
+                } else if (shape === 'rect') {
+                    d = sdBox(px, py, cx, cy, p1, p2);
+                } else {
+                    // Kapsel: Achse vertikal, um Mittelpunkt zentriert
+                    d = sdCapsule(px, py, cx, cy - p2, cx, cy + p2, p1);
+                }
+
+                // Oberfläche (d≈0) → Weiß, innen → Rot, außen → Blau
+                const t = Math.min(Math.abs(d) / norm, 1.0);
+                let r, g, b;
+                if (d <= 0) {
+                    r = 255;
+                    g = Math.round(255 * (1 - t));
+                    b = Math.round(255 * (1 - t));
+                } else {
+                    r = Math.round(255 * (1 - t));
+                    g = Math.round(255 * (1 - t));
+                    b = 255;
+                }
+
+                // Iso-Konturlinien: fract(d / spacing) < threshold → abdunkeln
+                if (showIso) {
+                    const frac = ((d / 30) % 1 + 1) % 1;
+                    if (frac < 0.05) {
+                        r = Math.round(r * 0.3);
+                        g = Math.round(g * 0.3);
+                        b = Math.round(b * 0.3);
+                    }
+                }
+
+                const idx = (py * w + px) * 4;
+                data[idx]     = r;
+                data[idx + 1] = g;
+                data[idx + 2] = b;
+                data[idx + 3] = 255;
+            }
+        }
+        ctx.putImageData(imageData, 0, 0);
+    }
+
+    // Globale Funktion für die onclick-Handler der Buttons
+    window.demo2SetShape = function (s) {
+        shape = s;
+
+        ['circle', 'rect', 'capsule'].forEach(id => {
+            const btn    = document.getElementById('demo2-btn-' + id);
+            const active = id === s;
+            btn.style.background  = active ? '#4a90d9' : '#f0f0f0';
+            btn.style.color       = active ? '#fff'    : '#333';
+            btn.style.borderColor = active ? '#4a90d9' : '#bbb';
+        });
+
+        const p2Group = document.getElementById('demo2-p2-group');
+        const label1  = document.getElementById('demo2-label-p1');
+        const label2  = document.getElementById('demo2-label-p2');
+        const sl1     = document.getElementById('demo2-sl-p1');
+        const sl2     = document.getElementById('demo2-sl-p2');
+
+        if (s === 'circle') {
+            p2Group.style.display = 'none';
+            label1.textContent    = 'Radius';
+            sl1.min = 15; sl1.max = 170; sl1.value = 80; p1 = 80;
+        } else if (s === 'rect') {
+            p2Group.style.display = 'block';
+            label1.textContent    = 'Halbbreite';
+            label2.textContent    = 'Halbhöhe';
+            sl1.min = 10; sl1.max = 185; sl1.value = 100; p1 = 100;
+            sl2.min = 10; sl2.max = 170; sl2.value = 70;  p2 = 70;
+        } else {
+            p2Group.style.display = 'block';
+            label1.textContent    = 'Radius';
+            label2.textContent    = 'Halbachse';
+            sl1.min = 10; sl1.max = 80;  sl1.value = 30;  p1 = 30;
+            sl2.min = 20; sl2.max = 165; sl2.value = 80;  p2 = 80;
+        }
+        document.getElementById('demo2-val-p1').textContent = p1;
+        document.getElementById('demo2-val-p2').textContent = p2;
+        render();
+    };
+
+    document.getElementById('demo2-sl-p1').addEventListener('input', function () {
+        p1 = parseInt(this.value);
+        document.getElementById('demo2-val-p1').textContent = p1;
+        render();
+    });
+
+    document.getElementById('demo2-sl-p2').addEventListener('input', function () {
+        p2 = parseInt(this.value);
+        document.getElementById('demo2-val-p2').textContent = p2;
+        render();
+    });
+
+    document.getElementById('demo2-cb-iso').addEventListener('change', function () {
+        showIso = this.checked;
+        render();
+    });
+
+    render();
+})();
+</script>
+```
+
+:::
+
 
 
 ## 4. Erste Ideen für "X"
