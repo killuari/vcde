@@ -866,6 +866,285 @@ void main() {
 </script>
 ```
 
+## Beleuchtung & Schatten
+
+```{=html}
+<!-- Beleuchtungs-Demo: Phong-Shading, Schatten & Ambient Occlusion -->
+<div style="margin:1.5rem 0;">
+
+  <!-- Komponenten-Toggles -->
+  <div style="display:flex; gap:0.5rem; margin-bottom:1.2rem; flex-wrap:wrap; align-items:center;">
+    <strong>Komponenten:</strong>
+    <button id="demo5-btn-shadow"
+            onclick="demo5Toggle('shadow')"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #4a90d9;
+                   background:#4a90d9; color:#fff; cursor:pointer; font-size:0.9rem;">Schatten</button>
+    <button id="demo5-btn-specular"
+            onclick="demo5Toggle('specular')"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #4a90d9;
+                   background:#4a90d9; color:#fff; cursor:pointer; font-size:0.9rem;">Specular</button>
+    <button id="demo5-btn-ao"
+            onclick="demo5Toggle('ao')"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                   background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Amb. Okklusion</button>
+  </div>
+
+  <div style="display:flex; flex-wrap:wrap; gap:2rem; align-items:flex-start;">
+
+    <canvas id="demo5-canvas" width="450" height="450"
+            style="border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,0.4);">
+    </canvas>
+
+    <div style="display:flex; flex-direction:column; gap:1.5rem; min-width:220px; padding-top:0.5rem;">
+
+      <div style="font-size:0.78rem; font-weight:700; text-transform:uppercase;
+                  letter-spacing:0.06em; color:#888;">Lichtquelle</div>
+
+      <div>
+        <label><strong>Azimut</strong>: <span id="demo5-val-az">0°</span></label><br>
+        <input type="range" id="demo5-sl-az" min="0" max="360" step="5" value="0"
+               style="width:100%; margin-top:0.4rem;">
+      </div>
+
+      <div>
+        <label><strong>Höhe</strong>: <span id="demo5-val-el">45°</span></label><br>
+        <input type="range" id="demo5-sl-el" min="10" max="80" step="5" value="45"
+               style="width:100%; margin-top:0.4rem;">
+      </div>
+
+      <div id="demo5-shine-group">
+        <label><strong>Glanzgrad</strong>: <span id="demo5-val-shine">32</span></label><br>
+        <input type="range" id="demo5-sl-shine" min="4" max="256" step="1" value="32"
+               style="width:100%; margin-top:0.4rem;">
+      </div>
+
+      <div style="font-size:0.78rem; font-weight:700; text-transform:uppercase;
+                  letter-spacing:0.06em; color:#888; margin-top:0.3rem;">Blocker</div>
+
+      <div>
+        <label><strong>X-Position</strong>: <span id="demo5-val-bx">1.2</span></label><br>
+        <input type="range" id="demo5-sl-bx" min="-2.5" max="2.5" step="0.1" value="1.2"
+               style="width:100%; margin-top:0.4rem;">
+      </div>
+
+      <div>
+        <label><strong>Höhe</strong>: <span id="demo5-val-by">1.2</span></label><br>
+        <input type="range" id="demo5-sl-by" min="-0.5" max="2.5" step="0.1" value="1.2"
+               style="width:100%; margin-top:0.4rem;">
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script id="demo5-frag-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+uniform vec2  u_resolution;
+uniform float u_time;
+uniform float u_light_az;
+uniform float u_light_el;
+uniform float u_shininess;
+uniform float u_bx;
+uniform float u_by;
+uniform float u_shadows;
+uniform float u_specular;
+uniform float u_ao;
+
+float sdSphere(vec3 p, float r) {
+    return length(p) - r;
+}
+
+// Hauptkugel (r=0.7), Bodenebene (y=-1), Blocker (r=0.35)
+float map(vec3 p) {
+    float dMain    = sdSphere(p, 0.7);
+    float dGround  = p.y + 1.0;
+    float dBlocker = sdSphere(p - vec3(u_bx, u_by, 0.0), 0.35);
+    return min(min(dMain, dGround), dBlocker);
+}
+
+// Materialnummer: 0=Kugel, 1=Boden, 2=Blocker
+float mapMaterial(vec3 p) {
+    float dMain    = sdSphere(p, 0.7);
+    float dGround  = p.y + 1.0;
+    float dBlocker = sdSphere(p - vec3(u_bx, u_by, 0.0), 0.35);
+    if (dMain <= dGround && dMain <= dBlocker) return 0.0;
+    if (dGround <= dBlocker)                   return 1.0;
+    return 2.0;
+}
+
+vec3 calcNormal(vec3 p) {
+    vec2 e = vec2(0.001, 0.0);
+    return normalize(vec3(
+        map(p + e.xyy) - map(p - e.xyy),
+        map(p + e.yxy) - map(p - e.yxy),
+        map(p + e.yyx) - map(p - e.yyx)
+    ));
+}
+
+float rayMarch(vec3 ro, vec3 rd) {
+    float t = 0.0;
+    for (int i = 0; i < 100; i++) {
+        float d = map(ro + t * rd);
+        if (d < 0.001) return t;
+        if (t > 20.0)  break;
+        t += d;
+    }
+    return -1.0;
+}
+
+// Shadow Ray: zweiter Strahl von Oberfläche zur Lichtquelle (theorie.qmd)
+float hardShadow(vec3 ro, vec3 rd, float maxt) {
+    float t = 0.02;
+    for (int i = 0; i < 64; i++) {
+        float h = map(ro + rd * t);
+        if (h < 0.001) return 0.0;
+        t += h;
+        if (t >= maxt) break;
+    }
+    return 1.0;
+}
+
+// Ambient Occlusion: SDF-Wachstum entlang der Normale (5 Samples)
+float ambientOcclusion(vec3 pos, vec3 nor) {
+    float occ = 0.0;
+    float sca = 1.0;
+    for (int i = 0; i < 5; i++) {
+        float h = 0.01 + 0.12 * float(i) / 4.0;
+        float d = map(pos + h * nor);
+        occ += (h - d) * sca;
+        sca *= 0.95;
+    }
+    return clamp(1.0 - 3.0 * occ, 0.0, 1.0);
+}
+
+void main() {
+    vec2 uv = (gl_FragCoord.xy - 0.5 * u_resolution) / u_resolution.y;
+
+    vec3 ro = vec3(0.0, 0.5, 3.5);
+    vec3 rd = normalize(vec3(uv.x, uv.y - 0.12, -1.5));
+
+    // Lichtrichtung aus Azimut + Höhe
+    vec3 ld = normalize(vec3(
+        cos(u_light_az) * cos(u_light_el),
+        sin(u_light_el),
+        sin(u_light_az) * cos(u_light_el)
+    ));
+
+    vec3 col = vec3(0.10, 0.12, 0.18);
+
+    float t = rayMarch(ro, rd);
+    if (t > 0.0) {
+        vec3 pos = ro + t * rd;
+        vec3 nor = calcNormal(pos);
+
+        // Materialfarbe je nach Objekt
+        float matID = mapMaterial(pos);
+        vec3 baseColor;
+        if (matID < 0.5) {
+            baseColor = vec3(0.90, 0.52, 0.20);   // Orange – Hauptkugel
+        } else if (matID < 1.5) {
+            // Schachbrettmuster: Schatten auf dem Boden gut sichtbar
+            float chk = mod(floor(pos.x * 1.5) + floor(pos.z * 1.5), 2.0);
+            baseColor = mix(vec3(0.58, 0.60, 0.63), vec3(0.80, 0.82, 0.86), chk);
+        } else {
+            baseColor = vec3(0.38, 0.72, 0.90);   // Blau – Blocker
+        }
+
+        vec3 viewDir = normalize(ro - pos);
+        vec3 halfDir = normalize(ld + viewDir);
+
+        float amb  = 0.18;
+        float diff = max(dot(nor, ld), 0.0);
+
+        // Shadow Ray: trifft der Strahl zur Lichtquelle ein Objekt?
+        float shad = 1.0;
+        if (u_shadows > 0.5) {
+            shad = hardShadow(pos + nor * 0.01, ld, 8.0);
+        }
+
+        // Ambient Occlusion
+        float ao = 1.0;
+        if (u_ao > 0.5) {
+            ao = ambientOcclusion(pos, nor);
+        }
+
+        // Blinn-Phong Specular
+        float spec = 0.0;
+        if (u_specular > 0.5) {
+            spec = pow(max(dot(nor, halfDir), 0.0), u_shininess);
+        }
+
+        col  = baseColor * (amb * ao + diff * shad * 0.82);
+        col += vec3(1.0) * spec * shad * 0.60;
+    }
+
+    col = pow(clamp(col, 0.0, 1.0), vec3(0.4545));
+    gl_FragColor = vec4(col, 1.0);
+}
+</script>
+
+<script>
+(function () {
+    const canvas  = document.getElementById('demo5-canvas');
+    const shader  = document.getElementById('demo5-frag-shader').textContent;
+    const sandbox = new GlslCanvas(canvas);
+    sandbox.load(shader);
+
+    // Standardzustand: Schatten AN, Specular AN, AO AUS
+    const state = { shadow: true, specular: true, ao: false };
+
+    sandbox.setUniform('u_light_az',  0.0);
+    sandbox.setUniform('u_light_el',  0.785);   // 45° in Radiant
+    sandbox.setUniform('u_shininess', 32.0);
+    sandbox.setUniform('u_bx',        1.2);
+    sandbox.setUniform('u_by',        1.2);
+    sandbox.setUniform('u_shadows',   1.0);
+    sandbox.setUniform('u_specular',  1.0);
+    sandbox.setUniform('u_ao',        0.0);
+
+    window.demo5Toggle = function (key) {
+        state[key] = !state[key];
+        const btn    = document.getElementById('demo5-btn-' + key);
+        const active = state[key];
+        btn.style.background  = active ? '#4a90d9' : '#f0f0f0';
+        btn.style.color       = active ? '#fff'    : '#333';
+        btn.style.borderColor = active ? '#4a90d9' : '#bbb';
+
+        sandbox.setUniform('u_shadows',  state.shadow   ? 1.0 : 0.0);
+        sandbox.setUniform('u_specular', state.specular ? 1.0 : 0.0);
+        sandbox.setUniform('u_ao',       state.ao       ? 1.0 : 0.0);
+
+        // Glanzgrad-Slider nur bei aktivem Specular anzeigen
+        document.getElementById('demo5-shine-group').style.display =
+            state.specular ? 'block' : 'none';
+    };
+
+    function bindDeg(slId, dispId, uniformName) {
+        document.getElementById(slId).addEventListener('input', function () {
+            const deg = parseFloat(this.value);
+            document.getElementById(dispId).textContent = deg + '°';
+            sandbox.setUniform(uniformName, deg * Math.PI / 180.0);
+        });
+    }
+
+    function bindVal(slId, dispId, uniformName, decimals) {
+        document.getElementById(slId).addEventListener('input', function () {
+            const v = parseFloat(this.value);
+            document.getElementById(dispId).textContent = v.toFixed(decimals);
+            sandbox.setUniform(uniformName, v);
+        });
+    }
+
+    bindDeg('demo5-sl-az',    'demo5-val-az',    'u_light_az');
+    bindDeg('demo5-sl-el',    'demo5-val-el',    'u_light_el');
+    bindVal('demo5-sl-shine', 'demo5-val-shine', 'u_shininess', 0);
+    bindVal('demo5-sl-bx',    'demo5-val-bx',    'u_bx', 1);
+    bindVal('demo5-sl-by',    'demo5-val-by',    'u_by', 1);
+})();
+</script>
+```
+
 :::
 
 
