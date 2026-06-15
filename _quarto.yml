@@ -1,11 +1,26 @@
 project:
   type: website
+  render:
+    - index.qmd
+    - einfuehrung.qmd
+    - theorie.qmd
+    - verwandte_methoden.qmd
+    - csg.qmd
   resources:
     - demos/
+    - tobias-assets/
 
 format:
   html:
     css: styles.css
+    theme: default
+    toc: true
+    toc-depth: 2
+    lang: de
+    grid:
+      body-width: 1500px
+      margin-width: 220px
+      gutter-width: 1.5rem
 
 website:
   title: "SDF Rendering via Ray Marching"

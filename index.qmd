@@ -1,14 +1,6 @@
 ---
 title: "Konzeptskizze: SDF-Rendering via Ray Marching"
 author: "Luis Kahles, Tobias Jäkel, Moritz Potthoff"
-format: 
-  html:
-    toc: true
-    toc-depth: 2
-    theme: default
-page-layout: full
-jupyter: python3
-bibliography: references.bib
 ---
 
 ## Interaktive Demos

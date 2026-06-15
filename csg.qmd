@@ -1,15 +1,9 @@
 ---
-title: "Theoretischer Hintergrund & Methoden"
-author: "Tobias Jäkel"
-format: 
-  html:
-    toc: true
-    toc-depth: 2
-    theme: default
-page-layout: full
+title: "Constructive Solid Geometry"
+author: "Moritz Potthoff"
 ---
 
-### Constructive Solid Geometry mit SDFs
+## Constructive Solid Geometry mit SDFs
 
 Constructive Solid Geometry beschreibt komplexe Körper als Kombination einfacher Grundformen. Statt ein Objekt direkt als Mesh zu modellieren, setzt man es aus Primitiven wie Kugeln, Boxen, Tori oder Zylindern zusammen. Bei klassischen Meshes bedeutet das oft geometrische Operationen auf Dreiecken. Bei SDFs reicht dagegen häufig eine einfache mathematische Kombination der Distanzwerte.
 
@@ -26,6 +20,8 @@ Die Intuition dahinter:
 * Bei der **Union** interessiert die näher gelegene Oberfläche. Deshalb nimmt man das Minimum.
 * Bei der **Intersection** muss ein Punkt in beiden Körpern liegen. Ein Punkt ist erst dann innen, wenn beide Distanzen negativ sind. Deshalb bestimmt die größere Distanz die Grenze.
 * Bei der **Difference** wird das zweite Objekt aus dem ersten herausgeschnitten. Durch $-d_2$ wird innen und außen der zweiten Form vertauscht.
+
+<iframe class="demo-embed" src="tobias-assets/demos/csg-demo.html" height="650"></iframe>
 
 Für mehr als zwei Objekte wird dieselbe Operation wiederholt. Im Demo beginnt die Szene mit dem ersten Objekt und kombiniert dann nacheinander die weiteren aktiven Objekte:
 
@@ -46,7 +42,7 @@ d = max(d, -d3);
 
 Das macht CSG zu einem starken Beispiel für SDFs: Eine Änderung in einer einzigen Formel kann die Topologie der Szene verändern, ohne dass neue Dreiecke erzeugt oder Meshes neu berechnet werden müssen. Für die Präsentation eignet sich das gut, weil man an Union, Intersection und Difference direkt sieht, dass SDFs nicht nur eine andere Rendering-Technik sind, sondern auch eine andere Art, Geometrie zu denken.
 
-### Glatte Übergänge
+## Glatte Übergänge
 
 Die Demo enthält zusätzlich einen Regler für **Verschmelzung**. Mathematisch wird dafür die harte `min`- oder `max`-Operation durch eine geglättete Variante ersetzt. Für eine weiche Union kann man zum Beispiel zwischen den beiden Distanzwerten interpolieren:
 
@@ -59,7 +55,7 @@ float smoothUnion(float d1, float d2, float k) {
 
 Der Parameter `k` kontrolliert die Breite des Übergangsbereichs. Bei `k = 0` bleibt die CSG-Operation hart. Je größer `k` wird, desto weicher gehen die Oberflächen ineinander über. Das ist ein Beispiel dafür, dass SDFs nicht nur boolesche Geometrieoperationen erlauben, sondern auch kontinuierliche Formmanipulationen.
 
-### CSG Live-Demo
+## CSG Live-Demo
 
 Die Demo zeigt eine kleine SDF-Szene aus mehreren Primitiven. Links ist das Ergebnis des Ray-Marching-Shaders zu sehen, rechts die editierbare Beschreibung der Szene. Die Objektliste wählt die primitiven SDFs aus, und die Kombinationsfunktion zeigt, wie daraus die Szene gebaut wird. Zwischen `Union`, `Intersection` und `Difference` kann gewechselt werden, sodass die Wirkung der CSG-Operationen direkt sichtbar wird.
 
@@ -67,10 +63,8 @@ Die Demo zeigt eine kleine SDF-Szene aus mehreren Primitiven. Links ist das Erge
 <div class="demo-wide">
 <iframe
   src="demos/csg-demo/index.html"
-  width="100%"
   height="930"
   scrolling="no"
-  style="border: 1px solid #d7dce3; border-radius: 4px; overflow: hidden;"
   title="Interaktive SDF-CSG-Demo">
 </iframe>
 </div>

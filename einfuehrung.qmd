@@ -1,12 +1,6 @@
 ---
 title: "Einführung in das Thema"
 author: "Tobias Jäkel"
-format: 
-  html:
-    toc: true
-    toc-depth: 2
-    theme: default
-page-layout: full
 ---
 
 # Motivation

@@ -1,12 +1,6 @@
 ---
 title: "Theoretischer Hintergrund & Methoden"
 author: "Tobias Jäkel"
-format: 
-  html:
-    toc: true
-    toc-depth: 2
-    theme: default
-page-layout: full
 ---
 
 # Signed Distance Functions
@@ -59,7 +53,7 @@ f(\mathbf{p}) = \|\mathbf{p} - \mathbf{c}\| - r
 $$
 
 [Platz für interaktive Visualisierung der SDF einer Kugel]
-<iframe src="tobias-assets/demos/sphere-sdf-demo.html" width="100%" height="650" style="border: none;"></iframe>
+<iframe class="demo-embed" src="tobias-assets/demos/sphere-sdf-demo.html" height="650"></iframe>
 
 ## Primitive Formen und Operationen
 
@@ -100,7 +94,7 @@ $$
 Dadurch lassen sich komplexe Formen auf einfache Weise aus wenigen Grundkörpern erzeugen. Die mathematische Beschreibung der Geometrie bleibt dabei kompakt und kann flexibel erweitert oder verändert werden.
 
 [Platz für interaktive Visualisierung von CSG-Operationen]
-<iframe src="tobias-assets/demos/csg-demo.html" width="100%" height="650" style="border: none;"></iframe>
+<iframe class="demo-embed" src="tobias-assets/demos/csg-demo.html" height="650"></iframe>
 
 Die Möglichkeit, Geometrie durch mathematische Operationen zu kombinieren, zählt zu den zentralen Stärken von Signed Distance Functions und ist ein wesentlicher Grund für ihren Einsatz in der prozeduralen Modellierung und beim Ray-Marching-Rendering.
 
@@ -137,7 +131,7 @@ Der grundlegende Ablauf lässt sich wie folgt zusammenfassen:
 Die folgende Visualisierung verdeutlicht dieses Vorgehen. Die Schrittweite entspricht dabei jeweils dem Abstand zur nächstgelegenen Oberfläche. Mit jeder Iteration nähert sich der Strahl dem Objekt an, bis schließlich ein Schnittpunkt gefunden wird.
 
 [Platz für interaktive Visualisierung des Ray-Marching-Algorithmus]
-<iframe src="tobias-assets/demos/raymarch-demo.html" width="100%" height="650" style="border: none;"></iframe>
+<iframe class="demo-embed" src="tobias-assets/demos/raymarch-demo.html" height="650"></iframe>
 
 Das hier beschriebene Verfahren wird häufig als Ray Marching bezeichnet. Genauer handelt es sich aber um eine spezielle Form des Ray Marching, die als Sphere Tracing bekannt ist. Sie wurde 1995 von John C. Hart vorgestellt und nutzt die Distanzinformationen einer Signed Distance Function, um die Schrittweite adaptiv anzupassen.
 

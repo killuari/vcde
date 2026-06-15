@@ -1,19 +1,11 @@
 ---
-title: "Theoretischer Hintergrund & Methoden"
-author: "Tobias Jäkel"
-format: 
-  html:
-    toc: true
-    toc-depth: 2
-    theme: default
-page-layout: full
+title: "Verwandte Methoden"
+author: "Moritz Potthoff"
 ---
-
-## Verwandte Methoden
 
 Dieser Abschnitt fokussiert sich auf die Frage, wie Ray Marching mit SDFs im Vergleich zu bekannteren Rendering-Methoden einzuordnen ist und warum Constructive Solid Geometry (CSG) bei SDFs besonders elegant funktioniert.
 
-### Verwandte Methoden
+## Einordnung
 
 In der klassischen Echtzeitgrafik dominiert **Rasterisierung**. Dabei werden 3D-Modelle als Dreiecksnetze beschrieben, auf den Bildschirm projiziert und anschließend Pixel für Pixel eingefärbt. Diese Methode ist sehr schnell und bildet die Grundlage moderner Game-Engines. Ihr Nachteil ist, dass jede Form zuerst als Mesh vorliegen muss. Sehr glatte, prozedurale oder topologisch komplexe Formen können dadurch aufwendig werden, weil die Geometrie explizit modelliert, gespeichert und verwaltet werden muss.
 

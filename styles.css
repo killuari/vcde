@@ -7,61 +7,15 @@ body {
   overflow-x: hidden;
 }
 
-#quarto-content.page-columns {
-  display: grid;
-  grid-template-columns: minmax(0, 1500px) 220px;
-  gap: 1.5rem;
-  width: min(98vw, 1760px);
-  max-width: none;
-  margin: 0 auto;
-  padding: 0 0.75rem;
-}
-
-main.content {
-  grid-column: 1;
-  width: 100%;
-  max-width: none;
-}
-
-main.content.column-page-left {
-  grid-column: 1;
-}
-
-#quarto-margin-sidebar {
+/* Embedded demos and iframes */
+.demo-embed,
+.demo-wide iframe {
   display: block;
-  grid-column: 2;
-  width: 220px;
-  max-width: 220px;
-  margin: 0;
-  padding: 0;
-  z-index: 1;
-}
-
-#quarto-margin-sidebar nav {
-  position: sticky;
-  top: 0.75rem;
-  max-height: calc(100vh - 1.5rem);
-  overflow: auto;
+  width: 100%;
+  border: 1px solid #d7dce3;
+  border-radius: 4px;
 }
 
 .demo-wide {
-  width: 100%;
-  margin: 0;
-  transform: none;
-}
-
-@media (max-width: 1100px) {
-  #quarto-content.page-columns {
-    display: block;
-    width: min(100vw, 100%);
-    padding: 0 0.75rem;
-  }
-
-  main.content {
-    max-width: none;
-  }
-
-  #quarto-margin-sidebar {
-    display: none;
-  }
+  margin: 1.5rem 0;
 }
