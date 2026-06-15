@@ -1,3 +1,14 @@
+---
+title: "Theoretischer Hintergrund & Methoden"
+author: "Tobias Jäkel"
+format: 
+  html:
+    toc: true
+    toc-depth: 2
+    theme: default
+page-layout: full
+---
+
 ### Constructive Solid Geometry mit SDFs
 
 Constructive Solid Geometry beschreibt komplexe Körper als Kombination einfacher Grundformen. Statt ein Objekt direkt als Mesh zu modellieren, setzt man es aus Primitiven wie Kugeln, Boxen, Tori oder Zylindern zusammen. Bei klassischen Meshes bedeutet das oft geometrische Operationen auf Dreiecken. Bei SDFs reicht dagegen häufig eine einfache mathematische Kombination der Distanzwerte.

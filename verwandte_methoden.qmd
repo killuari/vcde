@@ -1,3 +1,14 @@
+---
+title: "Theoretischer Hintergrund & Methoden"
+author: "Tobias Jäkel"
+format: 
+  html:
+    toc: true
+    toc-depth: 2
+    theme: default
+page-layout: full
+---
+
 ## Verwandte Methoden
 
 Dieser Abschnitt fokussiert sich auf die Frage, wie Ray Marching mit SDFs im Vergleich zu bekannteren Rendering-Methoden einzuordnen ist und warum Constructive Solid Geometry (CSG) bei SDFs besonders elegant funktioniert.
