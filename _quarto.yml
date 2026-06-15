@@ -6,3 +6,22 @@ project:
 format:
   html:
     css: styles.css
+
+website:
+  title: "SDF Rendering via Ray Marching"
+  navbar: 
+    left:
+      - href: index.qmd
+        text: "Home"
+
+      - href: einfuehrung.qmd
+        text: "Einführung"
+
+      - href: theorie.qmd
+        text: "Theorie"      
+
+      - href: verwandte_methoden.qmd
+        text: "Verwandte Methoden"
+
+      - href: csg.qmd
+        text: "CSG"
