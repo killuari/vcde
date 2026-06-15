@@ -69,151 +69,6 @@ Wir binden interaktive WebGL-Shader (via Shadertoy) direkt in Quarto ein. Studie
 
 ::: {.panel-tabset}
 
-## Demo 1
-
-```{=html}
-<script src="https://cdn.jsdelivr.net/npm/glslCanvas@0.2.6/dist/GlslCanvas.min.js"></script>
-
-<!-- Layout: Canvas links, Slider rechts -->
-<div style="display:flex; flex-wrap:wrap; gap:2rem; align-items:flex-start; margin:1.5rem 0;">
-
-  <canvas id="demo1-canvas" width="450" height="450"
-          style="border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,0.4);">
-  </canvas>
-
-  <div style="display:flex; flex-direction:column; gap:1.8rem; min-width:220px; padding-top:0.5rem;">
-
-    <div>
-      <label><strong> Kugelradius</strong>: <span id="demo1-val-radius">0.60</span></label><br>
-      <input type="range" id="demo1-sl-radius" min="0.1" max="1.3" step="0.01" value="0.6"
-             style="width:100%; margin-top:0.4rem;">
-    </div>
-
-    <div>
-      <label><strong> Lichthöhe</strong>: <span id="demo1-val-light">3.0</span></label><br>
-      <input type="range" id="demo1-sl-light" min="0.5" max="6.0" step="0.1" value="3.0"
-             style="width:100%; margin-top:0.4rem;">
-    </div>
-
-    <div>
-      <label><strong> Glanzgrad</strong>: <span id="demo1-val-shine">32</span></label><br>
-      <input type="range" id="demo1-sl-shine" min="2" max="256" step="1" value="32"
-             style="width:100%; margin-top:0.4rem;">
-    </div>
-
-  </div>
-</div>
-
-<!-- GLSL Shader -->
-<script id="demo1-frag-shader" type="x-shader/x-fragment">
-precision mediump float;
-
-uniform vec2  u_resolution;
-uniform float u_time;
-uniform float u_radius;        // Slider 1
-uniform float u_light_height;  // Slider 2
-uniform float u_shininess;     // Slider 3
-
-// --- SDF ---
-float sdSphere(vec3 p, float r) {
-    return length(p) - r;
-}
-
-float map(vec3 p) {
-    return sdSphere(p, u_radius);
-}
-
-// Normale via zentrale Differenzen
-vec3 calcNormal(vec3 p) {
-    vec2 e = vec2(0.001, 0.0);
-    return normalize(vec3(
-        map(p + e.xyy) - map(p - e.xyy),
-        map(p + e.yxy) - map(p - e.yxy),
-        map(p + e.yyx) - map(p - e.yyx)
-    ));
-}
-
-// --- Sphere Tracing ---
-float rayMarch(vec3 ro, vec3 rd) {
-    float t = 0.0;
-    for (int i = 0; i < 100; i++) {
-        float d = map(ro + t * rd);
-        if (d < 0.001) return t;   // Treffer
-        if (t > 20.0)  break;      // Zu weit weg
-        t += d;                    // Sicherer Schritt
-    }
-    return -1.0; // kein Treffer
-}
-
-void main() {
-    // UV: (-0.5 .. 0.5) mit korrektem Seitenverhältnis
-    vec2 uv = (gl_FragCoord.xy - 0.5 * u_resolution) / u_resolution.y;
-
-    // Kamera
-    vec3 ro = vec3(0.0, 0.0, 3.0);
-    vec3 rd = normalize(vec3(uv, -1.5));
-
-    // Hintergrundfarbe (dunkles Blaugrau)
-    vec3 col = vec3(0.05, 0.07, 0.13);
-
-    float t = rayMarch(ro, rd);
-
-    if (t > 0.0) {
-        vec3 pos = ro + t * rd;
-        vec3 nor = calcNormal(pos);
-
-        // Lichtquelle von oben
-        vec3 lightPos = vec3(1.0, u_light_height, 2.5);
-        vec3 lightDir = normalize(lightPos - pos);
-        vec3 viewDir  = normalize(ro - pos);
-        vec3 halfDir  = normalize(lightDir + viewDir); // Blinn-Phong
-
-        // Beleuchtungskomponenten
-        float amb  = 0.12;
-        float diff = max(dot(nor, lightDir), 0.0);
-        float spec = pow(max(dot(nor, halfDir), 0.0), u_shininess);
-
-        // Hellblaue Kugelfarbe
-        vec3 baseColor = vec3(0.35, 0.72, 1.0);
-
-        col  = baseColor * (amb + diff * 0.88);
-        col += vec3(1.0) * spec * 0.65;
-    }
-
-    // Gamma-Korrektur
-    col = pow(clamp(col, 0.0, 1.0), vec3(0.4545));
-    gl_FragColor = vec4(col, 1.0);
-}
-</script>
-
-<script>
-(function () {
-    const canvas  = document.getElementById('demo1-canvas');
-    const shader  = document.getElementById('demo1-frag-shader').textContent;
-    const sandbox = new GlslCanvas(canvas);
-    sandbox.load(shader);
-
-    // Startwerte setzen
-    sandbox.setUniform('u_radius',       0.6);
-    sandbox.setUniform('u_light_height', 3.0);
-    sandbox.setUniform('u_shininess',    32.0);
-
-    // Slider verbinden
-    function bind(sliderId, displayId, uniformName, decimals) {
-        document.getElementById(sliderId).addEventListener('input', function () {
-            const v = parseFloat(this.value);
-            sandbox.setUniform(uniformName, v);
-            document.getElementById(displayId).textContent = v.toFixed(decimals);
-        });
-    }
-
-    bind('demo1-sl-radius', 'demo1-val-radius', 'u_radius',       2);
-    bind('demo1-sl-light',  'demo1-val-light',  'u_light_height', 1);
-    bind('demo1-sl-shine',  'demo1-val-shine',  'u_shininess',    0);
-})();
-</script>
-```
-
 ## SDF-Distanzfeld (2D Heatmap)
 
 ```{=html}
@@ -317,7 +172,7 @@ void main() {
         const data = imageData.data;
         const cx = w / 2, cy = h / 2;
         // Normierungsweite: Pixelanzahl bis zur vollen Farbsättigung
-        const norm = w * 0.28;
+        const norm = w * 0.05;
 
         for (let py = 0; py < h; py++) {
             for (let px = 0; px < w; px++) {
@@ -801,7 +656,6 @@ void main() {
     const canvas  = document.getElementById('demo4-canvas');
     const shader  = document.getElementById('demo4-frag-shader').textContent;
     const sandbox = new GlslCanvas(canvas);
-    sandbox.load(shader);
 
     // [label1, min1, max1, step1, default1, label2, min2, max2, step2, default2, showP2]
     const shapeConfigs = [
@@ -813,13 +667,29 @@ void main() {
         ['Größe',         0.20, 1.50, 0.01, 0.80, '',            0.05, 1.00, 0.01, 0.40, false],
     ];
 
+    let currentShape = 0;
     let p1 = 0.60, p2 = 0.25;
 
-    sandbox.setUniform('u_shape',  0.0);
-    sandbox.setUniform('u_param1', p1);
-    sandbox.setUniform('u_param2', p2);
+    function applyUniforms() {
+        sandbox.setUniform('u_shape',  parseFloat(currentShape));
+        sandbox.setUniform('u_param1', p1);
+        sandbox.setUniform('u_param2', p2);
+    }
+
+    sandbox.on('load', applyUniforms);
+    sandbox.load(shader);
+
+    let wasHidden = false;
+    new IntersectionObserver(function(entries) {
+        if (!entries[0].isIntersecting) { wasHidden = true; return; }
+        if (!wasHidden) return;
+        wasHidden = false;
+        canvas.width = 450; canvas.height = 450;
+        sandbox.load(shader);
+    }, { threshold: 0.01 }).observe(canvas);
 
     window.demo4SetShape = function (idx) {
+        currentShape = idx;
         const cfg = shapeConfigs[idx];
 
         const sl1 = document.getElementById('demo4-sl-p1');
@@ -846,9 +716,7 @@ void main() {
             btn.style.borderColor = active ? '#4a90d9' : '#bbb';
         }
 
-        sandbox.setUniform('u_shape',  parseFloat(idx));
-        sandbox.setUniform('u_param1', p1);
-        sandbox.setUniform('u_param2', p2);
+        applyUniforms();
     };
 
     document.getElementById('demo4-sl-p1').addEventListener('input', function () {
@@ -873,7 +741,7 @@ void main() {
 <div style="margin:1.5rem 0;">
 
   <!-- Komponenten-Toggles -->
-  <div style="display:flex; gap:0.5rem; margin-bottom:1.2rem; flex-wrap:wrap; align-items:center;">
+  <div style="display:flex; gap:0.5rem; margin-bottom:0.8rem; flex-wrap:wrap; align-items:center;">
     <strong>Komponenten:</strong>
     <button id="demo5-btn-shadow"
             onclick="demo5Toggle('shadow')"
@@ -887,6 +755,19 @@ void main() {
             onclick="demo5Toggle('ao')"
             style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
                    background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Amb. Okklusion</button>
+  </div>
+
+  <!-- Blocker-Form -->
+  <div style="display:flex; gap:0.5rem; margin-bottom:1.2rem; flex-wrap:wrap; align-items:center;">
+    <strong>Blocker-Form:</strong>
+    <button id="demo5-btn-bshape-0"
+            onclick="demo5SetBlockerShape(0)"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #4a90d9;
+                   background:#4a90d9; color:#fff; cursor:pointer; font-size:0.9rem;">Kugel</button>
+    <button id="demo5-btn-bshape-1"
+            onclick="demo5SetBlockerShape(1)"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                   background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Box</button>
   </div>
 
   <div style="display:flex; flex-wrap:wrap; gap:2rem; align-items:flex-start;">
@@ -907,8 +788,8 @@ void main() {
       </div>
 
       <div>
-        <label><strong>Höhe</strong>: <span id="demo5-val-el">45°</span></label><br>
-        <input type="range" id="demo5-sl-el" min="10" max="80" step="5" value="45"
+        <label><strong>Höhe</strong>: <span id="demo5-val-el">40°</span></label><br>
+        <input type="range" id="demo5-sl-el" min="20" max="60" step="5" value="40"
                style="width:100%; margin-top:0.4rem;">
       </div>
 
@@ -933,6 +814,12 @@ void main() {
                style="width:100%; margin-top:0.4rem;">
       </div>
 
+      <div>
+        <label><strong>Tiefe (Z)</strong>: <span id="demo5-val-bz">0.0</span></label><br>
+        <input type="range" id="demo5-sl-bz" min="-2.5" max="2.5" step="0.1" value="0.0"
+               style="width:100%; margin-top:0.4rem;">
+      </div>
+
     </div>
   </div>
 </div>
@@ -947,6 +834,8 @@ uniform float u_light_el;
 uniform float u_shininess;
 uniform float u_bx;
 uniform float u_by;
+uniform float u_bz;
+uniform float u_blocker_shape;
 uniform float u_shadows;
 uniform float u_specular;
 uniform float u_ao;
@@ -955,19 +844,30 @@ float sdSphere(vec3 p, float r) {
     return length(p) - r;
 }
 
-// Hauptkugel (r=0.7), Bodenebene (y=-1), Blocker (r=0.35)
+float sdBox(vec3 p, vec3 b) {
+    vec3 q = abs(p) - b;
+    return length(max(q, 0.0)) + min(max(q.x, max(q.y, q.z)), 0.0);
+}
+
+float blockerSDF(vec3 brel) {
+    return u_blocker_shape < 0.5
+           ? sdSphere(brel, 0.35)
+           : sdBox(brel, vec3(0.28));
+}
+
+// Hauptkugel (r=0.6), Bodenebene (y=-1), Blocker
 float map(vec3 p) {
-    float dMain    = sdSphere(p, 0.7);
+    float dMain    = sdSphere(p, 0.6);
     float dGround  = p.y + 1.0;
-    float dBlocker = sdSphere(p - vec3(u_bx, u_by, 0.0), 0.35);
+    float dBlocker = blockerSDF(p - vec3(u_bx, u_by, u_bz));
     return min(min(dMain, dGround), dBlocker);
 }
 
 // Materialnummer: 0=Kugel, 1=Boden, 2=Blocker
 float mapMaterial(vec3 p) {
-    float dMain    = sdSphere(p, 0.7);
+    float dMain    = sdSphere(p, 0.6);
     float dGround  = p.y + 1.0;
-    float dBlocker = sdSphere(p - vec3(u_bx, u_by, 0.0), 0.35);
+    float dBlocker = blockerSDF(p - vec3(u_bx, u_by, u_bz));
     if (dMain <= dGround && dMain <= dBlocker) return 0.0;
     if (dGround <= dBlocker)                   return 1.0;
     return 2.0;
@@ -993,7 +893,7 @@ float rayMarch(vec3 ro, vec3 rd) {
     return -1.0;
 }
 
-// Shadow Ray: zweiter Strahl von Oberfläche zur Lichtquelle (theorie.qmd)
+// Shadow Ray: zweiter Strahl von Oberfläche zur Lichtquelle
 float hardShadow(vec3 ro, vec3 rd, float maxt) {
     float t = 0.02;
     for (int i = 0; i < 64; i++) {
@@ -1031,7 +931,7 @@ void main() {
         sin(u_light_az) * cos(u_light_el)
     ));
 
-    vec3 col = vec3(0.10, 0.12, 0.18);
+    vec3 col = vec3(0.07, 0.08, 0.13);   // dunkler Hintergrund für besseren Kontrast
 
     float t = rayMarch(ro, rd);
     if (t > 0.0) {
@@ -1046,7 +946,7 @@ void main() {
         } else if (matID < 1.5) {
             // Schachbrettmuster: Schatten auf dem Boden gut sichtbar
             float chk = mod(floor(pos.x * 1.5) + floor(pos.z * 1.5), 2.0);
-            baseColor = mix(vec3(0.58, 0.60, 0.63), vec3(0.80, 0.82, 0.86), chk);
+            baseColor = mix(vec3(0.55, 0.57, 0.60), vec3(0.78, 0.80, 0.84), chk);
         } else {
             baseColor = vec3(0.38, 0.72, 0.90);   // Blau – Blocker
         }
@@ -1054,7 +954,7 @@ void main() {
         vec3 viewDir = normalize(ro - pos);
         vec3 halfDir = normalize(ld + viewDir);
 
-        float amb  = 0.18;
+        float amb  = 0.20;
         float diff = max(dot(nor, ld), 0.0);
 
         // Shadow Ray: trifft der Strahl zur Lichtquelle ein Objekt?
@@ -1075,8 +975,12 @@ void main() {
             spec = pow(max(dot(nor, halfDir), 0.0), u_shininess);
         }
 
-        col  = baseColor * (amb * ao + diff * shad * 0.82);
-        col += vec3(1.0) * spec * shad * 0.60;
+        // Randlicht: verhindert Verschmelzen der Kanten mit dem dunklen Hintergrund
+        float rim = pow(1.0 - max(dot(nor, viewDir), 0.0), 3.0);
+
+        col  = baseColor * (amb * ao + diff * shad * 0.80);
+        col += vec3(1.0) * spec * shad * 0.55;
+        col += baseColor * 0.22 * rim;
     }
 
     col = pow(clamp(col, 0.0, 1.0), vec3(0.4545));
@@ -1089,19 +993,36 @@ void main() {
     const canvas  = document.getElementById('demo5-canvas');
     const shader  = document.getElementById('demo5-frag-shader').textContent;
     const sandbox = new GlslCanvas(canvas);
+
+    const state = { shadow: true, specular: true, ao: false };
+    const u = {
+        u_light_az:      0.0,
+        u_light_el:      0.698,
+        u_shininess:     32.0,
+        u_bx:            1.2,
+        u_by:            1.2,
+        u_bz:            0.0,
+        u_blocker_shape: 0.0,
+        u_shadows:       1.0,
+        u_specular:      1.0,
+        u_ao:            0.0,
+    };
+
+    function applyUniforms() {
+        Object.keys(u).forEach(function(k) { sandbox.setUniform(k, u[k]); });
+    }
+
+    sandbox.on('load', applyUniforms);
     sandbox.load(shader);
 
-    // Standardzustand: Schatten AN, Specular AN, AO AUS
-    const state = { shadow: true, specular: true, ao: false };
-
-    sandbox.setUniform('u_light_az',  0.0);
-    sandbox.setUniform('u_light_el',  0.785);   // 45° in Radiant
-    sandbox.setUniform('u_shininess', 32.0);
-    sandbox.setUniform('u_bx',        1.2);
-    sandbox.setUniform('u_by',        1.2);
-    sandbox.setUniform('u_shadows',   1.0);
-    sandbox.setUniform('u_specular',  1.0);
-    sandbox.setUniform('u_ao',        0.0);
+    let wasHidden = false;
+    new IntersectionObserver(function(entries) {
+        if (!entries[0].isIntersecting) { wasHidden = true; return; }
+        if (!wasHidden) return;
+        wasHidden = false;
+        canvas.width = 450; canvas.height = 450;
+        sandbox.load(shader);
+    }, { threshold: 0.01 }).observe(canvas);
 
     window.demo5Toggle = function (key) {
         state[key] = !state[key];
@@ -1111,20 +1032,35 @@ void main() {
         btn.style.color       = active ? '#fff'    : '#333';
         btn.style.borderColor = active ? '#4a90d9' : '#bbb';
 
-        sandbox.setUniform('u_shadows',  state.shadow   ? 1.0 : 0.0);
-        sandbox.setUniform('u_specular', state.specular ? 1.0 : 0.0);
-        sandbox.setUniform('u_ao',       state.ao       ? 1.0 : 0.0);
+        u.u_shadows  = state.shadow   ? 1.0 : 0.0;
+        u.u_specular = state.specular ? 1.0 : 0.0;
+        u.u_ao       = state.ao       ? 1.0 : 0.0;
+        sandbox.setUniform('u_shadows',  u.u_shadows);
+        sandbox.setUniform('u_specular', u.u_specular);
+        sandbox.setUniform('u_ao',       u.u_ao);
 
-        // Glanzgrad-Slider nur bei aktivem Specular anzeigen
         document.getElementById('demo5-shine-group').style.display =
             state.specular ? 'block' : 'none';
+    };
+
+    window.demo5SetBlockerShape = function (shape) {
+        u.u_blocker_shape = parseFloat(shape);
+        sandbox.setUniform('u_blocker_shape', u.u_blocker_shape);
+        [0, 1].forEach(function(i) {
+            const btn    = document.getElementById('demo5-btn-bshape-' + i);
+            const active = i === shape;
+            btn.style.background  = active ? '#4a90d9' : '#f0f0f0';
+            btn.style.color       = active ? '#fff'    : '#333';
+            btn.style.borderColor = active ? '#4a90d9' : '#bbb';
+        });
     };
 
     function bindDeg(slId, dispId, uniformName) {
         document.getElementById(slId).addEventListener('input', function () {
             const deg = parseFloat(this.value);
             document.getElementById(dispId).textContent = deg + '°';
-            sandbox.setUniform(uniformName, deg * Math.PI / 180.0);
+            u[uniformName] = deg * Math.PI / 180.0;
+            sandbox.setUniform(uniformName, u[uniformName]);
         });
     }
 
@@ -1132,6 +1068,7 @@ void main() {
         document.getElementById(slId).addEventListener('input', function () {
             const v = parseFloat(this.value);
             document.getElementById(dispId).textContent = v.toFixed(decimals);
+            u[uniformName] = v;
             sandbox.setUniform(uniformName, v);
         });
     }
@@ -1141,6 +1078,7 @@ void main() {
     bindVal('demo5-sl-shine', 'demo5-val-shine', 'u_shininess', 0);
     bindVal('demo5-sl-bx',    'demo5-val-bx',    'u_bx', 1);
     bindVal('demo5-sl-by',    'demo5-val-by',    'u_by', 1);
+    bindVal('demo5-sl-bz',    'demo5-val-bz',    'u_bz', 1);
 })();
 </script>
 ```
