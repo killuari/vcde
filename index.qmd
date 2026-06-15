@@ -629,6 +629,243 @@ void main() {
 </script>
 ```
 
+## Primitiv-Galerie
+
+```{=html}
+<!-- Primitiv-Galerie: 6 IQ-SDF-Primitive via GLSL -->
+<div style="margin:1.5rem 0;">
+
+  <div style="display:flex; gap:0.5rem; margin-bottom:1.2rem; flex-wrap:wrap; align-items:center;">
+    <strong>Form:</strong>
+    <button id="demo4-btn-0" onclick="demo4SetShape(0)"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #4a90d9;
+                   background:#4a90d9; color:#fff; cursor:pointer; font-size:0.9rem;">Kugel</button>
+    <button id="demo4-btn-1" onclick="demo4SetShape(1)"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                   background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Box</button>
+    <button id="demo4-btn-2" onclick="demo4SetShape(2)"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                   background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Torus</button>
+    <button id="demo4-btn-3" onclick="demo4SetShape(3)"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                   background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Kapsel</button>
+    <button id="demo4-btn-4" onclick="demo4SetShape(4)"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                   background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Zylinder</button>
+    <button id="demo4-btn-5" onclick="demo4SetShape(5)"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                   background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Oktaeder</button>
+  </div>
+
+  <div style="display:flex; flex-wrap:wrap; gap:2rem; align-items:flex-start;">
+
+    <canvas id="demo4-canvas" width="450" height="450"
+            style="border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,0.4);">
+    </canvas>
+
+    <div style="display:flex; flex-direction:column; gap:1.8rem; min-width:220px; padding-top:0.5rem;">
+
+      <div>
+        <label><strong id="demo4-label-p1">Radius</strong>: <span id="demo4-val-p1">0.60</span></label><br>
+        <input type="range" id="demo4-sl-p1" min="0.1" max="1.2" step="0.01" value="0.6"
+               style="width:100%; margin-top:0.4rem;">
+      </div>
+
+      <div id="demo4-p2-group" style="display:none;">
+        <label><strong id="demo4-label-p2">—</strong>: <span id="demo4-val-p2">—</span></label><br>
+        <input type="range" id="demo4-sl-p2" min="0.05" max="1.2" step="0.01" value="0.4"
+               style="width:100%; margin-top:0.4rem;">
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script id="demo4-frag-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+uniform vec2  u_resolution;
+uniform float u_time;
+uniform float u_shape;
+uniform float u_param1;
+uniform float u_param2;
+
+float sdSphere(vec3 p, float r) {
+    return length(p) - r;
+}
+
+float sdBox(vec3 p, vec3 b) {
+    vec3 q = abs(p) - b;
+    return length(max(q, 0.0)) + min(max(q.x, max(q.y, q.z)), 0.0);
+}
+
+float sdTorus(vec3 p, vec2 t) {
+    vec2 q = vec2(length(p.xz) - t.x, p.y);
+    return length(q) - t.y;
+}
+
+float sdCapsule(vec3 p, float h, float r) {
+    p.y -= clamp(p.y, -h, h);
+    return length(p) - r;
+}
+
+float sdCylinder(vec3 p, float h, float r) {
+    vec2 d = abs(vec2(length(p.xz), p.y)) - vec2(r, h);
+    return min(max(d.x, d.y), 0.0) + length(max(d, 0.0));
+}
+
+float sdOctahedron(vec3 p, float s) {
+    p = abs(p);
+    float m = p.x + p.y + p.z - s;
+    vec3 q;
+    if      (3.0 * p.x < m) q = p.xyz;
+    else if (3.0 * p.y < m) q = p.yzx;
+    else if (3.0 * p.z < m) q = p.zxy;
+    else return m * 0.57735027;
+    float k = clamp(0.5 * (q.z - q.y + s), 0.0, s);
+    return length(vec3(q.x, q.y - s + k, q.z - k));
+}
+
+float map(vec3 p) {
+    float a  = u_time * 0.4;
+    float sa = sin(a), ca = cos(a);
+    vec3 rp  = vec3(ca * p.x + sa * p.z, p.y, -sa * p.x + ca * p.z);
+
+    if      (u_shape < 0.5) return sdSphere   (rp, u_param1);
+    else if (u_shape < 1.5) return sdBox      (rp, vec3(u_param1, u_param2, u_param1));
+    else if (u_shape < 2.5) return sdTorus    (rp, vec2(u_param1, u_param2));
+    else if (u_shape < 3.5) return sdCapsule  (rp, u_param1, u_param2);
+    else if (u_shape < 4.5) return sdCylinder (rp, u_param1, u_param2);
+    else                    return sdOctahedron(rp, u_param1);
+}
+
+vec3 calcNormal(vec3 p) {
+    vec2 e = vec2(0.001, 0.0);
+    return normalize(vec3(
+        map(p + e.xyy) - map(p - e.xyy),
+        map(p + e.yxy) - map(p - e.yxy),
+        map(p + e.yyx) - map(p - e.yyx)
+    ));
+}
+
+float rayMarch(vec3 ro, vec3 rd) {
+    float t = 0.0;
+    for (int i = 0; i < 100; i++) {
+        float d = map(ro + t * rd);
+        if (d < 0.001) return t;
+        if (t > 20.0)  break;
+        t += d;
+    }
+    return -1.0;
+}
+
+void main() {
+    vec2 uv = (gl_FragCoord.xy - 0.5 * u_resolution) / u_resolution.y;
+    vec3 ro  = vec3(0.0, 0.0, 3.0);
+    vec3 rd  = normalize(vec3(uv, -1.5));
+    vec3 col = vec3(0.05, 0.07, 0.13);
+
+    float t = rayMarch(ro, rd);
+    if (t > 0.0) {
+        vec3 pos = ro + t * rd;
+        vec3 nor = calcNormal(pos);
+
+        vec3 lightPos = vec3(2.0, 3.0, 4.0);
+        vec3 lightDir = normalize(lightPos - pos);
+        vec3 viewDir  = normalize(ro - pos);
+        vec3 halfDir  = normalize(lightDir + viewDir);
+
+        float amb  = 0.12;
+        float diff = max(dot(nor, lightDir), 0.0);
+        float spec = pow(max(dot(nor, halfDir), 0.0), 48.0);
+
+        vec3 baseColor;
+        if      (u_shape < 0.5) baseColor = vec3(0.35, 0.72, 1.00);
+        else if (u_shape < 1.5) baseColor = vec3(0.90, 0.55, 0.20);
+        else if (u_shape < 2.5) baseColor = vec3(0.30, 0.85, 0.50);
+        else if (u_shape < 3.5) baseColor = vec3(0.85, 0.30, 0.55);
+        else if (u_shape < 4.5) baseColor = vec3(0.75, 0.70, 0.20);
+        else                    baseColor = vec3(0.65, 0.35, 0.90);
+
+        col  = baseColor * (amb + diff * 0.88);
+        col += vec3(1.0) * spec * 0.65;
+    }
+
+    col = pow(clamp(col, 0.0, 1.0), vec3(0.4545));
+    gl_FragColor = vec4(col, 1.0);
+}
+</script>
+
+<script>
+(function () {
+    const canvas  = document.getElementById('demo4-canvas');
+    const shader  = document.getElementById('demo4-frag-shader').textContent;
+    const sandbox = new GlslCanvas(canvas);
+    sandbox.load(shader);
+
+    // [label1, min1, max1, step1, default1, label2, min2, max2, step2, default2, showP2]
+    const shapeConfigs = [
+        ['Radius',        0.10, 1.20, 0.01, 0.60, '',            0.05, 0.50, 0.01, 0.25, false],
+        ['Halbbreite XZ', 0.10, 1.20, 0.01, 0.60, 'Halbhöhe Y', 0.10, 1.20, 0.01, 0.40, true ],
+        ['Außenradius',   0.30, 1.00, 0.01, 0.70, 'Rohrradius', 0.05, 0.40, 0.01, 0.20, true ],
+        ['Halbachse',     0.00, 1.00, 0.01, 0.50, 'Radius',     0.05, 0.50, 0.01, 0.25, true ],
+        ['Halbhöhe',      0.10, 1.00, 0.01, 0.50, 'Radius',     0.10, 0.80, 0.01, 0.35, true ],
+        ['Größe',         0.20, 1.50, 0.01, 0.80, '',            0.05, 1.00, 0.01, 0.40, false],
+    ];
+
+    let p1 = 0.60, p2 = 0.25;
+
+    sandbox.setUniform('u_shape',  0.0);
+    sandbox.setUniform('u_param1', p1);
+    sandbox.setUniform('u_param2', p2);
+
+    window.demo4SetShape = function (idx) {
+        const cfg = shapeConfigs[idx];
+
+        const sl1 = document.getElementById('demo4-sl-p1');
+        sl1.min = cfg[1]; sl1.max = cfg[2]; sl1.step = cfg[3]; sl1.value = cfg[4];
+        p1 = cfg[4];
+        document.getElementById('demo4-label-p1').textContent = cfg[0];
+        document.getElementById('demo4-val-p1').textContent   = p1.toFixed(2);
+
+        const sl2   = document.getElementById('demo4-sl-p2');
+        const p2grp = document.getElementById('demo4-p2-group');
+        p2grp.style.display = cfg[10] ? 'block' : 'none';
+        if (cfg[10]) {
+            sl2.min = cfg[6]; sl2.max = cfg[7]; sl2.step = cfg[8]; sl2.value = cfg[9];
+            p2 = cfg[9];
+            document.getElementById('demo4-label-p2').textContent = cfg[5];
+            document.getElementById('demo4-val-p2').textContent   = p2.toFixed(2);
+        }
+
+        for (let i = 0; i < 6; i++) {
+            const btn    = document.getElementById('demo4-btn-' + i);
+            const active = i === idx;
+            btn.style.background  = active ? '#4a90d9' : '#f0f0f0';
+            btn.style.color       = active ? '#fff'    : '#333';
+            btn.style.borderColor = active ? '#4a90d9' : '#bbb';
+        }
+
+        sandbox.setUniform('u_shape',  parseFloat(idx));
+        sandbox.setUniform('u_param1', p1);
+        sandbox.setUniform('u_param2', p2);
+    };
+
+    document.getElementById('demo4-sl-p1').addEventListener('input', function () {
+        p1 = parseFloat(this.value);
+        document.getElementById('demo4-val-p1').textContent = p1.toFixed(2);
+        sandbox.setUniform('u_param1', p1);
+    });
+
+    document.getElementById('demo4-sl-p2').addEventListener('input', function () {
+        p2 = parseFloat(this.value);
+        document.getElementById('demo4-val-p2').textContent = p2.toFixed(2);
+        sandbox.setUniform('u_param2', p2);
+    });
+})();
+</script>
+```
+
 :::
 
 
