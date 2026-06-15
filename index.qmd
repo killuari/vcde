@@ -67,6 +67,10 @@ Wir binden interaktive WebGL-Shader (via Shadertoy) direkt in Quarto ein. Studie
 
 ## Interaktive Demos
 
+```{=html}
+<script src="https://cdn.jsdelivr.net/npm/glslCanvas@0.2.6/dist/GlslCanvas.min.js"></script>
+```
+
 ::: {.panel-tabset}
 
 ## SDF-Distanzfeld (2D Heatmap)
@@ -886,7 +890,7 @@ float rayMarch(vec3 ro, vec3 rd) {
     float t = 0.0;
     for (int i = 0; i < 100; i++) {
         float d = map(ro + t * rd);
-        if (d < 0.001) return t;
+        if (d < 0.005) return t;
         if (t > 20.0)  break;
         t += d;
     }
