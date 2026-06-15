@@ -8,7 +8,7 @@
 
 <meta name="author" content="Tobias Jäkel">
 
-<title>Theoretischer Hintergrund &amp; Methoden</title>
+<title>Einführung in das Thema</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -71,35 +71,6 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -116,27 +87,22 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#signed-distance-functions" id="toc-signed-distance-functions" class="nav-link active" data-scroll-target="#signed-distance-functions">Signed Distance Functions</a>
+  <li><a href="#motivation" id="toc-motivation" class="nav-link active" data-scroll-target="#motivation">Motivation</a>
   <ul class="collapse">
-  <li><a href="#grundidee" id="toc-grundidee" class="nav-link" data-scroll-target="#grundidee">Grundidee</a></li>
-  <li><a href="#formale-definition" id="toc-formale-definition" class="nav-link" data-scroll-target="#formale-definition">Formale Definition</a></li>
-  <li><a href="#die-kugel-als-beispiel" id="toc-die-kugel-als-beispiel" class="nav-link" data-scroll-target="#die-kugel-als-beispiel">Die Kugel als Beispiel</a></li>
-  <li><a href="#primitive-formen-und-operationen" id="toc-primitive-formen-und-operationen" class="nav-link" data-scroll-target="#primitive-formen-und-operationen">Primitive Formen und Operationen</a></li>
-  <li><a href="#kombination-mehrerer-objekte" id="toc-kombination-mehrerer-objekte" class="nav-link" data-scroll-target="#kombination-mehrerer-objekte">Kombination mehrerer Objekte</a></li>
+  <li><a href="#klassische-darstellung-von-3d-geometrie" id="toc-klassische-darstellung-von-3d-geometrie" class="nav-link" data-scroll-target="#klassische-darstellung-von-3d-geometrie">Klassische Darstellung von 3D-Geometrie</a></li>
+  <li><a href="#grenzen-polygonaler-netze" id="toc-grenzen-polygonaler-netze" class="nav-link" data-scroll-target="#grenzen-polygonaler-netze">Grenzen polygonaler Netze</a></li>
+  <li><a href="#alternative-geometrierepräsentationen" id="toc-alternative-geometrierepräsentationen" class="nav-link" data-scroll-target="#alternative-geometrierepräsentationen">Alternative Geometrierepräsentationen</a></li>
   </ul></li>
-  <li><a href="#ray-marching" id="toc-ray-marching" class="nav-link" data-scroll-target="#ray-marching">Ray Marching</a>
+  <li><a href="#typische-anwendungsgebiete" id="toc-typische-anwendungsgebiete" class="nav-link" data-scroll-target="#typische-anwendungsgebiete">Typische Anwendungsgebiete</a>
   <ul class="collapse">
-  <li><a href="#grundidee-1" id="toc-grundidee-1" class="nav-link" data-scroll-target="#grundidee-1">Grundidee</a></li>
-  <li><a href="#nutzung-von-signed-distance-functions" id="toc-nutzung-von-signed-distance-functions" class="nav-link" data-scroll-target="#nutzung-von-signed-distance-functions">Nutzung von Signed Distance Functions</a></li>
-  <li><a href="#der-ray-marching-algorithmus" id="toc-der-ray-marching-algorithmus" class="nav-link" data-scroll-target="#der-ray-marching-algorithmus">Der Ray-Marching-Algorithmus</a></li>
-  <li><a href="#abbruchbedingungen" id="toc-abbruchbedingungen" class="nav-link" data-scroll-target="#abbruchbedingungen">Abbruchbedingungen</a></li>
+  <li><a href="#prozedurale-modellierung" id="toc-prozedurale-modellierung" class="nav-link" data-scroll-target="#prozedurale-modellierung">Prozedurale Modellierung</a></li>
+  <li><a href="#constructive-solid-geometry" id="toc-constructive-solid-geometry" class="nav-link" data-scroll-target="#constructive-solid-geometry">Constructive Solid Geometry</a></li>
+  <li><a href="#fraktale-und-mathematische-strukturen" id="toc-fraktale-und-mathematische-strukturen" class="nav-link" data-scroll-target="#fraktale-und-mathematische-strukturen">Fraktale und mathematische Strukturen</a></li>
+  <li><a href="#echtzeit-rendering-und-demo-szene" id="toc-echtzeit-rendering-und-demo-szene" class="nav-link" data-scroll-target="#echtzeit-rendering-und-demo-szene">Echtzeit-Rendering und Demo-Szene</a></li>
+  <li><a href="#forschung-und-moderne-anwendungen" id="toc-forschung-und-moderne-anwendungen" class="nav-link" data-scroll-target="#forschung-und-moderne-anwendungen">Forschung und moderne Anwendungen</a></li>
+  <li><a href="#einordnung" id="toc-einordnung" class="nav-link" data-scroll-target="#einordnung">Einordnung</a></li>
   </ul></li>
-  <li><a href="#shading-und-beleuchtung" id="toc-shading-und-beleuchtung" class="nav-link" data-scroll-target="#shading-und-beleuchtung">Shading und Beleuchtung</a>
-  <ul class="collapse">
-  <li><a href="#oberflächennormalen" id="toc-oberflächennormalen" class="nav-link" data-scroll-target="#oberflächennormalen">Oberflächennormalen</a></li>
-  <li><a href="#phong-beleuchtungsmodell" id="toc-phong-beleuchtungsmodell" class="nav-link" data-scroll-target="#phong-beleuchtungsmodell">Phong-Beleuchtungsmodell</a></li>
-  <li><a href="#schatten" id="toc-schatten" class="nav-link" data-scroll-target="#schatten">Schatten</a></li>
-  </ul></li>
+  <li><a href="#historischer-überblick" id="toc-historischer-überblick" class="nav-link" data-scroll-target="#historischer-überblick">Historischer Überblick</a></li>
   <li><a href="#quellenverzeichnis" id="toc-quellenverzeichnis" class="nav-link" data-scroll-target="#quellenverzeichnis">Quellenverzeichnis</a></li>
   </ul>
 </nav>
@@ -146,7 +112,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Theoretischer Hintergrund &amp; Methoden</h1>
+<h1 class="title">Einführung in das Thema</h1>
 </div>
 
 
@@ -169,151 +135,65 @@ window.Quarto = {
 </header>
 
 
-<section id="signed-distance-functions" class="level1">
-<h1>Signed Distance Functions</h1>
-<section id="grundidee" class="level2">
-<h2 class="anchored" data-anchor-id="grundidee">Grundidee</h2>
-<p>Eine Signed Distance Function (SDF) beschreibt die Geometrie eines Objekts über eine mathematische Funktion. Anstatt die Oberfläche durch Vertices und Dreiecke darzustellen, liefert die Funktion für jeden Punkt im Raum den Abstand zur nächstgelegenen Oberfläche.</p>
-<p>Der Begriff signed bedeutet, dass dieser Abstand mit einem Vorzeichen versehen wird. Dadurch lässt sich nicht nur bestimmen, wie weit ein Punkt von einem Objekt entfernt ist, sondern auch, ob er sich innerhalb oder außerhalb des Objekts befindet.</p>
-<p>Für einen beliebigen Punkt <span class="math inline">\(p\)</span> gilt:</p>
-<p><span class="math inline">\(f(p) &lt; 0\)</span>: Der Punkt befindet sich innerhalb des Objekts.</p>
-<p><span class="math inline">\(f(p) = 0\)</span>: Der Punkt liegt auf der Oberfläche.</p>
-<p><span class="math inline">\(f(p) &gt; 0\)</span>: Der Punkt befindet sich außerhalb des Objekts.</p>
-<p>Die Oberfläche eines Objekts entspricht somit genau der Menge aller Punkte, für die die Funktion den Wert Null annimmt.</p>
+<section id="motivation" class="level1">
+<h1>Motivation</h1>
+<section id="klassische-darstellung-von-3d-geometrie" class="level2">
+<h2 class="anchored" data-anchor-id="klassische-darstellung-von-3d-geometrie">Klassische Darstellung von 3D-Geometrie</h2>
+<p>In der Computergrafik werden dreidimensionale Objekte meist durch polygonale Netze beschrieben. Dabei wird die Oberfläche eines Modells durch eine Vielzahl kleiner Dreiecke approximiert. Diese Form der Geometrierepräsentation hat sich über viele Jahrzehnte hinweg etabliert und wird von moderner Grafik-Hardware direkt unterstützt. Aus diesem Grund bilden Polygonnetze die Grundlage nahezu aller heutigen Echtzeit-Rendering-Verfahren.</p>
+<p>Ein wesentlicher Vorteil polygonaler Netze liegt in ihrer Flexibilität. Sowohl einfache geometrische Körper als auch komplexe Modelle mit Millionen von Polygonen lassen sich auf diese Weise darstellen. Darüber hinaus existiert ein umfangreiches Ökosystem aus Modellierungswerkzeugen, Dateiformaten und Rendering-Pipelines, das auf dieser Repräsentation basiert.</p>
 </section>
-<section id="formale-definition" class="level2">
-<h2 class="anchored" data-anchor-id="formale-definition">Formale Definition</h2>
-<p>Allgemein kann eine Signed Distance Function als Funktion</p>
-<p><span class="math display">\[
-f:\mathbb R^3 \rightarrow \mathbb R
-\]</span></p>
-<p>aufgefasst werden, die jedem Punkt im dreidimensionalen Raum einen signierten Abstand zur nächstgelegenen Oberfläche zuordnet.</p>
-<p>Da eine SDF nicht nur Informationen über die Oberfläche, sondern über den gesamten Raum enthält, eignet sie sich besonders gut für geometrische Abfragen und Verfahren wie Ray Marching, die direkt auf diesen Distanzinformationen aufbauen.</p>
+<section id="grenzen-polygonaler-netze" class="level2">
+<h2 class="anchored" data-anchor-id="grenzen-polygonaler-netze">Grenzen polygonaler Netze</h2>
+<p>Trotz ihrer weiten Verbreitung sind Polygonnetze nicht für jede Anwendung die ideale Lösung. Da die Geometrie explizit durch Vertices und Dreiecke beschrieben wird, steigt der Speicherbedarf mit zunehmendem Detailgrad eines Modells. Besonders bei sehr komplexen oder fein strukturierten Oberflächen kann dies zu großen Datenmengen führen.</p>
+<p>Auch die Modellierung mathematisch definierter Formen oder prozedural erzeugter Szenen gestaltet sich häufig aufwendiger. Sollen beispielsweise mehrere Grundkörper miteinander kombiniert oder komplexe geometrische Strukturen erzeugt werden, müssen die zugrunde liegenden Meshes entsprechend angepasst werden. Obwohl hierfür etablierte Verfahren existieren, kann die Verarbeitung schnell komplex werden.</p>
+<p>Darüber hinaus beschreibt ein Polygonnetz ausschließlich die Oberfläche eines Objekts. Informationen über den umgebenden Raum, beispielsweise Abstände zu Oberflächen oder die Zugehörigkeit eines Punktes zum Inneren oder Äußeren eines Objekts, sind nicht unmittelbar verfügbar und müssen zusätzlich berechnet werden.</p>
 </section>
-<section id="die-kugel-als-beispiel" class="level2">
-<h2 class="anchored" data-anchor-id="die-kugel-als-beispiel">Die Kugel als Beispiel</h2>
-<p>Die Idee einer Signed Distance Function lässt sich gut anhand einer Kugel veranschaulichen. Angenommen, die Kugel besitzt den Radius <span class="math inline">\(r\)</span> und ihr Mittelpunkt befindet sich im Ursprung des Koordinatensystems.</p>
-<p>Für einen beliebigen Punkt <span class="math inline">\(\mathbf p\)</span> im Raum kann zunächst dessen Abstand zum Ursprung berechnet werden. Liegt der Punkt genau auf der Oberfläche der Kugel, entspricht dieser Abstand dem Radius <span class="math inline">\(r\)</span>. Befindet sich der Punkt außerhalb der Kugel, ist der Abstand größer als <span class="math inline">\(r\)</span>, innerhalb der Kugel entsprechend kleiner.</p>
-<p>Die Signed Distance Function einer Kugel ergibt sich daher zu</p>
-<p><span class="math display">\[
-f(\mathbf p)=||\mathbf p||-r
-\]</span></p>
-<p>Der Ausdruck <span class="math inline">\(||\mathbf p||\)</span> beschreibt den euklidischen Abstand des Punktes <span class="math inline">\(\mathbf p\)</span> zum Ursprung. Durch das Subtrahieren des Radius erhält man direkt den Abstand zur Kugeloberfläche.</p>
-<p>Diese Formel gilt für eine Kugel mit Mittelpunkt im Ursprung. Für eine Kugel mit einem beliebigen Mittelpunkt <span class="math inline">\(\mathbf c\)</span> lässt sich die Funktion entsprechend anpassen: <span class="math display">\[
-f(\mathbf{p}) = \|\mathbf{p} - \mathbf{c}\| - r
-\]</span></p>
-<p>[Platz für interaktive Visualisierung der SDF einer Kugel] <iframe src="tobias-assets/demos/sphere-sdf-demo.html" width="100%" height="650" style="border: none;"></iframe></p>
+<section id="alternative-geometrierepräsentationen" class="level2">
+<h2 class="anchored" data-anchor-id="alternative-geometrierepräsentationen">Alternative Geometrierepräsentationen</h2>
+<p>Um einige dieser Einschränkungen zu umgehen, wurden verschiedene alternative Methoden zur Beschreibung von Geometrie entwickelt. Dazu zählen unter anderem Voxeldarstellungen, Punktwolken sowie implizite Oberflächen. Im Gegensatz zu Polygonnetzen wird die Geometrie hierbei nicht zwangsläufig durch eine Menge von Dreiecken beschrieben.</p>
+<p>Signed Distance Functions (SDFs) gehören zu den impliziten Geometrierepräsentationen. Anstatt die Oberfläche eines Objekts direkt zu speichern, wird eine Funktion definiert, die jedem Punkt im Raum einen signierten Abstand zur nächstgelegenen Oberfläche zuordnet. Die eigentliche Geometrie ergibt sich somit indirekt aus dieser Funktion.</p>
+<p>Da bei diesem Ansatz keine expliziten Dreiecke vorhanden sind, können klassische Rasterisierungsverfahren nicht unmittelbar angewendet werden. Stattdessen kommen häufig Ray-Marching-Verfahren zum Einsatz. Dabei werden Strahlen schrittweise durch die Szene verfolgt, bis eine Oberfläche gefunden wird. Die in der Signed Distance Function enthaltenen Distanzinformationen ermöglichen dabei eine effiziente Bestimmung der nächsten Schrittweite.</p>
+<p>Die Kombination aus Signed Distance Functions und Ray Marching hat sich insbesondere für prozedurale Szenen, mathematische Modelle und experimentelle Rendering-Techniken als interessante Alternative zu klassischen Polygonnetzen etabliert.</p>
 </section>
-<section id="primitive-formen-und-operationen" class="level2">
-<h2 class="anchored" data-anchor-id="primitive-formen-und-operationen">Primitive Formen und Operationen</h2>
-<p>Die Kugel stellt das einfachste Beispiel einer Signed Distance Function dar. Das zugrunde liegende Konzept lässt sich jedoch auf viele weitere geometrische Grundkörper übertragen. Für jede Form existiert eine Funktion, die für einen beliebigen Punkt im Raum den Abstand zur nächstgelegenen Oberfläche berechnet.</p>
-<p>Zu den häufig verwendeten Primitiven gehören unter anderem Kugeln, Ebenen, Quader, Zylinder und Torusse. Obwohl sich die zugrunde liegenden Formeln teilweise deutlich unterscheiden, verfolgen sie alle dasselbe Ziel: Die Geometrie eines Objekts wird durch eine mathematische Beschreibung seiner Oberfläche definiert.</p>
-<p>Primitive SDFs bilden die Grundlage für die Modellierung komplexerer Szenen. Ähnlich wie bei der klassischen 3D-Modellierung werden zunächst einfache Grundformen definiert, aus denen anschließend komplexe Strukturen aufgebaut werden können.</p>
-<p>Die folgende Abbildung zeigt einige typische Primitive sowie ihre jeweiligen Signed Distance Functions.</p>
+</section>
+<section id="typische-anwendungsgebiete" class="level1">
+<h1>Typische Anwendungsgebiete</h1>
+<section id="prozedurale-modellierung" class="level2">
+<h2 class="anchored" data-anchor-id="prozedurale-modellierung">Prozedurale Modellierung</h2>
+<p>Ein häufiges Einsatzgebiet von Signed Distance Functions ist die prozedurale Erzeugung von Geometrie. Anstatt Objekte manuell zu modellieren und als Polygonnetz zu speichern, werden Formen durch mathematische Funktionen beschrieben und zur Laufzeit generiert. Dadurch lassen sich komplexe Szenen und Modelle mit vergleichsweise wenig Speicheraufwand erzeugen. Typische Beispiele sind Landschaften, Höhlensysteme oder abstrakte, algorithmisch erzeugte Welten und Sci-Fi-Strukturen.</p>
 <p>[Beispielbild.png]</p>
 </section>
-<section id="kombination-mehrerer-objekte" class="level2">
-<h2 class="anchored" data-anchor-id="kombination-mehrerer-objekte">Kombination mehrerer Objekte</h2>
-<p>Während einzelne Primitive bereits einfache geometrische Formen beschreiben können, entstehen interessante Szenen meist erst durch die Kombination mehrerer Objekte. Ein großer Vorteil von Signed Distance Functions besteht darin, dass solche Kombinationen direkt auf den zugrunde liegenden Distanzfunktionen durchgeführt werden können.</p>
-<p>Eine häufig verwendete Technik ist die sogenannte Constructive Solid Geometry (CSG). Dabei werden komplexe Objekte aus einfachen Grundkörpern zusammengesetzt. Die wichtigsten Operationen sind die Vereinigung, die Schnittmenge und die Differenz zweier Objekte.</p>
-<p>Für die Vereinigung zweier Objekte wird jeweils die kleinere der beiden Distanzen verwendet:</p>
-<p><span class="math display">\[
-d = \min(d_1, d_2)
-\]</span></p>
-<p>Die Schnittmenge kann durch das Maximum beider Distanzen beschrieben werden:</p>
-<p><span class="math display">\[
-d = \max(d_1, d_2)
-\]</span></p>
-<p>Für die Differenz eines Objekts (d_1) und eines Objekts (d_2) ergibt sich:</p>
-<p><span class="math display">\[
-d = \max(d_1, -d_2)
-\]</span></p>
-<p>Dadurch lassen sich komplexe Formen auf einfache Weise aus wenigen Grundkörpern erzeugen. Die mathematische Beschreibung der Geometrie bleibt dabei kompakt und kann flexibel erweitert oder verändert werden.</p>
-<p>[Platz für interaktive Visualisierung von CSG-Operationen] <iframe src="tobias-assets/demos/csg-demo.html" width="100%" height="650" style="border: none;"></iframe></p>
-<p>Die Möglichkeit, Geometrie durch mathematische Operationen zu kombinieren, zählt zu den zentralen Stärken von Signed Distance Functions und ist ein wesentlicher Grund für ihren Einsatz in der prozeduralen Modellierung und beim Ray-Marching-Rendering.</p>
+<section id="constructive-solid-geometry" class="level2">
+<h2 class="anchored" data-anchor-id="constructive-solid-geometry">Constructive Solid Geometry</h2>
+<p>Signed Distance Functions eignen sich besonders gut für Constructive Solid Geometry (CSG). Dabei werden komplexe Objekte aus einfachen Grundkörpern wie Kugeln, Würfeln oder Zylindern zusammengesetzt. Operationen wie Vereinigung, Schnittmenge oder Differenz können direkt auf den zugrunde liegenden Distanzfunktionen formuliert werden. Dies ermöglicht eine flexible und oft sehr elegante Modellierung komplexer Geometrien.</p>
+<p>[Beispielbild.png]</p>
+</section>
+<section id="fraktale-und-mathematische-strukturen" class="level2">
+<h2 class="anchored" data-anchor-id="fraktale-und-mathematische-strukturen">Fraktale und mathematische Strukturen</h2>
+<p>Ein weiterer Anwendungsbereich ist die Darstellung mathematisch definierter Objekte und Fraktale. Bekannte Beispiele sind die Mandelbulb oder die Mandelbox. Solche Strukturen weisen häufig eine sehr hohe geometrische Komplexität und feine Details auf, die mit klassischen Polygonnetzen nur schwer darstellbar wären. Durch die mathematische Beschreibung der Geometrie eignen sich SDF-basierte Verfahren besonders gut für die Visualisierung solcher Formen.</p>
+<p>[Beispielbild.png]</p>
+</section>
+<section id="echtzeit-rendering-und-demo-szene" class="level2">
+<h2 class="anchored" data-anchor-id="echtzeit-rendering-und-demo-szene">Echtzeit-Rendering und Demo-Szene</h2>
+<p>Große Bekanntheit erlangten Signed Distance Functions durch die Demo-Szene und moderne Shader-Programmierung. Da sich komplexe Geometrie direkt im Shader beschreiben lässt, können beeindruckende Szenen mit vergleichsweise wenig Programmcode erzeugt werden. Besonders bei sogenannten 4k- oder 64k-Intros, bei denen die gesamte Anwendung nur wenige Kilobyte groß sein darf, bieten SDFs erhebliche Vorteile gegenüber gespeicherter Polygongeometrie.</p>
+<p>[Beispielbild.png]</p>
+</section>
+<section id="forschung-und-moderne-anwendungen" class="level2">
+<h2 class="anchored" data-anchor-id="forschung-und-moderne-anwendungen">Forschung und moderne Anwendungen</h2>
+<p>Auch in aktuellen Forschungsgebieten spielen Distanzfunktionen eine wichtige Rolle. Sie werden unter anderem für Kollisionsabfragen, Robotik, 3D-Rekonstruktion und Verfahren des Neural Renderings eingesetzt. Insbesondere die Repräsentation von Geometrie durch Distanzfelder hat in den letzten Jahren neue Ansätze zur Erfassung und Rekonstruktion realer Szenen ermöglicht.</p>
+<p>[Beispielbild.png]</p>
+</section>
+<section id="einordnung" class="level2">
+<h2 class="anchored" data-anchor-id="einordnung">Einordnung</h2>
+<p>Trotz ihrer vielseitigen Einsatzmöglichkeiten haben Signed Distance Functions klassische Polygonnetze bislang nicht ersetzt. Moderne Grafik-Hardware ist weiterhin stark auf die Verarbeitung polygonaler Geometrie optimiert, weshalb Meshes in den meisten Echtzeit-Anwendungen dominieren. SDFs werden daher vor allem in Bereichen eingesetzt, in denen ihre mathematische Beschreibung und die daraus resultierende Flexibilität besondere Vorteile bieten.</p>
 </section>
 </section>
-<section id="ray-marching" class="level1">
-<h1>Ray Marching</h1>
-<section id="grundidee-1" class="level2">
-<h2 class="anchored" data-anchor-id="grundidee-1">Grundidee</h2>
-<p>Nachdem die Geometrie einer Szene durch Signed Distance Functions beschrieben wurde, stellt sich die Frage, wie diese dargestellt werden kann. Im Gegensatz zu polygonalen Netzen existieren keine expliziten Dreiecke, die gerendert oder auf Schnittpunkte getestet werden können. Stattdessen liegt lediglich eine mathematische Beschreibung der Szene vor.</p>
-<p>Um die Oberfläche eines Objekts zu finden, wird für jedes Pixel ein Strahl von der Kamera in die Szene gesendet. Die Aufgabe besteht nun darin, entlang dieses Strahls den Punkt zu bestimmen, an dem eine Oberfläche getroffen wird.</p>
-</section>
-<section id="nutzung-von-signed-distance-functions" class="level2">
-<h2 class="anchored" data-anchor-id="nutzung-von-signed-distance-functions">Nutzung von Signed Distance Functions</h2>
-<p>Der entscheidende Vorteil einer Signed Distance Function besteht darin, dass sie nicht nur beschreibt, ob sich ein Punkt innerhalb oder außerhalb eines Objekts befindet, sondern zusätzlich den Abstand zur nächstgelegenen Oberfläche liefert.</p>
-<p>Betrachtet man einen beliebigen Punkt entlang eines Strahls, so kann die Signed Distance Function direkt ausgewertet werden. Das Ergebnis gibt an, wie weit die nächste Oberfläche entfernt ist.</p>
-<p>Diese Information kann genutzt werden, um sich entlang des Strahls schrittweise auf die Oberfläche zuzubewegen. Anstatt feste Schrittweiten zu verwenden, wird die aktuell berechnete Distanz als neue Schrittweite gewählt. Dadurch kann sich der Strahl in leeren Bereichen der Szene schnell fortbewegen, während die Schritte in der Nähe einer Oberfläche automatisch kleiner werden.</p>
-</section>
-<section id="der-ray-marching-algorithmus" class="level2">
-<h2 class="anchored" data-anchor-id="der-ray-marching-algorithmus">Der Ray-Marching-Algorithmus</h2>
-<p>Der Algorithmus beginnt am Ursprung des Strahls, welcher sich typischerweise an der Kameraposition befindet. Anschließend wird die Signed Distance Function am aktuellen Punkt ausgewertet. Der zurückgegebene Distanzwert bestimmt, wie weit sich der Strahl entlang seiner Richtung bewegen kann.</p>
-<p>Dieser Vorgang wird wiederholt, bis die Distanz zur nächsten Oberfläche ausreichend klein wird. In diesem Fall wird davon ausgegangen, dass die Oberfläche erreicht wurde.</p>
-<p>Der grundlegende Ablauf lässt sich wie folgt zusammenfassen:</p>
-<ol type="1">
-<li>Erzeuge einen Strahl von der Kamera in die Szene.</li>
-<li>Werte die Signed Distance Function am aktuellen Punkt aus.</li>
-<li>Bewege den Strahl um die berechnete Distanz entlang seiner Richtung.</li>
-<li>Wiederhole die Schritte 2 und 3.</li>
-<li>Breche ab, sobald die Oberfläche erreicht wurde oder der Strahl die Szene verlässt.</li>
-</ol>
-<p>Die folgende Visualisierung verdeutlicht dieses Vorgehen. Die Schrittweite entspricht dabei jeweils dem Abstand zur nächstgelegenen Oberfläche. Mit jeder Iteration nähert sich der Strahl dem Objekt an, bis schließlich ein Schnittpunkt gefunden wird.</p>
-<p>[Platz für interaktive Visualisierung des Ray-Marching-Algorithmus] <iframe src="tobias-assets/demos/raymarch-demo.html" width="100%" height="650" style="border: none;"></iframe></p>
-<p>Das hier beschriebene Verfahren wird häufig als Ray Marching bezeichnet. Genauer handelt es sich aber um eine spezielle Form des Ray Marching, die als Sphere Tracing bekannt ist. Sie wurde 1995 von John C. Hart vorgestellt und nutzt die Distanzinformationen einer Signed Distance Function, um die Schrittweite adaptiv anzupassen.</p>
-</section>
-<section id="abbruchbedingungen" class="level2">
-<h2 class="anchored" data-anchor-id="abbruchbedingungen">Abbruchbedingungen</h2>
-<p>Da eine Oberfläche in der Praxis selten exakt getroffen wird, wird ein kleiner Schwellwert () definiert. Unterschreitet die berechnete Distanz diesen Wert, gilt die Oberfläche als erreicht.</p>
-<p>Zusätzlich werden maximale Grenzen für die Anzahl der Iterationen und die zurückgelegte Distanz festgelegt. Dadurch wird verhindert, dass ein Strahl unbegrenzt weiterläuft, falls keine Oberfläche getroffen wird.</p>
-<p>Diese Abbruchbedingungen stellen sicher, dass der Algorithmus auch für komplexe Szenen in einer endlichen Anzahl von Schritten terminiert.</p>
-</section>
-</section>
-<section id="shading-und-beleuchtung" class="level1">
-<h1>Shading und Beleuchtung</h1>
-<p>Nachdem durch Ray Marching ein Schnittpunkt mit der Oberfläche bestimmt wurde, kann die Farbe des entsprechenden Pixels berechnet werden. Die Position des Schnittpunkts allein reicht hierfür jedoch nicht aus. Um Beleuchtungseffekte darstellen zu können, wird zusätzlich die Orientierung der Oberfläche benötigt.</p>
-<section id="oberflächennormalen" class="level2">
-<h2 class="anchored" data-anchor-id="oberflächennormalen">Oberflächennormalen</h2>
-<p>Bei polygonalen Netzen können Oberflächennormalen direkt aus den Dreiecken eines Modells berechnet werden. Da Signed Distance Functions keine explizite Geometrie besitzen, muss diese Information auf anderem Weg gewonnen werden.</p>
-<p>Eine SDF beschreibt den Raum durch eine mathematische Funktion. Die Oberflächennormale ergibt sich dabei aus dem Gradienten dieser Funktion und zeigt in die Richtung der stärksten Änderung des Distanzwertes. Mathematisch lässt sich die Normale als normierter Gradient ausdrücken:</p>
-<p><span class="math display">\[
-\mathbf n = \frac{\nabla f}{||\nabla f||}
-\]</span></p>
-<p>In der Praxis wird der Gradient meist numerisch approximiert, indem die Signed Distance Function an mehreren benachbarten Punkten ausgewertet wird. Auf diese Weise kann für jeden Oberflächenpunkt eine Normale bestimmt werden, die anschließend für die Beleuchtungsberechnung verwendet wird.</p>
-<p><span class="math display">\[
-\mathbf n \approx
-\begin{bmatrix}
-f(x+\varepsilon,y,z)-f(x-\varepsilon,y,z) \\
-f(x,y+\varepsilon,z)-f(x,y-\varepsilon,z) \\
-f(x,y,z+\varepsilon)-f(x,y,z-\varepsilon)
-\end{bmatrix}
-\]</span></p>
-<p>Der resultierende Vektor wird anschließend normalisiert, da für die Beleuchtung nur die Richtung der Normalen relevant ist.</p>
-</section>
-<section id="phong-beleuchtungsmodell" class="level2">
-<h2 class="anchored" data-anchor-id="phong-beleuchtungsmodell">Phong-Beleuchtungsmodell</h2>
-<p>Nachdem die Oberflächennormale bestimmt wurde, kann die Beleuchtung des Oberflächenpunkts berechnet werden. In unserer Implementierung verwenden wir hierfür das Phong Reflection Model, das sich aus drei Komponenten zusammensetzt:</p>
-<ul>
-<li>Ambient Lighting</li>
-<li>Diffuse Lighting</li>
-<li>Specular Lighting</li>
-</ul>
-<p>Der Ambient-Anteil beschreibt eine konstante Grundbeleuchtung der Szene. Die diffuse Komponente modelliert die direkte Beleuchtung durch eine Lichtquelle und hängt vom Winkel zwischen Oberflächennormale und Lichtvektor ab. Der spekulare Anteil erzeugt Glanzlichter und simuliert reflektierende Oberflächen.</p>
-<p>Die diffuse Beleuchtung wird häufig mithilfe des Lambert-Modells berechnet. Die Intensität ergibt sich aus dem Skalarprodukt zwischen Oberflächennormale (n) und Lichtvektor (l):</p>
-<p><span class="math display">\[
-I_d = \max(0,\mathbf n \cdot \mathbf l)
-\]</span></p>
-<p>Flächen, die direkt zur Lichtquelle zeigen, werden dadurch stärker beleuchtet als Flächen, die in einem flachen Winkel zur Lichtquelle stehen.</p>
-<p>Durch die Kombination von Ambient-, Diffuse- und Specular-Komponente entsteht ein deutlich realistischeres Erscheinungsbild der Szene. Die zuvor berechneten Oberflächennormalen spielen dabei eine zentrale Rolle, da sie die Grundlage für sämtliche Beleuchtungsberechnungen bilden.</p>
-</section>
-<section id="schatten" class="level2">
-<h2 class="anchored" data-anchor-id="schatten">Schatten</h2>
-<p>Das Beleuchtungsmodell allein entscheidet nur, wie stark ein Punkt beleuchtet würde, wenn ihn das Licht erreicht. Es prüft jedoch nicht automatisch, ob sich zwischen dem Punkt und der Lichtquelle ein anderes Objekt befindet.</p>
-<p>Für Schatten wird daher ein zusätzlicher Strahl verwendet. Nachdem durch Ray Marching ein Oberflächenpunkt gefunden wurde, wird von diesem Punkt aus ein zweiter Strahl in Richtung der Lichtquelle gesendet. Dieser sogenannte Shadow Ray überprüft, ob auf dem Weg zur Lichtquelle ein anderes Objekt getroffen wird.</p>
-<p>Falls der Shadow Ray vor Erreichen der Lichtquelle auf eine Oberfläche trifft, liegt der ursprüngliche Punkt im Schatten. Andernfalls wird er normal beleuchtet.</p>
-<p>Die Schattenberechnung funktioniert damit ähnlich wie beim klassischen Ray Tracing. Der Unterschied liegt darin, dass auch dieser zusätzliche Strahl nicht gegen Dreiecke getestet wird, sondern wieder mithilfe der Signed Distance Function durch die Szene gemarcht wird.</p>
-<p>Auf diese Weise können Schatten direkt in das SDF-basierte Rendering integriert werden, ohne eine separate Schattenkarte oder explizite Geometrie zu benötigen.</p>
-</section>
+<section id="historischer-überblick" class="level1">
+<h1>Historischer Überblick</h1>
+<p>Die Idee, Geometrie durch mathematische Funktionen zu beschreiben, reicht deutlich weiter zurück als moderne Echtzeit-Rendering-Verfahren. Bereits in frühen Arbeiten zu impliziten Oberflächen wurden Formen nicht durch Polygonnetze dargestellt, sondern durch Funktionen definiert, deren Nullstellen die Oberfläche eines Objekts beschreiben. Solche Ansätze wurden vor allem im wissenschaftlichen Umfeld und in der geometrischen Modellierung untersucht.</p>
+<p>Im Laufe der Zeit entstand das Konzept von Distanzfunktionen, bei denen nicht nur die Lage einer Oberfläche, sondern auch der Abstand zu ihr beschrieben wird. Daraus entwickelten sich schließlich Signed Distance Functions, die zusätzlich zwischen Punkten innerhalb und außerhalb eines Objekts unterscheiden können. Diese Repräsentation erwies sich als besonders nützlich, da sie neben der Beschreibung der Geometrie auch Informationen über den umgebenden Raum bereitstellt.</p>
+<p>Ein entscheidender Meilenstein folgte 1995 mit der Veröffentlichung des Sphere-Tracing-Verfahrens durch John C. Hart. Die grundlegende Idee bestand darin, die in einer Signed Distance Function enthaltenen Abstandsinformationen zu nutzen, um Strahlen effizient durch eine Szene zu verfolgen. Im Gegensatz zu klassischen Verfahren kann dabei die Schrittweite eines Strahls direkt aus der Distanz zur nächsten Oberfläche abgeleitet werden.</p>
+<p>Die Kombination aus Signed Distance Functions und Sphere Tracing bildet bis heute die theoretische Grundlage vieler Ray-Marching-Verfahren und stellt einen wichtigen Entwicklungsschritt im Bereich impliziter Geometrierepräsentationen dar.</p>
 </section>
 <section id="quellenverzeichnis" class="level1">
 <h1>Quellenverzeichnis</h1>
