@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Tobias Jäkel">
+
+<title>Theoretischer Hintergrund &amp; Methoden</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-1e273511d09b17b40736144097ac5380.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#signed-distance-functions" id="toc-signed-distance-functions" class="nav-link active" data-scroll-target="#signed-distance-functions">Signed Distance Functions</a>
+  <ul class="collapse">
+  <li><a href="#grundidee" id="toc-grundidee" class="nav-link" data-scroll-target="#grundidee">Grundidee</a></li>
+  <li><a href="#formale-definition" id="toc-formale-definition" class="nav-link" data-scroll-target="#formale-definition">Formale Definition</a></li>
+  <li><a href="#die-kugel-als-beispiel" id="toc-die-kugel-als-beispiel" class="nav-link" data-scroll-target="#die-kugel-als-beispiel">Die Kugel als Beispiel</a></li>
+  <li><a href="#primitive-formen-und-operationen" id="toc-primitive-formen-und-operationen" class="nav-link" data-scroll-target="#primitive-formen-und-operationen">Primitive Formen und Operationen</a></li>
+  <li><a href="#kombination-mehrerer-objekte" id="toc-kombination-mehrerer-objekte" class="nav-link" data-scroll-target="#kombination-mehrerer-objekte">Kombination mehrerer Objekte</a></li>
+  </ul></li>
+  <li><a href="#ray-marching" id="toc-ray-marching" class="nav-link" data-scroll-target="#ray-marching">Ray Marching</a>
+  <ul class="collapse">
+  <li><a href="#grundidee-1" id="toc-grundidee-1" class="nav-link" data-scroll-target="#grundidee-1">Grundidee</a></li>
+  <li><a href="#nutzung-von-signed-distance-functions" id="toc-nutzung-von-signed-distance-functions" class="nav-link" data-scroll-target="#nutzung-von-signed-distance-functions">Nutzung von Signed Distance Functions</a></li>
+  <li><a href="#der-ray-marching-algorithmus" id="toc-der-ray-marching-algorithmus" class="nav-link" data-scroll-target="#der-ray-marching-algorithmus">Der Ray-Marching-Algorithmus</a></li>
+  <li><a href="#abbruchbedingungen" id="toc-abbruchbedingungen" class="nav-link" data-scroll-target="#abbruchbedingungen">Abbruchbedingungen</a></li>
+  </ul></li>
+  <li><a href="#shading-und-beleuchtung" id="toc-shading-und-beleuchtung" class="nav-link" data-scroll-target="#shading-und-beleuchtung">Shading und Beleuchtung</a>
+  <ul class="collapse">
+  <li><a href="#oberflächennormalen" id="toc-oberflächennormalen" class="nav-link" data-scroll-target="#oberflächennormalen">Oberflächennormalen</a></li>
+  <li><a href="#phong-beleuchtungsmodell" id="toc-phong-beleuchtungsmodell" class="nav-link" data-scroll-target="#phong-beleuchtungsmodell">Phong-Beleuchtungsmodell</a></li>
+  <li><a href="#schatten" id="toc-schatten" class="nav-link" data-scroll-target="#schatten">Schatten</a></li>
+  </ul></li>
+  <li><a href="#quellenverzeichnis" id="toc-quellenverzeichnis" class="nav-link" data-scroll-target="#quellenverzeichnis">Quellenverzeichnis</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Theoretischer Hintergrund &amp; Methoden</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Tobias Jäkel </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="signed-distance-functions" class="level1">
+<h1>Signed Distance Functions</h1>
+<section id="grundidee" class="level2">
+<h2 class="anchored" data-anchor-id="grundidee">Grundidee</h2>
+<p>Eine Signed Distance Function (SDF) beschreibt die Geometrie eines Objekts über eine mathematische Funktion. Anstatt die Oberfläche durch Vertices und Dreiecke darzustellen, liefert die Funktion für jeden Punkt im Raum den Abstand zur nächstgelegenen Oberfläche.</p>
+<p>Der Begriff signed bedeutet, dass dieser Abstand mit einem Vorzeichen versehen wird. Dadurch lässt sich nicht nur bestimmen, wie weit ein Punkt von einem Objekt entfernt ist, sondern auch, ob er sich innerhalb oder außerhalb des Objekts befindet.</p>
+<p>Für einen beliebigen Punkt <span class="math inline">\(p\)</span> gilt:</p>
+<p><span class="math inline">\(f(p) &lt; 0\)</span>: Der Punkt befindet sich innerhalb des Objekts.</p>
+<p><span class="math inline">\(f(p) = 0\)</span>: Der Punkt liegt auf der Oberfläche.</p>
+<p><span class="math inline">\(f(p) &gt; 0\)</span>: Der Punkt befindet sich außerhalb des Objekts.</p>
+<p>Die Oberfläche eines Objekts entspricht somit genau der Menge aller Punkte, für die die Funktion den Wert Null annimmt.</p>
+</section>
+<section id="formale-definition" class="level2">
+<h2 class="anchored" data-anchor-id="formale-definition">Formale Definition</h2>
+<p>Allgemein kann eine Signed Distance Function als Funktion</p>
+<p><span class="math display">\[
+f:\mathbb R^3 \rightarrow \mathbb R
+\]</span></p>
+<p>aufgefasst werden, die jedem Punkt im dreidimensionalen Raum einen signierten Abstand zur nächstgelegenen Oberfläche zuordnet.</p>
+<p>Da eine SDF nicht nur Informationen über die Oberfläche, sondern über den gesamten Raum enthält, eignet sie sich besonders gut für geometrische Abfragen und Verfahren wie Ray Marching, die direkt auf diesen Distanzinformationen aufbauen.</p>
+</section>
+<section id="die-kugel-als-beispiel" class="level2">
+<h2 class="anchored" data-anchor-id="die-kugel-als-beispiel">Die Kugel als Beispiel</h2>
+<p>Die Idee einer Signed Distance Function lässt sich gut anhand einer Kugel veranschaulichen. Angenommen, die Kugel besitzt den Radius <span class="math inline">\(r\)</span> und ihr Mittelpunkt befindet sich im Ursprung des Koordinatensystems.</p>
+<p>Für einen beliebigen Punkt <span class="math inline">\(\mathbf p\)</span> im Raum kann zunächst dessen Abstand zum Ursprung berechnet werden. Liegt der Punkt genau auf der Oberfläche der Kugel, entspricht dieser Abstand dem Radius <span class="math inline">\(r\)</span>. Befindet sich der Punkt außerhalb der Kugel, ist der Abstand größer als <span class="math inline">\(r\)</span>, innerhalb der Kugel entsprechend kleiner.</p>
+<p>Die Signed Distance Function einer Kugel ergibt sich daher zu</p>
+<p><span class="math display">\[
+f(\mathbf p)=||\mathbf p||-r
+\]</span></p>
+<p>Der Ausdruck <span class="math inline">\(||\mathbf p||\)</span> beschreibt den euklidischen Abstand des Punktes <span class="math inline">\(\mathbf p\)</span> zum Ursprung. Durch das Subtrahieren des Radius erhält man direkt den Abstand zur Kugeloberfläche.</p>
+<p>Diese Formel gilt für eine Kugel mit Mittelpunkt im Ursprung. Für eine Kugel mit einem beliebigen Mittelpunkt <span class="math inline">\(\mathbf c\)</span> lässt sich die Funktion entsprechend anpassen: <span class="math display">\[
+f(\mathbf{p}) = \|\mathbf{p} - \mathbf{c}\| - r
+\]</span></p>
+<p>[Platz für interaktive Visualisierung der SDF einer Kugel] <iframe src="tobias-assets/demos/sphere-sdf-demo.html" width="100%" height="650" style="border: none;"></iframe></p>
+</section>
+<section id="primitive-formen-und-operationen" class="level2">
+<h2 class="anchored" data-anchor-id="primitive-formen-und-operationen">Primitive Formen und Operationen</h2>
+<p>Die Kugel stellt das einfachste Beispiel einer Signed Distance Function dar. Das zugrunde liegende Konzept lässt sich jedoch auf viele weitere geometrische Grundkörper übertragen. Für jede Form existiert eine Funktion, die für einen beliebigen Punkt im Raum den Abstand zur nächstgelegenen Oberfläche berechnet.</p>
+<p>Zu den häufig verwendeten Primitiven gehören unter anderem Kugeln, Ebenen, Quader, Zylinder und Torusse. Obwohl sich die zugrunde liegenden Formeln teilweise deutlich unterscheiden, verfolgen sie alle dasselbe Ziel: Die Geometrie eines Objekts wird durch eine mathematische Beschreibung seiner Oberfläche definiert.</p>
+<p>Primitive SDFs bilden die Grundlage für die Modellierung komplexerer Szenen. Ähnlich wie bei der klassischen 3D-Modellierung werden zunächst einfache Grundformen definiert, aus denen anschließend komplexe Strukturen aufgebaut werden können.</p>
+<p>Die folgende Abbildung zeigt einige typische Primitive sowie ihre jeweiligen Signed Distance Functions.</p>
+<p>[Beispielbild.png]</p>
+</section>
+<section id="kombination-mehrerer-objekte" class="level2">
+<h2 class="anchored" data-anchor-id="kombination-mehrerer-objekte">Kombination mehrerer Objekte</h2>
+<p>Während einzelne Primitive bereits einfache geometrische Formen beschreiben können, entstehen interessante Szenen meist erst durch die Kombination mehrerer Objekte. Ein großer Vorteil von Signed Distance Functions besteht darin, dass solche Kombinationen direkt auf den zugrunde liegenden Distanzfunktionen durchgeführt werden können.</p>
+<p>Eine häufig verwendete Technik ist die sogenannte Constructive Solid Geometry (CSG). Dabei werden komplexe Objekte aus einfachen Grundkörpern zusammengesetzt. Die wichtigsten Operationen sind die Vereinigung, die Schnittmenge und die Differenz zweier Objekte.</p>
+<p>Für die Vereinigung zweier Objekte wird jeweils die kleinere der beiden Distanzen verwendet:</p>
+<p><span class="math display">\[
+d = \min(d_1, d_2)
+\]</span></p>
+<p>Die Schnittmenge kann durch das Maximum beider Distanzen beschrieben werden:</p>
+<p><span class="math display">\[
+d = \max(d_1, d_2)
+\]</span></p>
+<p>Für die Differenz eines Objekts (d_1) und eines Objekts (d_2) ergibt sich:</p>
+<p><span class="math display">\[
+d = \max(d_1, -d_2)
+\]</span></p>
+<p>Dadurch lassen sich komplexe Formen auf einfache Weise aus wenigen Grundkörpern erzeugen. Die mathematische Beschreibung der Geometrie bleibt dabei kompakt und kann flexibel erweitert oder verändert werden.</p>
+<p>[Platz für interaktive Visualisierung von CSG-Operationen] <iframe src="tobias-assets/demos/csg-demo.html" width="100%" height="650" style="border: none;"></iframe></p>
+<p>Die Möglichkeit, Geometrie durch mathematische Operationen zu kombinieren, zählt zu den zentralen Stärken von Signed Distance Functions und ist ein wesentlicher Grund für ihren Einsatz in der prozeduralen Modellierung und beim Ray-Marching-Rendering.</p>
+</section>
+</section>
+<section id="ray-marching" class="level1">
+<h1>Ray Marching</h1>
+<section id="grundidee-1" class="level2">
+<h2 class="anchored" data-anchor-id="grundidee-1">Grundidee</h2>
+<p>Nachdem die Geometrie einer Szene durch Signed Distance Functions beschrieben wurde, stellt sich die Frage, wie diese dargestellt werden kann. Im Gegensatz zu polygonalen Netzen existieren keine expliziten Dreiecke, die gerendert oder auf Schnittpunkte getestet werden können. Stattdessen liegt lediglich eine mathematische Beschreibung der Szene vor.</p>
+<p>Um die Oberfläche eines Objekts zu finden, wird für jedes Pixel ein Strahl von der Kamera in die Szene gesendet. Die Aufgabe besteht nun darin, entlang dieses Strahls den Punkt zu bestimmen, an dem eine Oberfläche getroffen wird.</p>
+</section>
+<section id="nutzung-von-signed-distance-functions" class="level2">
+<h2 class="anchored" data-anchor-id="nutzung-von-signed-distance-functions">Nutzung von Signed Distance Functions</h2>
+<p>Der entscheidende Vorteil einer Signed Distance Function besteht darin, dass sie nicht nur beschreibt, ob sich ein Punkt innerhalb oder außerhalb eines Objekts befindet, sondern zusätzlich den Abstand zur nächstgelegenen Oberfläche liefert.</p>
+<p>Betrachtet man einen beliebigen Punkt entlang eines Strahls, so kann die Signed Distance Function direkt ausgewertet werden. Das Ergebnis gibt an, wie weit die nächste Oberfläche entfernt ist.</p>
+<p>Diese Information kann genutzt werden, um sich entlang des Strahls schrittweise auf die Oberfläche zuzubewegen. Anstatt feste Schrittweiten zu verwenden, wird die aktuell berechnete Distanz als neue Schrittweite gewählt. Dadurch kann sich der Strahl in leeren Bereichen der Szene schnell fortbewegen, während die Schritte in der Nähe einer Oberfläche automatisch kleiner werden.</p>
+</section>
+<section id="der-ray-marching-algorithmus" class="level2">
+<h2 class="anchored" data-anchor-id="der-ray-marching-algorithmus">Der Ray-Marching-Algorithmus</h2>
+<p>Der Algorithmus beginnt am Ursprung des Strahls, welcher sich typischerweise an der Kameraposition befindet. Anschließend wird die Signed Distance Function am aktuellen Punkt ausgewertet. Der zurückgegebene Distanzwert bestimmt, wie weit sich der Strahl entlang seiner Richtung bewegen kann.</p>
+<p>Dieser Vorgang wird wiederholt, bis die Distanz zur nächsten Oberfläche ausreichend klein wird. In diesem Fall wird davon ausgegangen, dass die Oberfläche erreicht wurde.</p>
+<p>Der grundlegende Ablauf lässt sich wie folgt zusammenfassen:</p>
+<ol type="1">
+<li>Erzeuge einen Strahl von der Kamera in die Szene.</li>
+<li>Werte die Signed Distance Function am aktuellen Punkt aus.</li>
+<li>Bewege den Strahl um die berechnete Distanz entlang seiner Richtung.</li>
+<li>Wiederhole die Schritte 2 und 3.</li>
+<li>Breche ab, sobald die Oberfläche erreicht wurde oder der Strahl die Szene verlässt.</li>
+</ol>
+<p>Die folgende Visualisierung verdeutlicht dieses Vorgehen. Die Schrittweite entspricht dabei jeweils dem Abstand zur nächstgelegenen Oberfläche. Mit jeder Iteration nähert sich der Strahl dem Objekt an, bis schließlich ein Schnittpunkt gefunden wird.</p>
+<p>[Platz für interaktive Visualisierung des Ray-Marching-Algorithmus] <iframe src="tobias-assets/demos/raymarch-demo.html" width="100%" height="650" style="border: none;"></iframe></p>
+<p>Das hier beschriebene Verfahren wird häufig als Ray Marching bezeichnet. Genauer handelt es sich aber um eine spezielle Form des Ray Marching, die als Sphere Tracing bekannt ist. Sie wurde 1995 von John C. Hart vorgestellt und nutzt die Distanzinformationen einer Signed Distance Function, um die Schrittweite adaptiv anzupassen.</p>
+</section>
+<section id="abbruchbedingungen" class="level2">
+<h2 class="anchored" data-anchor-id="abbruchbedingungen">Abbruchbedingungen</h2>
+<p>Da eine Oberfläche in der Praxis selten exakt getroffen wird, wird ein kleiner Schwellwert () definiert. Unterschreitet die berechnete Distanz diesen Wert, gilt die Oberfläche als erreicht.</p>
+<p>Zusätzlich werden maximale Grenzen für die Anzahl der Iterationen und die zurückgelegte Distanz festgelegt. Dadurch wird verhindert, dass ein Strahl unbegrenzt weiterläuft, falls keine Oberfläche getroffen wird.</p>
+<p>Diese Abbruchbedingungen stellen sicher, dass der Algorithmus auch für komplexe Szenen in einer endlichen Anzahl von Schritten terminiert.</p>
+</section>
+</section>
+<section id="shading-und-beleuchtung" class="level1">
+<h1>Shading und Beleuchtung</h1>
+<p>Nachdem durch Ray Marching ein Schnittpunkt mit der Oberfläche bestimmt wurde, kann die Farbe des entsprechenden Pixels berechnet werden. Die Position des Schnittpunkts allein reicht hierfür jedoch nicht aus. Um Beleuchtungseffekte darstellen zu können, wird zusätzlich die Orientierung der Oberfläche benötigt.</p>
+<section id="oberflächennormalen" class="level2">
+<h2 class="anchored" data-anchor-id="oberflächennormalen">Oberflächennormalen</h2>
+<p>Bei polygonalen Netzen können Oberflächennormalen direkt aus den Dreiecken eines Modells berechnet werden. Da Signed Distance Functions keine explizite Geometrie besitzen, muss diese Information auf anderem Weg gewonnen werden.</p>
+<p>Eine SDF beschreibt den Raum durch eine mathematische Funktion. Die Oberflächennormale ergibt sich dabei aus dem Gradienten dieser Funktion und zeigt in die Richtung der stärksten Änderung des Distanzwertes. Mathematisch lässt sich die Normale als normierter Gradient ausdrücken:</p>
+<p><span class="math display">\[
+\mathbf n = \frac{\nabla f}{||\nabla f||}
+\]</span></p>
+<p>In der Praxis wird der Gradient meist numerisch approximiert, indem die Signed Distance Function an mehreren benachbarten Punkten ausgewertet wird. Auf diese Weise kann für jeden Oberflächenpunkt eine Normale bestimmt werden, die anschließend für die Beleuchtungsberechnung verwendet wird.</p>
+<p><span class="math display">\[
+\mathbf n \approx
+\begin{bmatrix}
+f(x+\varepsilon,y,z)-f(x-\varepsilon,y,z) \\
+f(x,y+\varepsilon,z)-f(x,y-\varepsilon,z) \\
+f(x,y,z+\varepsilon)-f(x,y,z-\varepsilon)
+\end{bmatrix}
+\]</span></p>
+<p>Der resultierende Vektor wird anschließend normalisiert, da für die Beleuchtung nur die Richtung der Normalen relevant ist.</p>
+</section>
+<section id="phong-beleuchtungsmodell" class="level2">
+<h2 class="anchored" data-anchor-id="phong-beleuchtungsmodell">Phong-Beleuchtungsmodell</h2>
+<p>Nachdem die Oberflächennormale bestimmt wurde, kann die Beleuchtung des Oberflächenpunkts berechnet werden. In unserer Implementierung verwenden wir hierfür das Phong Reflection Model, das sich aus drei Komponenten zusammensetzt:</p>
+<ul>
+<li>Ambient Lighting</li>
+<li>Diffuse Lighting</li>
+<li>Specular Lighting</li>
+</ul>
+<p>Der Ambient-Anteil beschreibt eine konstante Grundbeleuchtung der Szene. Die diffuse Komponente modelliert die direkte Beleuchtung durch eine Lichtquelle und hängt vom Winkel zwischen Oberflächennormale und Lichtvektor ab. Der spekulare Anteil erzeugt Glanzlichter und simuliert reflektierende Oberflächen.</p>
+<p>Die diffuse Beleuchtung wird häufig mithilfe des Lambert-Modells berechnet. Die Intensität ergibt sich aus dem Skalarprodukt zwischen Oberflächennormale (n) und Lichtvektor (l):</p>
+<p><span class="math display">\[
+I_d = \max(0,\mathbf n \cdot \mathbf l)
+\]</span></p>
+<p>Flächen, die direkt zur Lichtquelle zeigen, werden dadurch stärker beleuchtet als Flächen, die in einem flachen Winkel zur Lichtquelle stehen.</p>
+<p>Durch die Kombination von Ambient-, Diffuse- und Specular-Komponente entsteht ein deutlich realistischeres Erscheinungsbild der Szene. Die zuvor berechneten Oberflächennormalen spielen dabei eine zentrale Rolle, da sie die Grundlage für sämtliche Beleuchtungsberechnungen bilden.</p>
+</section>
+<section id="schatten" class="level2">
+<h2 class="anchored" data-anchor-id="schatten">Schatten</h2>
+<p>Das Beleuchtungsmodell allein entscheidet nur, wie stark ein Punkt beleuchtet würde, wenn ihn das Licht erreicht. Es prüft jedoch nicht automatisch, ob sich zwischen dem Punkt und der Lichtquelle ein anderes Objekt befindet.</p>
+<p>Für Schatten wird daher ein zusätzlicher Strahl verwendet. Nachdem durch Ray Marching ein Oberflächenpunkt gefunden wurde, wird von diesem Punkt aus ein zweiter Strahl in Richtung der Lichtquelle gesendet. Dieser sogenannte Shadow Ray überprüft, ob auf dem Weg zur Lichtquelle ein anderes Objekt getroffen wird.</p>
+<p>Falls der Shadow Ray vor Erreichen der Lichtquelle auf eine Oberfläche trifft, liegt der ursprüngliche Punkt im Schatten. Andernfalls wird er normal beleuchtet.</p>
+<p>Die Schattenberechnung funktioniert damit ähnlich wie beim klassischen Ray Tracing. Der Unterschied liegt darin, dass auch dieser zusätzliche Strahl nicht gegen Dreiecke getestet wird, sondern wieder mithilfe der Signed Distance Function durch die Szene gemarcht wird.</p>
+<p>Auf diese Weise können Schatten direkt in das SDF-basierte Rendering integriert werden, ohne eine separate Schattenkarte oder explizite Geometrie zu benötigen.</p>
+</section>
+</section>
+<section id="quellenverzeichnis" class="level1">
+<h1>Quellenverzeichnis</h1>
+<p>Sphere Tracing: A Geometric Method for the Antialiased Ray Tracing of Implicit Surfaces, John C. Hart, 1995, https://www.researchgate.net/publication/2792108_Sphere_Tracing_A_Geometric_Method_for_the_Antialiased_Ray_Tracing_of_Implicit_Surfaces</p>
+<p>Distance Functions, Inigo Quilez, https://iquilezles.org/articles/distfunctions/</p>
+<p>Ray Marching, Inigo Quilez, https://iquilezles.org/articles/raymarchingdf/</p>
+<p>Ray Marching and Signed Distance Functions, Jamie Wong, https://jamie-wong.com/2016/07/15/ray-marching-signed-distance-functions/</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/killuari\.github\.io\/vcde\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
