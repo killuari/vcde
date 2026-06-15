@@ -6,6 +6,7 @@ format:
     toc: true
     toc-depth: 2
     theme: cosmo
+page-layout: full
 jupyter: python3
 bibliography: references.bib
 ---
@@ -1102,3 +1103,195 @@ void main() {
 * **Idee 3: 3D Fraktale (Das Mandelbulb)**
     * *Warum:* Ein perfektes Beispiel für Geometrie mit unendlichem Detailgrad, die mit Polygonen absolut unmöglich zu rendern wäre.
     * *Umsetzung:* Kurzer Exkurs in die Mathematik eines 3D-Fraktals und ein Shadertoy-Embed zum selbst Erkunden.
+
+
+## Verwandte Methoden und CSG
+
+Dieser Abschnitt fokussiert sich auf die Frage, wie Ray Marching mit SDFs im Vergleich zu bekannteren Rendering-Methoden einzuordnen ist und warum Constructive Solid Geometry (CSG) bei SDFs besonders elegant funktioniert.
+
+### Verwandte Methoden
+
+In der klassischen Echtzeitgrafik dominiert **Rasterisierung**. Dabei werden 3D-Modelle als Dreiecksnetze beschrieben, auf den Bildschirm projiziert und anschließend Pixel für Pixel eingefärbt. Diese Methode ist sehr schnell und bildet die Grundlage moderner Game-Engines. Ihr Nachteil ist, dass jede Form zuerst als Mesh vorliegen muss. Sehr glatte, prozedurale oder topologisch komplexe Formen können dadurch aufwendig werden, weil die Geometrie explizit modelliert, gespeichert und verwaltet werden muss.
+
+**Ray Tracing** verfolgt dagegen Strahlen von der Kamera in die Szene und berechnet Schnittpunkte mit Objekten. Dadurch lassen sich Reflexionen, Schatten und globale Beleuchtung sehr natürlich beschreiben. Klassisches Ray Tracing braucht jedoch explizite Schnittpunkttests, zum Beispiel zwischen einem Strahl und einem Dreieck, einer Kugel oder einer Ebene. Die Szene besteht also weiterhin aus konkreten geometrischen Primitiven oder Meshes.
+
+**Ray Marching** mit SDFs arbeitet anders. Ein Strahl wird nicht direkt mit einem Objekt geschnitten. Stattdessen fragt man an jedem Punkt entlang des Strahls: "Wie weit bin ich mindestens von der nächsten Oberfläche entfernt?" Diese Distanz kommt aus der Signed Distance Function. Der Strahl kann dann genau um diese Distanz weiterlaufen, ohne eine Oberfläche zu überspringen. Dieses Verfahren wird bei echten Distanzfunktionen auch **Sphere Tracing** genannt.
+
+Der zentrale Unterschied ist also die Repräsentation der Geometrie:
+
+| Methode | Geometrie | Grundidee | Stärke | Schwäche |
+|---|---|---|---|---|
+| Rasterisierung | Dreiecksnetze | Dreiecke auf Bildschirm projizieren | sehr schnell, etablierter Standard | komplexe Formen brauchen viele Polygone |
+| Ray Tracing | explizite Objekte oder Meshes | Strahlen schneiden Szene | realistische Lichtsimulation | viele Schnittpunkttests, hoher Aufwand |
+| Ray Marching mit SDFs | implizite Distanzfelder | Strahlen schrittweise anhand von Distanzen bewegen | prozedurale Formen, CSG, Fraktale | Performance hängt stark von Szene und Schrittzahl ab |
+
+### Mathematische Grundlage: Signed Distance Functions
+
+Eine **Signed Distance Function** beschreibt ein Objekt nicht durch Vertices, Kanten oder Dreiecke, sondern durch eine Funktion
+
+$$
+d(\mathbf{p}) : \mathbb{R}^3 \rightarrow \mathbb{R}.
+$$
+
+Für jeden Punkt $\mathbf{p}$ im Raum gibt die Funktion den Abstand zur nächsten Oberfläche zurück. Das Vorzeichen kodiert, ob der Punkt innen oder außen liegt:
+
+$$
+\begin{cases}
+d(\mathbf{p}) > 0 & \text{Punkt liegt außerhalb des Objekts} \\
+d(\mathbf{p}) = 0 & \text{Punkt liegt auf der Oberfläche} \\
+d(\mathbf{p}) < 0 & \text{Punkt liegt innerhalb des Objekts}
+\end{cases}
+$$
+
+Eine Kugel mit Radius $r$ um den Ursprung ist zum Beispiel:
+
+$$
+d_{\text{Kugel}}(\mathbf{p}) = \|\mathbf{p}\| - r.
+$$
+
+Das ist anschaulich: $\|\mathbf{p}\|$ ist der Abstand des Punktes zum Mittelpunkt. Wenn davon der Radius abgezogen wird, bleibt genau der Abstand zur Kugeloberfläche übrig. Bei einer Kugel mit verschobenem Mittelpunkt $\mathbf{c}$ wird daraus:
+
+$$
+d_{\text{Kugel}}(\mathbf{p}) = \|\mathbf{p} - \mathbf{c}\| - r.
+$$
+
+Für eine achsenausgerichtete Box mit Halbausdehnung $\mathbf{b} = (b_x, b_y, b_z)$ ist die Formel etwas komplexer, weil der nächste Oberflächenpunkt je nach Position auf einer Fläche, Kante oder Ecke liegen kann. Im Shader wird dafür diese kompakte SDF verwendet:
+
+```glsl
+float sdBox(vec3 p, vec3 b) {
+  vec3 q = abs(p) - b;
+  return length(max(q, 0.0)) +
+    min(max(q.x, max(q.y, q.z)), 0.0);
+}
+```
+
+Der wichtige Punkt ist: Auch diese Box ist im Demo nicht als Mesh gespeichert. Sie existiert nur als Funktion, die an jedem Punkt im Raum eine Distanz berechnet.
+
+### Ray Marching / Sphere Tracing
+
+Beim Rendering wird pro Pixel ein Strahl von der Kamera in die Szene geschickt. Ein Strahl kann parametrisch geschrieben werden als:
+
+$$
+\mathbf{r}(t) = \mathbf{o} + t \mathbf{v}
+$$
+
+mit Kameraposition $\mathbf{o}$, Blickrichtung $\mathbf{v}$ und Laufparameter $t \ge 0$. Bei klassischem Ray Tracing würde man jetzt analytisch einen Schnittpunkt mit Dreiecken oder Primitiven berechnen. Beim Ray Marching wird stattdessen iteriert:
+
+$$
+t_{i+1} = t_i + d(\mathbf{r}(t_i)).
+$$
+
+Die SDF sagt also, wie weit der aktuelle Punkt mindestens von der nächsten Oberfläche entfernt ist. Um genau diese Distanz darf der Strahl weitergehen, ohne die Oberfläche zu überspringen. Sobald
+
+$$
+|d(\mathbf{r}(t_i))| < \varepsilon
+$$
+
+gilt, wird der Punkt als Treffer auf der Oberfläche akzeptiert. Im Demo ist diese Idee im Shader als Schleife umgesetzt:
+
+```glsl
+for (int i = 0; i < 110; i++) {
+  p = ro + rd * depth;
+  float d = scene(p);
+
+  if (d < 0.001) {
+    return depth;
+  }
+
+  depth += d * 0.86;
+}
+```
+
+Der Faktor `0.86` ist eine praktische Sicherheitsdämpfung. Rein theoretisch kann man bei einer echten, korrekt skalierten SDF direkt um `d` weitergehen. In Shader-Demos verwendet man oft eine etwas kleinere Schrittweite, weil kombinierte oder geglättete Distanzfelder nicht immer perfekte Distanzfunktionen bleiben.
+
+### Constructive Solid Geometry mit SDFs
+
+Constructive Solid Geometry beschreibt komplexe Körper als Kombination einfacher Grundformen. Statt ein Objekt direkt als Mesh zu modellieren, setzt man es aus Primitiven wie Kugeln, Boxen, Tori oder Zylindern zusammen. Bei klassischen Meshes bedeutet das oft geometrische Operationen auf Dreiecken. Bei SDFs reicht dagegen häufig eine einfache mathematische Kombination der Distanzwerte.
+
+Angenommen, $d_1(\mathbf{p})$ ist die Distanz zur ersten Form und $d_2(\mathbf{p})$ die Distanz zur zweiten Form. Dann lassen sich die wichtigsten CSG-Operationen so ausdrücken:
+
+| Operation | SDF-Formel | Bedeutung |
+|---|---|---|
+| Union | $d(\mathbf{p}) = \min(d_1(\mathbf{p}), d_2(\mathbf{p}))$ | beide Objekte zusammen |
+| Intersection | $d(\mathbf{p}) = \max(d_1(\mathbf{p}), d_2(\mathbf{p}))$ | nur der gemeinsame Bereich |
+| Difference | $d(\mathbf{p}) = \max(d_1(\mathbf{p}), -d_2(\mathbf{p}))$ | erstes Objekt ohne zweites Objekt |
+
+Die Intuition dahinter:
+
+* Bei der **Union** interessiert die näher gelegene Oberfläche. Deshalb nimmt man das Minimum.
+* Bei der **Intersection** muss ein Punkt in beiden Körpern liegen. Ein Punkt ist erst dann innen, wenn beide Distanzen negativ sind. Deshalb bestimmt die größere Distanz die Grenze.
+* Bei der **Difference** wird das zweite Objekt aus dem ersten herausgeschnitten. Durch $-d_2$ wird innen und außen der zweiten Form vertauscht.
+
+Für mehr als zwei Objekte wird dieselbe Operation wiederholt. Im Demo beginnt die Szene mit dem ersten Objekt und kombiniert dann nacheinander die weiteren aktiven Objekte:
+
+```glsl
+float d = d1;
+d = min(d, d2);
+d = min(d, d3);
+d = min(d, d4);
+```
+
+Bei `Union` wächst die Szene dadurch mit jedem Objekt. Bei `Difference` bleibt Objekt 1 die Basis, und alle weiteren Objekte werden davon abgezogen:
+
+```glsl
+float d = d1;
+d = max(d, -d2);
+d = max(d, -d3);
+```
+
+Das macht CSG zu einem starken Beispiel für SDFs: Eine Änderung in einer einzigen Formel kann die Topologie der Szene verändern, ohne dass neue Dreiecke erzeugt oder Meshes neu berechnet werden müssen. Für die Präsentation eignet sich das gut, weil man an Union, Intersection und Difference direkt sieht, dass SDFs nicht nur eine andere Rendering-Technik sind, sondern auch eine andere Art, Geometrie zu denken.
+
+### Glatte Übergänge
+
+Die Demo enthält zusätzlich einen Regler für **Verschmelzung**. Mathematisch wird dafür die harte `min`- oder `max`-Operation durch eine geglättete Variante ersetzt. Für eine weiche Union kann man zum Beispiel zwischen den beiden Distanzwerten interpolieren:
+
+```glsl
+float smoothUnion(float d1, float d2, float k) {
+  float h = clamp(0.5 + 0.5 * (d2 - d1) / k, 0.0, 1.0);
+  return mix(d2, d1, h) - k * h * (1.0 - h);
+}
+```
+
+Der Parameter `k` kontrolliert die Breite des Übergangsbereichs. Bei `k = 0` bleibt die CSG-Operation hart. Je größer `k` wird, desto weicher gehen die Oberflächen ineinander über. Das ist ein Beispiel dafür, dass SDFs nicht nur boolesche Geometrieoperationen erlauben, sondern auch kontinuierliche Formmanipulationen.
+
+### Normalen und Beleuchtung
+
+Für die Beleuchtung braucht der Shader eine Oberflächennormale. Da keine Dreiecke existieren, gibt es auch keine gespeicherten Vertex-Normalen. Stattdessen wird die Normale aus dem Gradienten der SDF geschätzt:
+
+$$
+\mathbf{n}(\mathbf{p}) =
+\frac{\nabla d(\mathbf{p})}{\|\nabla d(\mathbf{p})\|}.
+$$
+
+Im Shader wird dieser Gradient numerisch angenähert, indem die SDF in kleinen Abständen in $x$-, $y$- und $z$-Richtung ausgewertet wird:
+
+```glsl
+vec3 normalAt(vec3 p) {
+  vec2 e = vec2(0.0015, 0.0);
+  return normalize(vec3(
+    scene(p + e.xyy) - scene(p - e.xyy),
+    scene(p + e.yxy) - scene(p - e.yxy),
+    scene(p + e.yyx) - scene(p - e.yyx)
+  ));
+}
+```
+
+Auch hier sieht man wieder den zentralen Unterschied zu Meshes: Die Geometrie wird nicht aus gespeicherten Flächen gelesen, sondern durch wiederholtes Auswerten der Distanzfunktion rekonstruiert.
+
+### Idee für die Live-Demo
+
+Die Demo zeigt eine kleine SDF-Szene aus mehreren Primitiven. Links ist das Ergebnis des Ray-Marching-Shaders zu sehen, rechts die editierbare Beschreibung der Szene. Die Objektliste wählt die primitiven SDFs aus, und die Kombinationsfunktion zeigt, wie daraus die Szene gebaut wird. Zwischen `Union`, `Intersection` und `Difference` kann gewechselt werden, sodass die Wirkung der CSG-Operationen direkt sichtbar wird.
+
+```{=html}
+<div class="demo-wide">
+<iframe
+  src="demos/csg-demo/index.html"
+  width="100%"
+  height="930"
+  scrolling="no"
+  style="border: 1px solid #d7dce3; border-radius: 4px; overflow: hidden;"
+  title="Interaktive SDF-CSG-Demo">
+</iframe>
+</div>
+
+```
