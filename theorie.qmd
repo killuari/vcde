@@ -1,0 +1,218 @@
+---
+title: "Theoretischer Hintergrund & Methoden"
+author: "Tobias Jäkel"
+format: 
+  html:
+    toc: true
+    toc-depth: 2
+    theme: default
+---
+
+# Signed Distance Functions
+
+## Grundidee
+
+Eine Signed Distance Function (SDF) beschreibt die Geometrie eines Objekts über eine mathematische Funktion. Anstatt die Oberfläche durch Vertices und Dreiecke darzustellen, liefert die Funktion für jeden Punkt im Raum den Abstand zur nächstgelegenen Oberfläche.
+
+Der Begriff signed bedeutet, dass dieser Abstand mit einem Vorzeichen versehen wird. Dadurch lässt sich nicht nur bestimmen, wie weit ein Punkt von einem Objekt entfernt ist, sondern auch, ob er sich innerhalb oder außerhalb des Objekts befindet.
+
+Für einen beliebigen Punkt $p$ gilt:
+
+$f(p) < 0$: Der Punkt befindet sich innerhalb des Objekts.
+
+$f(p) = 0$: Der Punkt liegt auf der Oberfläche.
+
+$f(p) > 0$: Der Punkt befindet sich außerhalb des Objekts.
+
+Die Oberfläche eines Objekts entspricht somit genau der Menge aller Punkte, für die die Funktion den Wert Null annimmt.
+
+## Formale Definition
+
+Allgemein kann eine Signed Distance Function als Funktion
+
+$$
+f:\mathbb R^3 \rightarrow \mathbb R
+$$
+
+aufgefasst werden, die jedem Punkt im dreidimensionalen Raum einen signierten Abstand zur nächstgelegenen Oberfläche zuordnet.
+
+Da eine SDF nicht nur Informationen über die Oberfläche, sondern über den gesamten Raum enthält, eignet sie sich besonders gut für geometrische Abfragen und Verfahren wie Ray Marching, die direkt auf diesen Distanzinformationen aufbauen.
+
+## Die Kugel als Beispiel
+
+Die Idee einer Signed Distance Function lässt sich gut anhand einer Kugel veranschaulichen. Angenommen, die Kugel besitzt den Radius $r$ und ihr Mittelpunkt befindet sich im Ursprung des Koordinatensystems.
+
+Für einen beliebigen Punkt $\mathbf p$ im Raum kann zunächst dessen Abstand zum Ursprung berechnet werden. Liegt der Punkt genau auf der Oberfläche der Kugel, entspricht dieser Abstand dem Radius $r$. Befindet sich der Punkt außerhalb der Kugel, ist der Abstand größer als $r$, innerhalb der Kugel entsprechend kleiner.
+
+Die Signed Distance Function einer Kugel ergibt sich daher zu
+
+$$
+f(\mathbf p)=||\mathbf p||-r
+$$
+
+Der Ausdruck $||\mathbf p||$ beschreibt den euklidischen Abstand des Punktes $\mathbf p$ zum Ursprung. Durch das Subtrahieren des Radius erhält man direkt den Abstand zur Kugeloberfläche. 
+
+Diese Formel gilt für eine Kugel mit Mittelpunkt im Ursprung. Für eine Kugel mit einem beliebigen Mittelpunkt $\mathbf c$ lässt sich die Funktion entsprechend anpassen:
+$$
+f(\mathbf{p}) = \|\mathbf{p} - \mathbf{c}\| - r
+$$
+
+[Platz für interaktive Visualisierung der SDF einer Kugel]
+<iframe src="tobias-assets/demos/sphere-sdf-demo.html" width="100%" height="650" style="border: none;"></iframe>
+
+## Primitive Formen und Operationen
+
+Die Kugel stellt das einfachste Beispiel einer Signed Distance Function dar. Das zugrunde liegende Konzept lässt sich jedoch auf viele weitere geometrische Grundkörper übertragen. Für jede Form existiert eine Funktion, die für einen beliebigen Punkt im Raum den Abstand zur nächstgelegenen Oberfläche berechnet.
+
+Zu den häufig verwendeten Primitiven gehören unter anderem Kugeln, Ebenen, Quader, Zylinder und Torusse. Obwohl sich die zugrunde liegenden Formeln teilweise deutlich unterscheiden, verfolgen sie alle dasselbe Ziel: Die Geometrie eines Objekts wird durch eine mathematische Beschreibung seiner Oberfläche definiert.
+
+Primitive SDFs bilden die Grundlage für die Modellierung komplexerer Szenen. Ähnlich wie bei der klassischen 3D-Modellierung werden zunächst einfache Grundformen definiert, aus denen anschließend komplexe Strukturen aufgebaut werden können.
+
+Die folgende Abbildung zeigt einige typische Primitive sowie ihre jeweiligen Signed Distance Functions.
+
+[Beispielbild.png]
+
+## Kombination mehrerer Objekte
+
+Während einzelne Primitive bereits einfache geometrische Formen beschreiben können, entstehen interessante Szenen meist erst durch die Kombination mehrerer Objekte. Ein großer Vorteil von Signed Distance Functions besteht darin, dass solche Kombinationen direkt auf den zugrunde liegenden Distanzfunktionen durchgeführt werden können.
+
+Eine häufig verwendete Technik ist die sogenannte Constructive Solid Geometry (CSG). Dabei werden komplexe Objekte aus einfachen Grundkörpern zusammengesetzt. Die wichtigsten Operationen sind die Vereinigung, die Schnittmenge und die Differenz zweier Objekte.
+
+Für die Vereinigung zweier Objekte wird jeweils die kleinere der beiden Distanzen verwendet:
+
+$$
+d = \min(d_1, d_2)
+$$
+
+Die Schnittmenge kann durch das Maximum beider Distanzen beschrieben werden:
+
+$$
+d = \max(d_1, d_2)
+$$
+
+Für die Differenz eines Objekts (d_1) und eines Objekts (d_2) ergibt sich:
+
+$$
+d = \max(d_1, -d_2)
+$$
+
+Dadurch lassen sich komplexe Formen auf einfache Weise aus wenigen Grundkörpern erzeugen. Die mathematische Beschreibung der Geometrie bleibt dabei kompakt und kann flexibel erweitert oder verändert werden.
+
+[Platz für interaktive Visualisierung von CSG-Operationen]
+<iframe src="tobias-assets/demos/csg-demo.html" width="100%" height="650" style="border: none;"></iframe>
+
+Die Möglichkeit, Geometrie durch mathematische Operationen zu kombinieren, zählt zu den zentralen Stärken von Signed Distance Functions und ist ein wesentlicher Grund für ihren Einsatz in der prozeduralen Modellierung und beim Ray-Marching-Rendering.
+
+# Ray Marching
+
+## Grundidee
+
+Nachdem die Geometrie einer Szene durch Signed Distance Functions beschrieben wurde, stellt sich die Frage, wie diese dargestellt werden kann. Im Gegensatz zu polygonalen Netzen existieren keine expliziten Dreiecke, die gerendert oder auf Schnittpunkte getestet werden können. Stattdessen liegt lediglich eine mathematische Beschreibung der Szene vor.
+
+Um die Oberfläche eines Objekts zu finden, wird für jedes Pixel ein Strahl von der Kamera in die Szene gesendet. Die Aufgabe besteht nun darin, entlang dieses Strahls den Punkt zu bestimmen, an dem eine Oberfläche getroffen wird.
+
+## Nutzung von Signed Distance Functions
+
+Der entscheidende Vorteil einer Signed Distance Function besteht darin, dass sie nicht nur beschreibt, ob sich ein Punkt innerhalb oder außerhalb eines Objekts befindet, sondern zusätzlich den Abstand zur nächstgelegenen Oberfläche liefert.
+
+Betrachtet man einen beliebigen Punkt entlang eines Strahls, so kann die Signed Distance Function direkt ausgewertet werden. Das Ergebnis gibt an, wie weit die nächste Oberfläche entfernt ist.
+
+Diese Information kann genutzt werden, um sich entlang des Strahls schrittweise auf die Oberfläche zuzubewegen. Anstatt feste Schrittweiten zu verwenden, wird die aktuell berechnete Distanz als neue Schrittweite gewählt. Dadurch kann sich der Strahl in leeren Bereichen der Szene schnell fortbewegen, während die Schritte in der Nähe einer Oberfläche automatisch kleiner werden.
+
+## Der Ray-Marching-Algorithmus
+
+Der Algorithmus beginnt am Ursprung des Strahls, welcher sich typischerweise an der Kameraposition befindet. Anschließend wird die Signed Distance Function am aktuellen Punkt ausgewertet. Der zurückgegebene Distanzwert bestimmt, wie weit sich der Strahl entlang seiner Richtung bewegen kann.
+
+Dieser Vorgang wird wiederholt, bis die Distanz zur nächsten Oberfläche ausreichend klein wird. In diesem Fall wird davon ausgegangen, dass die Oberfläche erreicht wurde.
+
+Der grundlegende Ablauf lässt sich wie folgt zusammenfassen:
+
+1. Erzeuge einen Strahl von der Kamera in die Szene.
+2. Werte die Signed Distance Function am aktuellen Punkt aus.
+3. Bewege den Strahl um die berechnete Distanz entlang seiner Richtung.
+4. Wiederhole die Schritte 2 und 3.
+5. Breche ab, sobald die Oberfläche erreicht wurde oder der Strahl die Szene verlässt.
+
+Die folgende Visualisierung verdeutlicht dieses Vorgehen. Die Schrittweite entspricht dabei jeweils dem Abstand zur nächstgelegenen Oberfläche. Mit jeder Iteration nähert sich der Strahl dem Objekt an, bis schließlich ein Schnittpunkt gefunden wird.
+
+[Platz für interaktive Visualisierung des Ray-Marching-Algorithmus]
+<iframe src="tobias-assets/demos/raymarch-demo.html" width="100%" height="650" style="border: none;"></iframe>
+
+Das hier beschriebene Verfahren wird häufig als Ray Marching bezeichnet. Genauer handelt es sich aber um eine spezielle Form des Ray Marching, die als Sphere Tracing bekannt ist. Sie wurde 1995 von John C. Hart vorgestellt und nutzt die Distanzinformationen einer Signed Distance Function, um die Schrittweite adaptiv anzupassen.
+
+## Abbruchbedingungen
+
+Da eine Oberfläche in der Praxis selten exakt getroffen wird, wird ein kleiner Schwellwert (\varepsilon) definiert. Unterschreitet die berechnete Distanz diesen Wert, gilt die Oberfläche als erreicht.
+
+Zusätzlich werden maximale Grenzen für die Anzahl der Iterationen und die zurückgelegte Distanz festgelegt. Dadurch wird verhindert, dass ein Strahl unbegrenzt weiterläuft, falls keine Oberfläche getroffen wird.
+
+Diese Abbruchbedingungen stellen sicher, dass der Algorithmus auch für komplexe Szenen in einer endlichen Anzahl von Schritten terminiert.
+
+# Shading und Beleuchtung
+
+Nachdem durch Ray Marching ein Schnittpunkt mit der Oberfläche bestimmt wurde, kann die Farbe des entsprechenden Pixels berechnet werden. Die Position des Schnittpunkts allein reicht hierfür jedoch nicht aus. Um Beleuchtungseffekte darstellen zu können, wird zusätzlich die Orientierung der Oberfläche benötigt.
+
+## Oberflächennormalen
+
+Bei polygonalen Netzen können Oberflächennormalen direkt aus den Dreiecken eines Modells berechnet werden. Da Signed Distance Functions keine explizite Geometrie besitzen, muss diese Information auf anderem Weg gewonnen werden.
+
+Eine SDF beschreibt den Raum durch eine mathematische Funktion. Die Oberflächennormale ergibt sich dabei aus dem Gradienten dieser Funktion und zeigt in die Richtung der stärksten Änderung des Distanzwertes. Mathematisch lässt sich die Normale als normierter Gradient ausdrücken:
+
+$$
+\mathbf n = \frac{\nabla f}{||\nabla f||}
+$$
+
+In der Praxis wird der Gradient meist numerisch approximiert, indem die Signed Distance Function an mehreren benachbarten Punkten ausgewertet wird. Auf diese Weise kann für jeden Oberflächenpunkt eine Normale bestimmt werden, die anschließend für die Beleuchtungsberechnung verwendet wird.
+
+$$
+\mathbf n \approx
+\begin{bmatrix}
+f(x+\varepsilon,y,z)-f(x-\varepsilon,y,z) \\
+f(x,y+\varepsilon,z)-f(x,y-\varepsilon,z) \\
+f(x,y,z+\varepsilon)-f(x,y,z-\varepsilon)
+\end{bmatrix}
+$$
+
+Der resultierende Vektor wird anschließend normalisiert, da für die Beleuchtung nur die Richtung der Normalen relevant ist.
+
+## Phong-Beleuchtungsmodell
+
+Nachdem die Oberflächennormale bestimmt wurde, kann die Beleuchtung des Oberflächenpunkts berechnet werden. In unserer Implementierung verwenden wir hierfür das Phong Reflection Model, das sich aus drei Komponenten zusammensetzt:
+
+- Ambient Lighting
+- Diffuse Lighting
+- Specular Lighting
+
+Der Ambient-Anteil beschreibt eine konstante Grundbeleuchtung der Szene. Die diffuse Komponente modelliert die direkte Beleuchtung durch eine Lichtquelle und hängt vom Winkel zwischen Oberflächennormale und Lichtvektor ab. Der spekulare Anteil erzeugt Glanzlichter und simuliert reflektierende Oberflächen.
+
+Die diffuse Beleuchtung wird häufig mithilfe des Lambert-Modells berechnet. Die Intensität ergibt sich aus dem Skalarprodukt zwischen Oberflächennormale (\mathbf n) und Lichtvektor (\mathbf l):
+
+$$
+I_d = \max(0,\mathbf n \cdot \mathbf l)
+$$
+
+Flächen, die direkt zur Lichtquelle zeigen, werden dadurch stärker beleuchtet als Flächen, die in einem flachen Winkel zur Lichtquelle stehen.
+
+Durch die Kombination von Ambient-, Diffuse- und Specular-Komponente entsteht ein deutlich realistischeres Erscheinungsbild der Szene. Die zuvor berechneten Oberflächennormalen spielen dabei eine zentrale Rolle, da sie die Grundlage für sämtliche Beleuchtungsberechnungen bilden.
+
+## Schatten
+
+Das Beleuchtungsmodell allein entscheidet nur, wie stark ein Punkt beleuchtet würde, wenn ihn das Licht erreicht. Es prüft jedoch nicht automatisch, ob sich zwischen dem Punkt und der Lichtquelle ein anderes Objekt befindet.
+
+Für Schatten wird daher ein zusätzlicher Strahl verwendet. Nachdem durch Ray Marching ein Oberflächenpunkt gefunden wurde, wird von diesem Punkt aus ein zweiter Strahl in Richtung der Lichtquelle gesendet. Dieser sogenannte Shadow Ray überprüft, ob auf dem Weg zur Lichtquelle ein anderes Objekt getroffen wird.
+
+Falls der Shadow Ray vor Erreichen der Lichtquelle auf eine Oberfläche trifft, liegt der ursprüngliche Punkt im Schatten. Andernfalls wird er normal beleuchtet.
+
+Die Schattenberechnung funktioniert damit ähnlich wie beim klassischen Ray Tracing. Der Unterschied liegt darin, dass auch dieser zusätzliche Strahl nicht gegen Dreiecke getestet wird, sondern wieder mithilfe der Signed Distance Function durch die Szene gemarcht wird.
+
+Auf diese Weise können Schatten direkt in das SDF-basierte Rendering integriert werden, ohne eine separate Schattenkarte oder explizite Geometrie zu benötigen.
+
+# Quellenverzeichnis
+
+Sphere Tracing: A Geometric Method for the Antialiased Ray Tracing of Implicit Surfaces, John C. Hart, 1995, https://www.researchgate.net/publication/2792108_Sphere_Tracing_A_Geometric_Method_for_the_Antialiased_Ray_Tracing_of_Implicit_Surfaces
+
+Distance Functions, Inigo Quilez, https://iquilezles.org/articles/distfunctions/
+
+Ray Marching, Inigo Quilez, https://iquilezles.org/articles/raymarchingdf/
+
+Ray Marching and Signed Distance Functions, Jamie Wong, https://jamie-wong.com/2016/07/15/ray-marching-signed-distance-functions/
