@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Tobias Jäkel">
+<meta name="author" content="Moritz Potthoff">
 
-<title>Theoretischer Hintergrund &amp; Methoden – SDF Rendering via Ray Marching</title>
+<title>Constructive Solid Geometry – SDF Rendering via Ray Marching</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-1e273511d09b17b40736144097ac5380.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-ba499602e970795321e448e63a866844.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -93,17 +93,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "No results",
-    "search-matching-documents-text": "matching documents",
-    "search-copy-link-title": "Copy link to search",
-    "search-hide-matches-text": "Hide additional matches",
-    "search-more-match-text": "more match in this document",
-    "search-more-matches-text": "more matches in this document",
-    "search-clear-button-title": "Clear",
+    "search-no-results-text": "Keine Treffer",
+    "search-matching-documents-text": "Treffer",
+    "search-copy-link-title": "Link in die Suche kopieren",
+    "search-hide-matches-text": "Zusätzliche Treffer verbergen",
+    "search-more-match-text": "weitere Treffer in diesem Dokument",
+    "search-more-matches-text": "weitere Treffer in diesem Dokument",
+    "search-clear-button-title": "Zurücksetzen",
     "search-text-placeholder": "",
-    "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit",
-    "search-label": "Search"
+    "search-detached-cancel-button-title": "Abbrechen",
+    "search-submit-button-title": "Abschicken",
+    "search-label": "Suchen"
   }
 }</script>
 
@@ -151,8 +151,8 @@ window.Quarto = {
     <span class="navbar-title">SDF Rendering via Ray Marching</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+            <div id="quarto-search" class="" title="Suchen"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Navigation umschalten" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -185,28 +185,36 @@ window.Quarto = {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Auf dieser Seite</h2>
+   
+  <ul class="collapse">
+  <li><a href="#constructive-solid-geometry-mit-sdfs" id="toc-constructive-solid-geometry-mit-sdfs" class="nav-link active" data-scroll-target="#constructive-solid-geometry-mit-sdfs">Constructive Solid Geometry mit SDFs</a></li>
+  <li><a href="#glatte-übergänge" id="toc-glatte-übergänge" class="nav-link" data-scroll-target="#glatte-übergänge">Glatte Übergänge</a></li>
+  <li><a href="#csg-live-demo" id="toc-csg-live-demo" class="nav-link" data-scroll-target="#csg-live-demo">CSG Live-Demo</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
-<main class="content column-page" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Theoretischer Hintergrund &amp; Methoden</h1>
+<h1 class="title">Constructive Solid Geometry</h1>
 </div>
 
 
 
-<div class="quarto-title-meta column-page">
+<div class="quarto-title-meta">
 
     <div>
-    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-heading">Autor:in</div>
     <div class="quarto-title-meta-contents">
-             <p>Tobias Jäkel </p>
+             <p>Moritz Potthoff </p>
           </div>
   </div>
     
@@ -219,8 +227,8 @@ window.Quarto = {
 </header>
 
 
-<section id="constructive-solid-geometry-mit-sdfs" class="level3">
-<h3 class="anchored" data-anchor-id="constructive-solid-geometry-mit-sdfs">Constructive Solid Geometry mit SDFs</h3>
+<section id="constructive-solid-geometry-mit-sdfs" class="level2">
+<h2 class="anchored" data-anchor-id="constructive-solid-geometry-mit-sdfs">Constructive Solid Geometry mit SDFs</h2>
 <p>Constructive Solid Geometry beschreibt komplexe Körper als Kombination einfacher Grundformen. Statt ein Objekt direkt als Mesh zu modellieren, setzt man es aus Primitiven wie Kugeln, Boxen, Tori oder Zylindern zusammen. Bei klassischen Meshes bedeutet das oft geometrische Operationen auf Dreiecken. Bei SDFs reicht dagegen häufig eine einfache mathematische Kombination der Distanzwerte.</p>
 <p>Angenommen, <span class="math inline">\(d_1(\mathbf{p})\)</span> ist die Distanz zur ersten Form und <span class="math inline">\(d_2(\mathbf{p})\)</span> die Distanz zur zweiten Form. Dann lassen sich die wichtigsten CSG-Operationen so ausdrücken:</p>
 <table class="caption-top table">
@@ -260,31 +268,33 @@ window.Quarto = {
 <li>Bei der <strong>Intersection</strong> muss ein Punkt in beiden Körpern liegen. Ein Punkt ist erst dann innen, wenn beide Distanzen negativ sind. Deshalb bestimmt die größere Distanz die Grenze.</li>
 <li>Bei der <strong>Difference</strong> wird das zweite Objekt aus dem ersten herausgeschnitten. Durch <span class="math inline">\(-d_2\)</span> wird innen und außen der zweiten Form vertauscht.</li>
 </ul>
+<iframe class="demo-embed" src="tobias-assets/demos/csg-demo.html" height="650">
+</iframe>
 <p>Für mehr als zwei Objekte wird dieselbe Operation wiederholt. Im Demo beginnt die Szene mit dem ersten Objekt und kombiniert dann nacheinander die weiteren aktiven Objekte:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode glsl code-with-copy"><code class="sourceCode glsl"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span> d <span class="op">=</span> d1<span class="op">;</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> <span class="bu">min</span><span class="op">(</span>d<span class="op">,</span> d2<span class="op">);</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> <span class="bu">min</span><span class="op">(</span>d<span class="op">,</span> d3<span class="op">);</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> <span class="bu">min</span><span class="op">(</span>d<span class="op">,</span> d4<span class="op">);</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> <span class="bu">min</span><span class="op">(</span>d<span class="op">,</span> d4<span class="op">);</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Bei <code>Union</code> wächst die Szene dadurch mit jedem Objekt. Bei <code>Difference</code> bleibt Objekt 1 die Basis, und alle weiteren Objekte werden davon abgezogen:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode glsl code-with-copy"><code class="sourceCode glsl"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span> d <span class="op">=</span> d1<span class="op">;</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> <span class="bu">max</span><span class="op">(</span>d<span class="op">,</span> <span class="op">-</span>d2<span class="op">);</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> <span class="bu">max</span><span class="op">(</span>d<span class="op">,</span> <span class="op">-</span>d3<span class="op">);</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> <span class="bu">max</span><span class="op">(</span>d<span class="op">,</span> <span class="op">-</span>d3<span class="op">);</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Das macht CSG zu einem starken Beispiel für SDFs: Eine Änderung in einer einzigen Formel kann die Topologie der Szene verändern, ohne dass neue Dreiecke erzeugt oder Meshes neu berechnet werden müssen. Für die Präsentation eignet sich das gut, weil man an Union, Intersection und Difference direkt sieht, dass SDFs nicht nur eine andere Rendering-Technik sind, sondern auch eine andere Art, Geometrie zu denken.</p>
 </section>
-<section id="glatte-übergänge" class="level3">
-<h3 class="anchored" data-anchor-id="glatte-übergänge">Glatte Übergänge</h3>
+<section id="glatte-übergänge" class="level2">
+<h2 class="anchored" data-anchor-id="glatte-übergänge">Glatte Übergänge</h2>
 <p>Die Demo enthält zusätzlich einen Regler für <strong>Verschmelzung</strong>. Mathematisch wird dafür die harte <code>min</code>- oder <code>max</code>-Operation durch eine geglättete Variante ersetzt. Für eine weiche Union kann man zum Beispiel zwischen den beiden Distanzwerten interpolieren:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode glsl code-with-copy"><code class="sourceCode glsl"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span> <span class="fu">smoothUnion</span><span class="op">(</span><span class="dt">float</span> d1<span class="op">,</span> <span class="dt">float</span> d2<span class="op">,</span> <span class="dt">float</span> k<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">float</span> h <span class="op">=</span> <span class="bu">clamp</span><span class="op">(</span><span class="fl">0.5</span> <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="op">(</span>d2 <span class="op">-</span> d1<span class="op">)</span> <span class="op">/</span> k<span class="op">,</span> <span class="fl">0.0</span><span class="op">,</span> <span class="fl">1.0</span><span class="op">);</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">return</span> <span class="bu">mix</span><span class="op">(</span>d2<span class="op">,</span> d1<span class="op">,</span> h<span class="op">)</span> <span class="op">-</span> k <span class="op">*</span> h <span class="op">*</span> <span class="op">(</span><span class="fl">1.0</span> <span class="op">-</span> h<span class="op">);</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Der Parameter <code>k</code> kontrolliert die Breite des Übergangsbereichs. Bei <code>k = 0</code> bleibt die CSG-Operation hart. Je größer <code>k</code> wird, desto weicher gehen die Oberflächen ineinander über. Das ist ein Beispiel dafür, dass SDFs nicht nur boolesche Geometrieoperationen erlauben, sondern auch kontinuierliche Formmanipulationen.</p>
 </section>
-<section id="csg-live-demo" class="level3">
-<h3 class="anchored" data-anchor-id="csg-live-demo">CSG Live-Demo</h3>
+<section id="csg-live-demo" class="level2">
+<h2 class="anchored" data-anchor-id="csg-live-demo">CSG Live-Demo</h2>
 <p>Die Demo zeigt eine kleine SDF-Szene aus mehreren Primitiven. Links ist das Ergebnis des Ray-Marching-Shaders zu sehen, rechts die editierbare Beschreibung der Szene. Die Objektliste wählt die primitiven SDFs aus, und die Kombinationsfunktion zeigt, wie daraus die Szene gebaut wird. Zwischen <code>Union</code>, <code>Intersection</code> und <code>Difference</code> kann gewechselt werden, sodass die Wirkung der CSG-Operationen direkt sichtbar wird.</p>
 <div class="demo-wide">
-<iframe src="demos/csg-demo/index.html" width="100%" height="930" scrolling="no" style="border: 1px solid #d7dce3; border-radius: 4px; overflow: hidden;" title="Interaktive SDF-CSG-Demo">
+<iframe src="demos/csg-demo/index.html" height="930" scrolling="no" title="Interaktive SDF-CSG-Demo">
 </iframe>
 </div>
 
@@ -318,12 +328,12 @@ window.Quarto = {
       // flash "checked"
       button.classList.add('code-copy-button-checked');
       var currentTitle = button.getAttribute("title");
-      button.setAttribute("title", "Copied!");
+      button.setAttribute("title", "Kopiert");
       let tooltip;
       if (window.bootstrap) {
         button.setAttribute("data-bs-toggle", "tooltip");
         button.setAttribute("data-bs-placement", "left");
-        button.setAttribute("data-bs-title", "Copied!");
+        button.setAttribute("data-bs-title", "Kopiert");
         tooltip = new bootstrap.Tooltip(button, 
           { trigger: "manual", 
             customClass: "code-copy-button-tooltip",

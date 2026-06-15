@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://killuari.github.io/vcde/Aufteilung.html</loc>
-    <lastmod>2026-06-15T14:18:16.988Z</lastmod>
+    <loc>https://killuari.github.io/vcde/csg.html</loc>
+    <lastmod>2026-06-15T14:37:32.269Z</lastmod>
   </url>
   <url>
     <loc>https://killuari.github.io/vcde/theorie.html</loc>
-    <lastmod>2026-06-15T14:18:17.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://killuari.github.io/vcde/csg.html</loc>
-    <lastmod>2026-06-15T14:18:16.995Z</lastmod>
-  </url>
-  <url>
-    <loc>https://killuari.github.io/vcde/verwandte_methoden.html</loc>
-    <lastmod>2026-06-15T14:18:17.001Z</lastmod>
-  </url>
-  <url>
-    <loc>https://killuari.github.io/vcde/einfuehrung.html</loc>
-    <lastmod>2026-06-15T14:18:16.996Z</lastmod>
+    <lastmod>2026-06-15T14:37:32.274Z</lastmod>
   </url>
   <url>
     <loc>https://killuari.github.io/vcde/index.html</loc>
-    <lastmod>2026-06-15T14:18:16.996Z</lastmod>
+    <lastmod>2026-06-15T14:37:32.270Z</lastmod>
+  </url>
+  <url>
+    <loc>https://killuari.github.io/vcde/einfuehrung.html</loc>
+    <lastmod>2026-06-15T14:37:32.270Z</lastmod>
+  </url>
+  <url>
+    <loc>https://killuari.github.io/vcde/verwandte_methoden.html</loc>
+    <lastmod>2026-06-15T14:37:32.276Z</lastmod>
   </url>
 </urlset>
