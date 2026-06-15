@@ -65,6 +65,1032 @@ Wir binden interaktive WebGL-Shader (via Shadertoy) direkt in Quarto ein. Studie
 :::
 
 
+## Interaktive Demos
+
+```{=html}
+<script src="https://cdn.jsdelivr.net/npm/glslCanvas@0.2.6/dist/GlslCanvas.min.js"></script>
+```
+
+::: {.panel-tabset}
+
+## SDF-Distanzfeld (2D Heatmap)
+
+```{=html}
+<!-- Form-Auswahl und Canvas-Layout -->
+<div style="margin:1.5rem 0;">
+
+  <div style="display:flex; gap:0.5rem; margin-bottom:1.2rem; flex-wrap:wrap; align-items:center;">
+    <strong>Form:</strong>
+    <button id="demo2-btn-circle"
+            onclick="demo2SetShape('circle')"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #4a90d9;
+                   background:#4a90d9; color:#fff; cursor:pointer; font-size:0.9rem;">Kreis</button>
+    <button id="demo2-btn-rect"
+            onclick="demo2SetShape('rect')"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                   background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Rechteck</button>
+    <button id="demo2-btn-capsule"
+            onclick="demo2SetShape('capsule')"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                   background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Kapsel</button>
+  </div>
+
+  <div style="display:flex; flex-wrap:wrap; gap:2rem; align-items:flex-start;">
+
+    <canvas id="demo2-canvas" width="400" height="400"
+            style="border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,0.25); max-width:100%;">
+    </canvas>
+
+    <div style="display:flex; flex-direction:column; gap:1.5rem; min-width:210px; padding-top:0.5rem;">
+
+      <div>
+        <label><strong id="demo2-label-p1">Radius</strong>: <span id="demo2-val-p1">80</span> px</label><br>
+        <input type="range" id="demo2-sl-p1" min="15" max="170" step="1" value="80"
+               style="width:100%; margin-top:0.4rem;">
+      </div>
+
+      <div id="demo2-p2-group" style="display:none;">
+        <label><strong id="demo2-label-p2">Halbhöhe</strong>: <span id="demo2-val-p2">70</span> px</label><br>
+        <input type="range" id="demo2-sl-p2" min="10" max="170" step="1" value="70"
+               style="width:100%; margin-top:0.4rem;">
+      </div>
+
+      <div>
+        <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+          <input type="checkbox" id="demo2-cb-iso">
+          Iso-Konturlinien anzeigen
+        </label>
+      </div>
+
+      <!-- Legende -->
+      <div style="font-size:0.85rem; line-height:2.0; margin-top:0.5rem;">
+        <div><span style="display:inline-block;width:14px;height:14px;background:#ff3333;
+                          border-radius:3px;vertical-align:middle;margin-right:6px;"></span>d &lt; 0 — innen</div>
+        <div><span style="display:inline-block;width:14px;height:14px;background:#ffffff;
+                          border:1px solid #bbb;border-radius:3px;vertical-align:middle;margin-right:6px;"></span>d = 0 — Oberfläche</div>
+        <div><span style="display:inline-block;width:14px;height:14px;background:#3366ff;
+                          border-radius:3px;vertical-align:middle;margin-right:6px;"></span>d &gt; 0 — außen</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+    const canvas = document.getElementById('demo2-canvas');
+    const ctx    = canvas.getContext('2d');
+
+    let shape   = 'circle';
+    let p1      = 80;   // Radius (Kreis/Kapsel) oder Halbbreite (Rechteck)
+    let p2      = 70;   // Halbhöhe (Rechteck) oder Halbachse (Kapsel)
+    let showIso = false;
+
+    // --- SDF-Funktionen (Pixelkoordinaten) ---
+
+    function sdCircle(px, py, cx, cy, r) {
+        return Math.sqrt((px - cx) ** 2 + (py - cy) ** 2) - r;
+    }
+
+    // Achsenausgerichtete Box
+    function sdBox(px, py, cx, cy, hw, hh) {
+        const dx = Math.abs(px - cx) - hw;
+        const dy = Math.abs(py - cy) - hh;
+        return Math.sqrt(Math.max(dx, 0) ** 2 + Math.max(dy, 0) ** 2)
+               + Math.min(Math.max(dx, dy), 0);
+    }
+
+    // Kapsel = aufgeweitete Linienstrecke
+    function sdCapsule(px, py, ax, ay, bx, by, r) {
+        const pax = px - ax, pay = py - ay;
+        const bax = bx - ax, bay = by - ay;
+        const len2 = bax * bax + bay * bay;
+        const h = len2 > 0 ? Math.max(0, Math.min(1, (pax * bax + pay * bay) / len2)) : 0;
+        const dx = pax - bax * h, dy = pay - bay * h;
+        return Math.sqrt(dx * dx + dy * dy) - r;
+    }
+
+    function render() {
+        const w = canvas.width, h = canvas.height;
+        const imageData = ctx.createImageData(w, h);
+        const data = imageData.data;
+        const cx = w / 2, cy = h / 2;
+        // Normierungsweite: Pixelanzahl bis zur vollen Farbsättigung
+        const norm = w * 0.05;
+
+        for (let py = 0; py < h; py++) {
+            for (let px = 0; px < w; px++) {
+                let d;
+                if (shape === 'circle') {
+                    d = sdCircle(px, py, cx, cy, p1);
+                } else if (shape === 'rect') {
+                    d = sdBox(px, py, cx, cy, p1, p2);
+                } else {
+                    // Kapsel: Achse vertikal, um Mittelpunkt zentriert
+                    d = sdCapsule(px, py, cx, cy - p2, cx, cy + p2, p1);
+                }
+
+                // Oberfläche (d≈0) → Weiß, innen → Rot, außen → Blau
+                const t = Math.min(Math.abs(d) / norm, 1.0);
+                let r, g, b;
+                if (d <= 0) {
+                    r = 255;
+                    g = Math.round(255 * (1 - t));
+                    b = Math.round(255 * (1 - t));
+                } else {
+                    r = Math.round(255 * (1 - t));
+                    g = Math.round(255 * (1 - t));
+                    b = 255;
+                }
+
+                // Iso-Konturlinien: fract(d / spacing) < threshold → abdunkeln
+                if (showIso) {
+                    const frac = ((d / 30) % 1 + 1) % 1;
+                    if (frac < 0.05) {
+                        r = Math.round(r * 0.3);
+                        g = Math.round(g * 0.3);
+                        b = Math.round(b * 0.3);
+                    }
+                }
+
+                const idx = (py * w + px) * 4;
+                data[idx]     = r;
+                data[idx + 1] = g;
+                data[idx + 2] = b;
+                data[idx + 3] = 255;
+            }
+        }
+        ctx.putImageData(imageData, 0, 0);
+    }
+
+    // Globale Funktion für die onclick-Handler der Buttons
+    window.demo2SetShape = function (s) {
+        shape = s;
+
+        ['circle', 'rect', 'capsule'].forEach(id => {
+            const btn    = document.getElementById('demo2-btn-' + id);
+            const active = id === s;
+            btn.style.background  = active ? '#4a90d9' : '#f0f0f0';
+            btn.style.color       = active ? '#fff'    : '#333';
+            btn.style.borderColor = active ? '#4a90d9' : '#bbb';
+        });
+
+        const p2Group = document.getElementById('demo2-p2-group');
+        const label1  = document.getElementById('demo2-label-p1');
+        const label2  = document.getElementById('demo2-label-p2');
+        const sl1     = document.getElementById('demo2-sl-p1');
+        const sl2     = document.getElementById('demo2-sl-p2');
+
+        if (s === 'circle') {
+            p2Group.style.display = 'none';
+            label1.textContent    = 'Radius';
+            sl1.min = 15; sl1.max = 170; sl1.value = 80; p1 = 80;
+        } else if (s === 'rect') {
+            p2Group.style.display = 'block';
+            label1.textContent    = 'Halbbreite';
+            label2.textContent    = 'Halbhöhe';
+            sl1.min = 10; sl1.max = 185; sl1.value = 100; p1 = 100;
+            sl2.min = 10; sl2.max = 170; sl2.value = 70;  p2 = 70;
+        } else {
+            p2Group.style.display = 'block';
+            label1.textContent    = 'Radius';
+            label2.textContent    = 'Halbachse';
+            sl1.min = 10; sl1.max = 80;  sl1.value = 30;  p1 = 30;
+            sl2.min = 20; sl2.max = 165; sl2.value = 80;  p2 = 80;
+        }
+        document.getElementById('demo2-val-p1').textContent = p1;
+        document.getElementById('demo2-val-p2').textContent = p2;
+        render();
+    };
+
+    document.getElementById('demo2-sl-p1').addEventListener('input', function () {
+        p1 = parseInt(this.value);
+        document.getElementById('demo2-val-p1').textContent = p1;
+        render();
+    });
+
+    document.getElementById('demo2-sl-p2').addEventListener('input', function () {
+        p2 = parseInt(this.value);
+        document.getElementById('demo2-val-p2').textContent = p2;
+        render();
+    });
+
+    document.getElementById('demo2-cb-iso').addEventListener('change', function () {
+        showIso = this.checked;
+        render();
+    });
+
+    render();
+})();
+</script>
+```
+
+## Ray-Marching Visualisierer
+
+```{=html}
+<div style="margin:1.5rem 0;">
+
+  <!-- Steuerleiste -->
+  <div style="display:flex; flex-wrap:wrap; gap:1.5rem; align-items:center; margin-bottom:1.2rem;">
+    <div>
+      <label><strong>Sichtbare Schritte</strong>: <span id="demo3-val-steps">0</span></label><br>
+      <input type="range" id="demo3-sl-steps" min="0" max="20" step="1" value="0"
+             style="width:220px; margin-top:0.4rem;">
+    </div>
+    <button id="demo3-play"
+            style="padding:0.4rem 1.2rem; border-radius:6px; border:2px solid #44aa66;
+                   background:#44aa66; color:#fff; cursor:pointer; font-size:1rem;">
+      ▶ Play
+    </button>
+  </div>
+
+  <canvas id="demo3-canvas" width="520" height="370"
+          style="border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,0.4); max-width:100%;">
+  </canvas>
+
+</div>
+
+<script>
+(function () {
+    const canvas = document.getElementById('demo3-canvas');
+    const ctx    = canvas.getContext('2d');
+
+    // Feste Szenenparameter
+    const CX = 360, CY = 185, CR = 88;    // Kreishindernis (Mittelpunkt + Radius in px)
+    const ROX = 55,  ROY = 300;            // Strahl-Ursprung
+    const RDX = 0.8321, RDY = -0.5547;    // Strahl-Richtung (normiert: length = 1.0)
+    const EPS = 1.5;                       // Treffertoleranz in Pixeln
+
+    // Alle Sphere-Tracing-Schritte vorberechnen
+    const steps = [];
+    let pos = {x: ROX, y: ROY};
+    for (let i = 0; i < 20; i++) {
+        const d    = Math.sqrt((pos.x - CX) ** 2 + (pos.y - CY) ** 2) - CR;
+        const next = {x: pos.x + RDX * d, y: pos.y + RDY * d};
+        const hit  = Math.abs(d) < EPS;
+        steps.push({pos: {...pos}, d, next: {...next}, hit});
+        if (hit || next.x > canvas.width + 50) break;
+        pos = next;
+    }
+    const maxStep = steps.length;
+    document.getElementById('demo3-sl-steps').max = maxStep;
+
+    let currentStep = 0;
+    let animTimer   = null;
+
+    function drawDashedCircle(x, y, r, strokeColor) {
+        if (r < 0.5) return;
+        ctx.save();
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth   = 1.2;
+        ctx.setLineDash([5, 3]);
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    function draw(n) {
+        const W = canvas.width, H = canvas.height;
+        const toShow = Math.min(n, maxStep);
+
+        // Hintergrund
+        ctx.fillStyle = '#0d1117';
+        ctx.fillRect(0, 0, W, H);
+
+        // Leichtes Gitter als räumliche Referenz
+        ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+        ctx.lineWidth   = 1;
+        for (let gx = 0; gx <= W; gx += 40) {
+            ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke();
+        }
+        for (let gy = 0; gy <= H; gy += 40) {
+            ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke();
+        }
+
+        // Strahlrichtung (gestrichelt, dezent)
+        ctx.save();
+        ctx.strokeStyle = 'rgba(255,204,51,0.15)';
+        ctx.lineWidth   = 1;
+        ctx.setLineDash([6, 5]);
+        ctx.beginPath();
+        ctx.moveTo(ROX, ROY);
+        ctx.lineTo(ROX + RDX * 650, ROY + RDY * 650);
+        ctx.stroke();
+        ctx.restore();
+
+        // Kreishindernis
+        ctx.beginPath();
+        ctx.arc(CX, CY, CR, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(70,110,160,0.22)';
+        ctx.fill();
+        ctx.strokeStyle = '#5588bb';
+        ctx.lineWidth   = 2;
+        ctx.stroke();
+        ctx.fillStyle   = '#7799cc';
+        ctx.font        = '12px monospace';
+        ctx.fillText('Objekt', CX - 21, CY + 4);
+
+        // Safe Spheres der bisherigen Schritte
+        for (let i = 0; i < toShow; i++) {
+            const s     = steps[i];
+            const alpha = (0.28 + 0.18 * (i / maxStep)).toFixed(2);
+            drawDashedCircle(s.pos.x, s.pos.y, Math.abs(s.d), `rgba(50,210,230,${alpha})`);
+        }
+
+        // Schritt-Segmente (Vorschübe entlang des Strahls)
+        ctx.lineWidth = 1.5;
+        for (let i = 0; i < toShow; i++) {
+            const s = steps[i];
+            ctx.strokeStyle = '#ffcc33';
+            ctx.beginPath();
+            ctx.moveTo(s.pos.x, s.pos.y);
+            ctx.lineTo(s.next.x, s.next.y);
+            ctx.stroke();
+        }
+
+        // Zwischenpunkte mit Index-Nummer
+        ctx.font = '11px monospace';
+        for (let i = 0; i < toShow; i++) {
+            const s = steps[i];
+            ctx.fillStyle = '#99bbdd';
+            ctx.beginPath();
+            ctx.arc(s.pos.x, s.pos.y, 3.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#aaccee';
+            ctx.fillText(i, s.pos.x + 6, s.pos.y - 5);
+        }
+
+        // Strahl-Ursprung (immer sichtbar)
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(ROX, ROY, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#bbbbbb';
+        ctx.font      = '12px monospace';
+        ctx.fillText('Kamera', ROX + 8, ROY + 4);
+
+        // Aktueller Endpunkt und Status
+        if (toShow > 0) {
+            const last   = steps[toShow - 1];
+            const endPos = last.next;
+            const hit    = last.hit;
+
+            ctx.fillStyle = hit ? '#44ff88' : '#ffcc33';
+            ctx.beginPath();
+            ctx.arc(endPos.x, endPos.y, 6, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = hit ? '#22cc66' : '#cc9900';
+            ctx.lineWidth   = 1.5;
+            ctx.stroke();
+
+            ctx.fillStyle = hit ? '#44ff88' : '#ffffff';
+            ctx.font      = 'bold 13px monospace';
+            const label   = hit
+                ? `Schritt ${toShow}: Treffer!   d ≈ ${Math.abs(last.d).toFixed(2)} px`
+                : `Schritt ${toShow}: d = ${Math.abs(last.d).toFixed(1)} px`;
+            ctx.fillText(label, 10, 24);
+        } else {
+            ctx.fillStyle = '#666666';
+            ctx.font      = '13px monospace';
+            ctx.fillText('Slider ziehen oder ▶ Play drücken', 10, 24);
+        }
+    }
+
+    // Animation stoppen
+    function stopAnim() {
+        if (animTimer) { clearInterval(animTimer); animTimer = null; }
+        document.getElementById('demo3-play').textContent = '▶ Play';
+    }
+
+    document.getElementById('demo3-play').addEventListener('click', function () {
+        if (animTimer) { stopAnim(); return; }
+        if (currentStep >= maxStep) currentStep = 0;
+        this.textContent = '⏸ Pause';
+        animTimer = setInterval(() => {
+            currentStep++;
+            document.getElementById('demo3-sl-steps').value        = currentStep;
+            document.getElementById('demo3-val-steps').textContent = currentStep;
+            draw(currentStep);
+            if (currentStep >= maxStep) stopAnim();
+        }, 700);
+    });
+
+    document.getElementById('demo3-sl-steps').addEventListener('input', function () {
+        stopAnim();
+        currentStep = parseInt(this.value);
+        document.getElementById('demo3-val-steps').textContent = currentStep;
+        draw(currentStep);
+    });
+
+    draw(0);
+})();
+</script>
+```
+
+## Primitiv-Galerie
+
+```{=html}
+<!-- Primitiv-Galerie: 6 IQ-SDF-Primitive via GLSL -->
+<div style="margin:1.5rem 0;">
+
+  <div style="display:flex; gap:0.5rem; margin-bottom:1.2rem; flex-wrap:wrap; align-items:center;">
+    <strong>Form:</strong>
+    <button id="demo4-btn-0" onclick="demo4SetShape(0)"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #4a90d9;
+                   background:#4a90d9; color:#fff; cursor:pointer; font-size:0.9rem;">Kugel</button>
+    <button id="demo4-btn-1" onclick="demo4SetShape(1)"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                   background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Box</button>
+    <button id="demo4-btn-2" onclick="demo4SetShape(2)"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                   background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Torus</button>
+    <button id="demo4-btn-3" onclick="demo4SetShape(3)"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                   background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Kapsel</button>
+    <button id="demo4-btn-4" onclick="demo4SetShape(4)"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                   background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Zylinder</button>
+    <button id="demo4-btn-5" onclick="demo4SetShape(5)"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                   background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Oktaeder</button>
+  </div>
+
+  <div style="display:flex; flex-wrap:wrap; gap:2rem; align-items:flex-start;">
+
+    <canvas id="demo4-canvas" width="450" height="450"
+            style="border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,0.4);">
+    </canvas>
+
+    <div style="display:flex; flex-direction:column; gap:1.8rem; min-width:220px; padding-top:0.5rem;">
+
+      <div>
+        <label><strong id="demo4-label-p1">Radius</strong>: <span id="demo4-val-p1">0.60</span></label><br>
+        <input type="range" id="demo4-sl-p1" min="0.1" max="1.2" step="0.01" value="0.6"
+               style="width:100%; margin-top:0.4rem;">
+      </div>
+
+      <div id="demo4-p2-group" style="display:none;">
+        <label><strong id="demo4-label-p2">—</strong>: <span id="demo4-val-p2">—</span></label><br>
+        <input type="range" id="demo4-sl-p2" min="0.05" max="1.2" step="0.01" value="0.4"
+               style="width:100%; margin-top:0.4rem;">
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script id="demo4-frag-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+uniform vec2  u_resolution;
+uniform float u_time;
+uniform float u_shape;
+uniform float u_param1;
+uniform float u_param2;
+
+float sdSphere(vec3 p, float r) {
+    return length(p) - r;
+}
+
+float sdBox(vec3 p, vec3 b) {
+    vec3 q = abs(p) - b;
+    return length(max(q, 0.0)) + min(max(q.x, max(q.y, q.z)), 0.0);
+}
+
+float sdTorus(vec3 p, vec2 t) {
+    vec2 q = vec2(length(p.xz) - t.x, p.y);
+    return length(q) - t.y;
+}
+
+float sdCapsule(vec3 p, float h, float r) {
+    p.y -= clamp(p.y, -h, h);
+    return length(p) - r;
+}
+
+float sdCylinder(vec3 p, float h, float r) {
+    vec2 d = abs(vec2(length(p.xz), p.y)) - vec2(r, h);
+    return min(max(d.x, d.y), 0.0) + length(max(d, 0.0));
+}
+
+float sdOctahedron(vec3 p, float s) {
+    p = abs(p);
+    float m = p.x + p.y + p.z - s;
+    vec3 q;
+    if      (3.0 * p.x < m) q = p.xyz;
+    else if (3.0 * p.y < m) q = p.yzx;
+    else if (3.0 * p.z < m) q = p.zxy;
+    else return m * 0.57735027;
+    float k = clamp(0.5 * (q.z - q.y + s), 0.0, s);
+    return length(vec3(q.x, q.y - s + k, q.z - k));
+}
+
+float map(vec3 p) {
+    float a  = u_time * 0.4;
+    float sa = sin(a), ca = cos(a);
+    vec3 rp  = vec3(ca * p.x + sa * p.z, p.y, -sa * p.x + ca * p.z);
+
+    if      (u_shape < 0.5) return sdSphere   (rp, u_param1);
+    else if (u_shape < 1.5) return sdBox      (rp, vec3(u_param1, u_param2, u_param1));
+    else if (u_shape < 2.5) return sdTorus    (rp, vec2(u_param1, u_param2));
+    else if (u_shape < 3.5) return sdCapsule  (rp, u_param1, u_param2);
+    else if (u_shape < 4.5) return sdCylinder (rp, u_param1, u_param2);
+    else                    return sdOctahedron(rp, u_param1);
+}
+
+vec3 calcNormal(vec3 p) {
+    vec2 e = vec2(0.001, 0.0);
+    return normalize(vec3(
+        map(p + e.xyy) - map(p - e.xyy),
+        map(p + e.yxy) - map(p - e.yxy),
+        map(p + e.yyx) - map(p - e.yyx)
+    ));
+}
+
+float rayMarch(vec3 ro, vec3 rd) {
+    float t = 0.0;
+    for (int i = 0; i < 100; i++) {
+        float d = map(ro + t * rd);
+        if (d < 0.001) return t;
+        if (t > 20.0)  break;
+        t += d;
+    }
+    return -1.0;
+}
+
+void main() {
+    vec2 uv = (gl_FragCoord.xy - 0.5 * u_resolution) / u_resolution.y;
+    vec3 ro  = vec3(0.0, 0.0, 3.0);
+    vec3 rd  = normalize(vec3(uv, -1.5));
+    vec3 col = vec3(0.05, 0.07, 0.13);
+
+    float t = rayMarch(ro, rd);
+    if (t > 0.0) {
+        vec3 pos = ro + t * rd;
+        vec3 nor = calcNormal(pos);
+
+        vec3 lightPos = vec3(2.0, 3.0, 4.0);
+        vec3 lightDir = normalize(lightPos - pos);
+        vec3 viewDir  = normalize(ro - pos);
+        vec3 halfDir  = normalize(lightDir + viewDir);
+
+        float amb  = 0.12;
+        float diff = max(dot(nor, lightDir), 0.0);
+        float spec = pow(max(dot(nor, halfDir), 0.0), 48.0);
+
+        vec3 baseColor;
+        if      (u_shape < 0.5) baseColor = vec3(0.35, 0.72, 1.00);
+        else if (u_shape < 1.5) baseColor = vec3(0.90, 0.55, 0.20);
+        else if (u_shape < 2.5) baseColor = vec3(0.30, 0.85, 0.50);
+        else if (u_shape < 3.5) baseColor = vec3(0.85, 0.30, 0.55);
+        else if (u_shape < 4.5) baseColor = vec3(0.75, 0.70, 0.20);
+        else                    baseColor = vec3(0.65, 0.35, 0.90);
+
+        col  = baseColor * (amb + diff * 0.88);
+        col += vec3(1.0) * spec * 0.65;
+    }
+
+    col = pow(clamp(col, 0.0, 1.0), vec3(0.4545));
+    gl_FragColor = vec4(col, 1.0);
+}
+</script>
+
+<script>
+(function () {
+    const canvas  = document.getElementById('demo4-canvas');
+    const shader  = document.getElementById('demo4-frag-shader').textContent;
+    const sandbox = new GlslCanvas(canvas);
+
+    // [label1, min1, max1, step1, default1, label2, min2, max2, step2, default2, showP2]
+    const shapeConfigs = [
+        ['Radius',        0.10, 1.20, 0.01, 0.60, '',            0.05, 0.50, 0.01, 0.25, false],
+        ['Halbbreite XZ', 0.10, 1.20, 0.01, 0.60, 'Halbhöhe Y', 0.10, 1.20, 0.01, 0.40, true ],
+        ['Außenradius',   0.30, 1.00, 0.01, 0.70, 'Rohrradius', 0.05, 0.40, 0.01, 0.20, true ],
+        ['Halbachse',     0.00, 1.00, 0.01, 0.50, 'Radius',     0.05, 0.50, 0.01, 0.25, true ],
+        ['Halbhöhe',      0.10, 1.00, 0.01, 0.50, 'Radius',     0.10, 0.80, 0.01, 0.35, true ],
+        ['Größe',         0.20, 1.50, 0.01, 0.80, '',            0.05, 1.00, 0.01, 0.40, false],
+    ];
+
+    let currentShape = 0;
+    let p1 = 0.60, p2 = 0.25;
+
+    function applyUniforms() {
+        sandbox.setUniform('u_shape',  parseFloat(currentShape));
+        sandbox.setUniform('u_param1', p1);
+        sandbox.setUniform('u_param2', p2);
+    }
+
+    sandbox.on('load', applyUniforms);
+    sandbox.load(shader);
+
+    let wasHidden = false;
+    new IntersectionObserver(function(entries) {
+        if (!entries[0].isIntersecting) { wasHidden = true; return; }
+        if (!wasHidden) return;
+        wasHidden = false;
+        canvas.width = 450; canvas.height = 450;
+        sandbox.load(shader);
+    }, { threshold: 0.01 }).observe(canvas);
+
+    window.demo4SetShape = function (idx) {
+        currentShape = idx;
+        const cfg = shapeConfigs[idx];
+
+        const sl1 = document.getElementById('demo4-sl-p1');
+        sl1.min = cfg[1]; sl1.max = cfg[2]; sl1.step = cfg[3]; sl1.value = cfg[4];
+        p1 = cfg[4];
+        document.getElementById('demo4-label-p1').textContent = cfg[0];
+        document.getElementById('demo4-val-p1').textContent   = p1.toFixed(2);
+
+        const sl2   = document.getElementById('demo4-sl-p2');
+        const p2grp = document.getElementById('demo4-p2-group');
+        p2grp.style.display = cfg[10] ? 'block' : 'none';
+        if (cfg[10]) {
+            sl2.min = cfg[6]; sl2.max = cfg[7]; sl2.step = cfg[8]; sl2.value = cfg[9];
+            p2 = cfg[9];
+            document.getElementById('demo4-label-p2').textContent = cfg[5];
+            document.getElementById('demo4-val-p2').textContent   = p2.toFixed(2);
+        }
+
+        for (let i = 0; i < 6; i++) {
+            const btn    = document.getElementById('demo4-btn-' + i);
+            const active = i === idx;
+            btn.style.background  = active ? '#4a90d9' : '#f0f0f0';
+            btn.style.color       = active ? '#fff'    : '#333';
+            btn.style.borderColor = active ? '#4a90d9' : '#bbb';
+        }
+
+        applyUniforms();
+    };
+
+    document.getElementById('demo4-sl-p1').addEventListener('input', function () {
+        p1 = parseFloat(this.value);
+        document.getElementById('demo4-val-p1').textContent = p1.toFixed(2);
+        sandbox.setUniform('u_param1', p1);
+    });
+
+    document.getElementById('demo4-sl-p2').addEventListener('input', function () {
+        p2 = parseFloat(this.value);
+        document.getElementById('demo4-val-p2').textContent = p2.toFixed(2);
+        sandbox.setUniform('u_param2', p2);
+    });
+})();
+</script>
+```
+
+## Beleuchtung & Schatten
+
+```{=html}
+<!-- Beleuchtungs-Demo: Phong-Shading, Schatten & Ambient Occlusion -->
+<div style="margin:1.5rem 0;">
+
+  <!-- Komponenten-Toggles -->
+  <div style="display:flex; gap:0.5rem; margin-bottom:0.8rem; flex-wrap:wrap; align-items:center;">
+    <strong>Komponenten:</strong>
+    <button id="demo5-btn-shadow"
+            onclick="demo5Toggle('shadow')"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #4a90d9;
+                   background:#4a90d9; color:#fff; cursor:pointer; font-size:0.9rem;">Schatten</button>
+    <button id="demo5-btn-specular"
+            onclick="demo5Toggle('specular')"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #4a90d9;
+                   background:#4a90d9; color:#fff; cursor:pointer; font-size:0.9rem;">Specular</button>
+    <button id="demo5-btn-ao"
+            onclick="demo5Toggle('ao')"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                   background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Amb. Okklusion</button>
+  </div>
+
+  <!-- Blocker-Form -->
+  <div style="display:flex; gap:0.5rem; margin-bottom:1.2rem; flex-wrap:wrap; align-items:center;">
+    <strong>Blocker-Form:</strong>
+    <button id="demo5-btn-bshape-0"
+            onclick="demo5SetBlockerShape(0)"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #4a90d9;
+                   background:#4a90d9; color:#fff; cursor:pointer; font-size:0.9rem;">Kugel</button>
+    <button id="demo5-btn-bshape-1"
+            onclick="demo5SetBlockerShape(1)"
+            style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                   background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Box</button>
+  </div>
+
+  <div style="display:flex; flex-wrap:wrap; gap:2rem; align-items:flex-start;">
+
+    <canvas id="demo5-canvas" width="450" height="450"
+            style="border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,0.4);">
+    </canvas>
+
+    <div style="display:flex; flex-direction:column; gap:1.5rem; min-width:220px; padding-top:0.5rem;">
+
+      <div style="font-size:0.78rem; font-weight:700; text-transform:uppercase;
+                  letter-spacing:0.06em; color:#888;">Lichtquelle</div>
+
+      <div>
+        <label><strong>Azimut</strong>: <span id="demo5-val-az">0°</span></label><br>
+        <input type="range" id="demo5-sl-az" min="0" max="360" step="5" value="0"
+               style="width:100%; margin-top:0.4rem;">
+      </div>
+
+      <div>
+        <label><strong>Höhe</strong>: <span id="demo5-val-el">40°</span></label><br>
+        <input type="range" id="demo5-sl-el" min="20" max="60" step="5" value="40"
+               style="width:100%; margin-top:0.4rem;">
+      </div>
+
+      <div id="demo5-shine-group">
+        <label><strong>Glanzgrad</strong>: <span id="demo5-val-shine">32</span></label><br>
+        <input type="range" id="demo5-sl-shine" min="4" max="256" step="1" value="32"
+               style="width:100%; margin-top:0.4rem;">
+      </div>
+
+      <div style="font-size:0.78rem; font-weight:700; text-transform:uppercase;
+                  letter-spacing:0.06em; color:#888; margin-top:0.3rem;">Blocker</div>
+
+      <div>
+        <label><strong>X-Position</strong>: <span id="demo5-val-bx">1.2</span></label><br>
+        <input type="range" id="demo5-sl-bx" min="-2.5" max="2.5" step="0.1" value="1.2"
+               style="width:100%; margin-top:0.4rem;">
+      </div>
+
+      <div>
+        <label><strong>Höhe</strong>: <span id="demo5-val-by">1.2</span></label><br>
+        <input type="range" id="demo5-sl-by" min="-0.5" max="2.5" step="0.1" value="1.2"
+               style="width:100%; margin-top:0.4rem;">
+      </div>
+
+      <div>
+        <label><strong>Tiefe (Z)</strong>: <span id="demo5-val-bz">0.0</span></label><br>
+        <input type="range" id="demo5-sl-bz" min="-2.5" max="2.5" step="0.1" value="0.0"
+               style="width:100%; margin-top:0.4rem;">
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script id="demo5-frag-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+uniform vec2  u_resolution;
+uniform float u_time;
+uniform float u_light_az;
+uniform float u_light_el;
+uniform float u_shininess;
+uniform float u_bx;
+uniform float u_by;
+uniform float u_bz;
+uniform float u_blocker_shape;
+uniform float u_shadows;
+uniform float u_specular;
+uniform float u_ao;
+
+float sdSphere(vec3 p, float r) {
+    return length(p) - r;
+}
+
+float sdBox(vec3 p, vec3 b) {
+    vec3 q = abs(p) - b;
+    return length(max(q, 0.0)) + min(max(q.x, max(q.y, q.z)), 0.0);
+}
+
+float blockerSDF(vec3 brel) {
+    return u_blocker_shape < 0.5
+           ? sdSphere(brel, 0.35)
+           : sdBox(brel, vec3(0.28));
+}
+
+// Hauptkugel (r=0.6), Bodenebene (y=-1), Blocker
+float map(vec3 p) {
+    float dMain    = sdSphere(p, 0.6);
+    float dGround  = p.y + 1.0;
+    float dBlocker = blockerSDF(p - vec3(u_bx, u_by, u_bz));
+    return min(min(dMain, dGround), dBlocker);
+}
+
+// Materialnummer: 0=Kugel, 1=Boden, 2=Blocker
+float mapMaterial(vec3 p) {
+    float dMain    = sdSphere(p, 0.6);
+    float dGround  = p.y + 1.0;
+    float dBlocker = blockerSDF(p - vec3(u_bx, u_by, u_bz));
+    if (dMain <= dGround && dMain <= dBlocker) return 0.0;
+    if (dGround <= dBlocker)                   return 1.0;
+    return 2.0;
+}
+
+vec3 calcNormal(vec3 p) {
+    vec2 e = vec2(0.001, 0.0);
+    return normalize(vec3(
+        map(p + e.xyy) - map(p - e.xyy),
+        map(p + e.yxy) - map(p - e.yxy),
+        map(p + e.yyx) - map(p - e.yyx)
+    ));
+}
+
+float rayMarch(vec3 ro, vec3 rd) {
+    float t = 0.0;
+    for (int i = 0; i < 100; i++) {
+        float d = map(ro + t * rd);
+        if (d < 0.005) return t;
+        if (t > 20.0)  break;
+        t += d;
+    }
+    return -1.0;
+}
+
+// Shadow Ray: zweiter Strahl von Oberfläche zur Lichtquelle
+float hardShadow(vec3 ro, vec3 rd, float maxt) {
+    float t = 0.02;
+    for (int i = 0; i < 64; i++) {
+        float h = map(ro + rd * t);
+        if (h < 0.001) return 0.0;
+        t += h;
+        if (t >= maxt) break;
+    }
+    return 1.0;
+}
+
+// Ambient Occlusion: SDF-Wachstum entlang der Normale (5 Samples)
+float ambientOcclusion(vec3 pos, vec3 nor) {
+    float occ = 0.0;
+    float sca = 1.0;
+    for (int i = 0; i < 5; i++) {
+        float h = 0.01 + 0.12 * float(i) / 4.0;
+        float d = map(pos + h * nor);
+        occ += (h - d) * sca;
+        sca *= 0.95;
+    }
+    return clamp(1.0 - 3.0 * occ, 0.0, 1.0);
+}
+
+void main() {
+    vec2 uv = (gl_FragCoord.xy - 0.5 * u_resolution) / u_resolution.y;
+
+    vec3 ro = vec3(0.0, 0.5, 3.5);
+    vec3 rd = normalize(vec3(uv.x, uv.y - 0.12, -1.5));
+
+    // Lichtrichtung aus Azimut + Höhe
+    vec3 ld = normalize(vec3(
+        cos(u_light_az) * cos(u_light_el),
+        sin(u_light_el),
+        sin(u_light_az) * cos(u_light_el)
+    ));
+
+    vec3 col = vec3(0.07, 0.08, 0.13);   // dunkler Hintergrund für besseren Kontrast
+
+    float t = rayMarch(ro, rd);
+    if (t > 0.0) {
+        vec3 pos = ro + t * rd;
+        vec3 nor = calcNormal(pos);
+
+        // Materialfarbe je nach Objekt
+        float matID = mapMaterial(pos);
+        vec3 baseColor;
+        if (matID < 0.5) {
+            baseColor = vec3(0.90, 0.52, 0.20);   // Orange – Hauptkugel
+        } else if (matID < 1.5) {
+            // Schachbrettmuster: Schatten auf dem Boden gut sichtbar
+            float chk = mod(floor(pos.x * 1.5) + floor(pos.z * 1.5), 2.0);
+            baseColor = mix(vec3(0.55, 0.57, 0.60), vec3(0.78, 0.80, 0.84), chk);
+        } else {
+            baseColor = vec3(0.38, 0.72, 0.90);   // Blau – Blocker
+        }
+
+        vec3 viewDir = normalize(ro - pos);
+        vec3 halfDir = normalize(ld + viewDir);
+
+        float amb  = 0.20;
+        float diff = max(dot(nor, ld), 0.0);
+
+        // Shadow Ray: trifft der Strahl zur Lichtquelle ein Objekt?
+        float shad = 1.0;
+        if (u_shadows > 0.5) {
+            shad = hardShadow(pos + nor * 0.01, ld, 8.0);
+        }
+
+        // Ambient Occlusion
+        float ao = 1.0;
+        if (u_ao > 0.5) {
+            ao = ambientOcclusion(pos, nor);
+        }
+
+        // Blinn-Phong Specular
+        float spec = 0.0;
+        if (u_specular > 0.5) {
+            spec = pow(max(dot(nor, halfDir), 0.0), u_shininess);
+        }
+
+        // Randlicht: verhindert Verschmelzen der Kanten mit dem dunklen Hintergrund
+        float rim = pow(1.0 - max(dot(nor, viewDir), 0.0), 3.0);
+
+        col  = baseColor * (amb * ao + diff * shad * 0.80);
+        col += vec3(1.0) * spec * shad * 0.55;
+        col += baseColor * 0.22 * rim;
+    }
+
+    col = pow(clamp(col, 0.0, 1.0), vec3(0.4545));
+    gl_FragColor = vec4(col, 1.0);
+}
+</script>
+
+<script>
+(function () {
+    const canvas  = document.getElementById('demo5-canvas');
+    const shader  = document.getElementById('demo5-frag-shader').textContent;
+    const sandbox = new GlslCanvas(canvas);
+
+    const state = { shadow: true, specular: true, ao: false };
+    const u = {
+        u_light_az:      0.0,
+        u_light_el:      0.698,
+        u_shininess:     32.0,
+        u_bx:            1.2,
+        u_by:            1.2,
+        u_bz:            0.0,
+        u_blocker_shape: 0.0,
+        u_shadows:       1.0,
+        u_specular:      1.0,
+        u_ao:            0.0,
+    };
+
+    function applyUniforms() {
+        Object.keys(u).forEach(function(k) { sandbox.setUniform(k, u[k]); });
+    }
+
+    sandbox.on('load', applyUniforms);
+    sandbox.load(shader);
+
+    let wasHidden = false;
+    new IntersectionObserver(function(entries) {
+        if (!entries[0].isIntersecting) { wasHidden = true; return; }
+        if (!wasHidden) return;
+        wasHidden = false;
+        canvas.width = 450; canvas.height = 450;
+        sandbox.load(shader);
+    }, { threshold: 0.01 }).observe(canvas);
+
+    window.demo5Toggle = function (key) {
+        state[key] = !state[key];
+        const btn    = document.getElementById('demo5-btn-' + key);
+        const active = state[key];
+        btn.style.background  = active ? '#4a90d9' : '#f0f0f0';
+        btn.style.color       = active ? '#fff'    : '#333';
+        btn.style.borderColor = active ? '#4a90d9' : '#bbb';
+
+        u.u_shadows  = state.shadow   ? 1.0 : 0.0;
+        u.u_specular = state.specular ? 1.0 : 0.0;
+        u.u_ao       = state.ao       ? 1.0 : 0.0;
+        sandbox.setUniform('u_shadows',  u.u_shadows);
+        sandbox.setUniform('u_specular', u.u_specular);
+        sandbox.setUniform('u_ao',       u.u_ao);
+
+        document.getElementById('demo5-shine-group').style.display =
+            state.specular ? 'block' : 'none';
+    };
+
+    window.demo5SetBlockerShape = function (shape) {
+        u.u_blocker_shape = parseFloat(shape);
+        sandbox.setUniform('u_blocker_shape', u.u_blocker_shape);
+        [0, 1].forEach(function(i) {
+            const btn    = document.getElementById('demo5-btn-bshape-' + i);
+            const active = i === shape;
+            btn.style.background  = active ? '#4a90d9' : '#f0f0f0';
+            btn.style.color       = active ? '#fff'    : '#333';
+            btn.style.borderColor = active ? '#4a90d9' : '#bbb';
+        });
+    };
+
+    function bindDeg(slId, dispId, uniformName) {
+        document.getElementById(slId).addEventListener('input', function () {
+            const deg = parseFloat(this.value);
+            document.getElementById(dispId).textContent = deg + '°';
+            u[uniformName] = deg * Math.PI / 180.0;
+            sandbox.setUniform(uniformName, u[uniformName]);
+        });
+    }
+
+    function bindVal(slId, dispId, uniformName, decimals) {
+        document.getElementById(slId).addEventListener('input', function () {
+            const v = parseFloat(this.value);
+            document.getElementById(dispId).textContent = v.toFixed(decimals);
+            u[uniformName] = v;
+            sandbox.setUniform(uniformName, v);
+        });
+    }
+
+    bindDeg('demo5-sl-az',    'demo5-val-az',    'u_light_az');
+    bindDeg('demo5-sl-el',    'demo5-val-el',    'u_light_el');
+    bindVal('demo5-sl-shine', 'demo5-val-shine', 'u_shininess', 0);
+    bindVal('demo5-sl-bx',    'demo5-val-bx',    'u_bx', 1);
+    bindVal('demo5-sl-by',    'demo5-val-by',    'u_by', 1);
+    bindVal('demo5-sl-bz',    'demo5-val-bz',    'u_bz', 1);
+})();
+</script>
+```
+
+:::
+
+
+
 ## 4. Erste Ideen für "X"
 
 * **Idee 1: Constructive Solid Geometry (CSG)**
