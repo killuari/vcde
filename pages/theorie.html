@@ -27,23 +27,23 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-ba499602e970795321e448e63a866844.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-ba499602e970795321e448e63a866844.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -102,7 +102,7 @@ window.Quarto = {
 };
 </script>
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -112,7 +112,7 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">SDF Rendering via Ray Marching</span>
     </a>
   </div>
@@ -123,23 +123,23 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./einfuehrung.html"> 
+    <a class="nav-link" href="../pages/einfuehrung.html"> 
 <span class="menu-text">Einführung</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./theorie.html" aria-current="page"> 
+    <a class="nav-link active" href="../pages/theorie.html" aria-current="page"> 
 <span class="menu-text">Theorie</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./verwandte_methoden.html"> 
+    <a class="nav-link" href="../pages/verwandte-methoden.html"> 
 <span class="menu-text">Verwandte Methoden</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./csg.html"> 
+    <a class="nav-link" href="../pages/csg.html"> 
 <span class="menu-text">CSG</span></a>
   </li>  
 </ul>
@@ -244,7 +244,7 @@ f(\mathbf p)=||\mathbf p||-r
 <p>Diese Formel gilt für eine Kugel mit Mittelpunkt im Ursprung. Für eine Kugel mit einem beliebigen Mittelpunkt <span class="math inline">\(\mathbf c\)</span> lässt sich die Funktion entsprechend anpassen: <span class="math display">\[
 f(\mathbf{p}) = \|\mathbf{p} - \mathbf{c}\| - r
 \]</span></p>
-<p>[Platz für interaktive Visualisierung der SDF einer Kugel] <iframe class="demo-embed" src="tobias-assets/demos/sphere-sdf-demo.html" height="650"></iframe></p>
+<p>[Platz für interaktive Visualisierung der SDF einer Kugel] <iframe class="demo-embed" src="../assets/demos/embedded/sphere-sdf-demo.html" height="650"></iframe></p>
 </section>
 <section id="primitive-formen-und-operationen" class="level2">
 <h2 class="anchored" data-anchor-id="primitive-formen-und-operationen">Primitive Formen und Operationen</h2>
@@ -271,7 +271,7 @@ d = \max(d_1, d_2)
 d = \max(d_1, -d_2)
 \]</span></p>
 <p>Dadurch lassen sich komplexe Formen auf einfache Weise aus wenigen Grundkörpern erzeugen. Die mathematische Beschreibung der Geometrie bleibt dabei kompakt und kann flexibel erweitert oder verändert werden.</p>
-<p>[Platz für interaktive Visualisierung von CSG-Operationen] <iframe class="demo-embed" src="tobias-assets/demos/csg-demo.html" height="650"></iframe></p>
+<p>[Platz für interaktive Visualisierung von CSG-Operationen] <iframe class="demo-embed" src="../assets/demos/embedded/csg-demo.html" height="650"></iframe></p>
 <p>Die Möglichkeit, Geometrie durch mathematische Operationen zu kombinieren, zählt zu den zentralen Stärken von Signed Distance Functions und ist ein wesentlicher Grund für ihren Einsatz in der prozeduralen Modellierung und beim Ray-Marching-Rendering.</p>
 </section>
 </section>
@@ -301,7 +301,7 @@ d = \max(d_1, -d_2)
 <li>Breche ab, sobald die Oberfläche erreicht wurde oder der Strahl die Szene verlässt.</li>
 </ol>
 <p>Die folgende Visualisierung verdeutlicht dieses Vorgehen. Die Schrittweite entspricht dabei jeweils dem Abstand zur nächstgelegenen Oberfläche. Mit jeder Iteration nähert sich der Strahl dem Objekt an, bis schließlich ein Schnittpunkt gefunden wird.</p>
-<p>[Platz für interaktive Visualisierung des Ray-Marching-Algorithmus] <iframe class="demo-embed" src="tobias-assets/demos/raymarch-demo.html" height="650"></iframe></p>
+<p>[Platz für interaktive Visualisierung des Ray-Marching-Algorithmus] <iframe class="demo-embed" src="../assets/demos/embedded/raymarch-demo.html" height="650"></iframe></p>
 <p>Das hier beschriebene Verfahren wird häufig als Ray Marching bezeichnet. Genauer handelt es sich aber um eine spezielle Form des Ray Marching, die als Sphere Tracing bekannt ist. Sie wurde 1995 von John C. Hart vorgestellt und nutzt die Distanzinformationen einer Signed Distance Function, um die Schrittweite adaptiv anzupassen.</p>
 </section>
 <section id="abbruchbedingungen" class="level2">
