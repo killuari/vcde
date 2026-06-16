@@ -2,13 +2,12 @@ project:
   type: website
   render:
     - index.qmd
-    - einfuehrung.qmd
-    - theorie.qmd
-    - verwandte_methoden.qmd
-    - csg.qmd
+    - pages/einfuehrung.qmd
+    - pages/theorie.qmd
+    - pages/verwandte-methoden.qmd
+    - pages/csg.qmd
   resources:
-    - demos/
-    - tobias-assets/
+    - assets/
 
 format:
   html:
@@ -29,14 +28,14 @@ website:
       - href: index.qmd
         text: "Home"
 
-      - href: einfuehrung.qmd
+      - href: pages/einfuehrung.qmd
         text: "Einführung"
 
-      - href: theorie.qmd
+      - href: pages/theorie.qmd
         text: "Theorie"      
 
-      - href: verwandte_methoden.qmd
+      - href: pages/verwandte-methoden.qmd
         text: "Verwandte Methoden"
 
-      - href: csg.qmd
+      - href: pages/csg.qmd
         text: "CSG"
