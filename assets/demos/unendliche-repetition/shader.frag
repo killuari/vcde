@@ -1,10 +1,10 @@
 precision mediump float;
 
-uniform vec2  u_resolution;
+uniform vec2 u_resolution;
 uniform float u_time;
-uniform float u_shape;    // 0=Torus  1=Box  2=Kapsel
-uniform float u_spacing;  // Gitter-Abstand
-uniform float u_shadows;  // Soft Shadows an/aus
+uniform float u_shape; // 0=Torus 1=Box 2=Kapsel
+uniform float u_spacing; // Gitter-Abstand
+uniform float u_shadows; // Soft Shadows an/aus
 
 // SDF-Primitive
 
@@ -26,7 +26,7 @@ float sdCapsule(vec3 p, float h, float r) {
 // Hash / Zellfarbe
 
 float hash(vec3 p) {
-    p  = fract(p * vec3(127.1, 311.7, 74.7));
+    p = fract(p * vec3(127.1, 311.7, 74.7));
     p += dot(p, p.yzx + 19.19);
     return fract(p.x * p.y * p.z);
 }
@@ -68,7 +68,7 @@ float rayMarch(vec3 ro, vec3 rd) {
     for (int i = 0; i < 128; i++) {
         float d = map(ro + t * rd);
         if (d < 0.002) return t;
-        if (t > 50.0)  break;
+        if (t > 50.0) break;
         t += d;
     }
     return -1.0;
@@ -76,12 +76,12 @@ float rayMarch(vec3 ro, vec3 rd) {
 
 float softShadow(vec3 ro, vec3 rd, float mint, float maxt, float k) {
     float res = 1.0;
-    float t   = mint;
+    float t = mint;
     for (int i = 0; i < 48; i++) {
         float h = map(ro + rd * t);
         if (h < 0.001) return 0.0;
         res = min(res, k * h / t);
-        t  += clamp(h, 0.02, 0.3);
+        t += clamp(h, 0.02, 0.3);
         if (t > maxt) break;
     }
     return clamp(res, 0.0, 1.0);
@@ -103,8 +103,8 @@ void main() {
 
     // Kamera fliegt vorwärts entlang -Z, leichtes Seitenschwingen
     float ta = u_time * 0.55;
-    vec3 ro  = vec3(sin(ta * 0.31) * u_spacing * 0.28, 0.35, -ta * 2.4);
-    vec3 rd  = normalize(vec3(uv.x + sin(ta * 0.17) * 0.03, uv.y - 0.06, -1.5));
+    vec3 ro = vec3(sin(ta * 0.31) * u_spacing * 0.28, 0.35, -ta * 2.4);
+    vec3 rd = normalize(vec3(uv.x + sin(ta * 0.17) * 0.03, uv.y - 0.06, -1.5));
 
     // Hintergrundgradient (tiefschwarz → dunkles Marineblau)
     vec3 col = mix(vec3(0.04, 0.05, 0.10), vec3(0.10, 0.14, 0.26), uv.y + 0.5);
@@ -114,12 +114,12 @@ void main() {
 
     float t = rayMarch(ro, rd);
     if (t > 0.0) {
-        vec3 pos  = ro + t * rd;
-        vec3 nor  = calcNormal(pos);
+        vec3 pos = ro + t * rd;
+        vec3 nor = calcNormal(pos);
         vec3 base = palette(getCellID(pos));
 
         float diff = max(dot(nor, ld), 0.0);
-        vec3  h_v  = normalize(ld - rd);
+        vec3 h_v = normalize(ld - rd);
         float spec = pow(max(dot(nor, h_v), 0.0), 40.0) * 0.45;
 
         float shad = 1.0;
@@ -129,7 +129,7 @@ void main() {
 
         float rim = pow(1.0 - max(dot(nor, -rd), 0.0), 4.0) * 0.22;
 
-        col  = base * (0.10 * ao + diff * shad * 0.85) + base * rim;
+        col = base * (0.10 * ao + diff * shad * 0.85) + base * rim;
         col += vec3(1.0) * spec * shad;
 
         // Exponential-Fog

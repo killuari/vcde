@@ -1,6 +1,6 @@
 precision mediump float;
 
-uniform vec2  u_resolution;
+uniform vec2 u_resolution;
 uniform float u_time;
 uniform float u_light_az;
 uniform float u_light_el;
@@ -29,18 +29,18 @@ float blockerSDF(vec3 brel) {
 }
 
 float map(vec3 p) {
-    float dMain    = sdSphere(p, 0.6);
-    float dGround  = p.y + 1.0;
+    float dMain = sdSphere(p, 0.6);
+    float dGround = p.y + 1.0;
     float dBlocker = blockerSDF(p - vec3(u_bx, u_by, u_bz));
     return min(min(dMain, dGround), dBlocker);
 }
 
 float mapMaterial(vec3 p) {
-    float dMain    = sdSphere(p, 0.6);
-    float dGround  = p.y + 1.0;
+    float dMain = sdSphere(p, 0.6);
+    float dGround = p.y + 1.0;
     float dBlocker = blockerSDF(p - vec3(u_bx, u_by, u_bz));
     if (dMain <= dGround && dMain <= dBlocker) return 0.0;
-    if (dGround <= dBlocker)                   return 1.0;
+    if (dGround <= dBlocker) return 1.0;
     return 2.0;
 }
 
@@ -58,7 +58,7 @@ float rayMarch(vec3 ro, vec3 rd) {
     for (int i = 0; i < 100; i++) {
         float d = map(ro + t * rd);
         if (d < 0.005) return t;
-        if (t > 20.0)  break;
+        if (t > 20.0) break;
         t += d;
     }
     return -1.0;
@@ -120,7 +120,7 @@ void main() {
         vec3 viewDir = normalize(ro - pos);
         vec3 halfDir = normalize(ld + viewDir);
 
-        float amb  = 0.20;
+        float amb = 0.20;
         float diff = max(dot(nor, ld), 0.0);
 
         float shad = 1.0;
@@ -140,7 +140,7 @@ void main() {
 
         float rim = pow(1.0 - max(dot(nor, viewDir), 0.0), 3.0);
 
-        col  = baseColor * (amb * ao + diff * shad * 0.80);
+        col = baseColor * (amb * ao + diff * shad * 0.80);
         col += vec3(1.0) * spec * shad * 0.55;
         col += baseColor * 0.22 * rim;
     }

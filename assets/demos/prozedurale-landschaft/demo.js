@@ -1,5 +1,5 @@
 (function () {
-    const canvas  = document.getElementById('canvas');
+    const canvas = document.getElementById('canvas');
     const sandbox = new GlslCanvas(canvas);
 
     var camX = 0.0, camZ = 0.0;
@@ -7,27 +7,27 @@
 
     const u = {
         u_cam_pos: [0.0, 0.0],
-        u_detail:  1.0,
-        u_fog:     0.025,
+        u_detail: 1.0,
+        u_fog: 0.025,
     };
 
     function applyUniforms() {
         sandbox.setUniform('u_cam_pos', u.u_cam_pos[0], u.u_cam_pos[1]);
-        sandbox.setUniform('u_detail',  u.u_detail);
-        sandbox.setUniform('u_fog',     u.u_fog);
+        sandbox.setUniform('u_detail', u.u_detail);
+        sandbox.setUniform('u_fog', u.u_fog);
     }
 
     var loadedShader = '';
-    var loopStarted  = false;
+    var loopStarted = false;
 
     function startLoop() {
         if (loopStarted) return;
         loopStarted = true;
         (function loop() {
             var speed = 0.07;
-            if (keys['w'] || keys['W'] || keys['ArrowUp'])    camZ -= speed;
-            if (keys['s'] || keys['S'] || keys['ArrowDown'])  camZ += speed;
-            if (keys['a'] || keys['A'] || keys['ArrowLeft'])  camX -= speed;
+            if (keys['w'] || keys['W'] || keys['ArrowUp']) camZ -= speed;
+            if (keys['s'] || keys['S'] || keys['ArrowDown']) camZ += speed;
+            if (keys['a'] || keys['A'] || keys['ArrowLeft']) camX -= speed;
             if (keys['d'] || keys['D'] || keys['ArrowRight']) camX += speed;
             u.u_cam_pos[0] = camX;
             u.u_cam_pos[1] = camZ;
@@ -71,8 +71,8 @@
         for (var i = 0; i < count; i++) {
             var btn = document.getElementById(prefix + i);
             if (!btn) continue;
-            btn.style.background  = i === active ? '#4a90d9' : '#f0f0f0';
-            btn.style.color       = i === active ? '#fff'    : '#333';
+            btn.style.background = i === active ? '#4a90d9' : '#f0f0f0';
+            btn.style.color = i === active ? '#fff' : '#333';
             btn.style.borderColor = i === active ? '#4a90d9' : '#bbb';
         }
     }

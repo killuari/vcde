@@ -63,11 +63,11 @@ author: "Luis Kahles, Tobias Jäkel, Moritz Potthoff"
       <!-- Legende -->
       <div style="font-size:0.85rem; line-height:2.0; margin-top:0.5rem;">
         <div><span style="display:inline-block;width:14px;height:14px;background:#ff3333;
-                          border-radius:3px;vertical-align:middle;margin-right:6px;"></span>d &lt; 0 — innen</div>
+                          border-radius:3px;vertical-align:middle;margin-right:6px;"></span>d &lt; 0 - innen</div>
         <div><span style="display:inline-block;width:14px;height:14px;background:#ffffff;
-                          border:1px solid #bbb;border-radius:3px;vertical-align:middle;margin-right:6px;"></span>d = 0 — Oberfläche</div>
+                          border:1px solid #bbb;border-radius:3px;vertical-align:middle;margin-right:6px;"></span>d = 0 - Oberfläche</div>
         <div><span style="display:inline-block;width:14px;height:14px;background:#3366ff;
-                          border-radius:3px;vertical-align:middle;margin-right:6px;"></span>d &gt; 0 — außen</div>
+                          border-radius:3px;vertical-align:middle;margin-right:6px;"></span>d &gt; 0 - außen</div>
       </div>
 
     </div>
@@ -469,7 +469,7 @@ author: "Luis Kahles, Tobias Jäkel, Moritz Potthoff"
       </div>
 
       <div id="demo4-p2-group" style="display:none;">
-        <label><strong id="demo4-label-p2">—</strong>: <span id="demo4-val-p2">—</span></label><br>
+        <label><strong id="demo4-label-p2">-</strong>: <span id="demo4-val-p2">-</span></label><br>
         <input type="range" id="demo4-sl-p2" min="0.05" max="1.2" step="0.01" value="0.4"
                style="width:100%; margin-top:0.4rem;">
       </div>
@@ -884,13 +884,13 @@ void main() {
         float matID = mapMaterial(pos);
         vec3 baseColor;
         if (matID < 0.5) {
-            baseColor = vec3(0.90, 0.52, 0.20);   // Orange – Hauptkugel
+            baseColor = vec3(0.90, 0.52, 0.20);   // Orange - Hauptkugel
         } else if (matID < 1.5) {
             // Schachbrettmuster: Schatten auf dem Boden gut sichtbar
             float chk = mod(floor(pos.x * 1.5) + floor(pos.z * 1.5), 2.0);
             baseColor = mix(vec3(0.55, 0.57, 0.60), vec3(0.78, 0.80, 0.84), chk);
         } else {
-            baseColor = vec3(0.38, 0.72, 0.90);   // Blau – Blocker
+            baseColor = vec3(0.38, 0.72, 0.90);   // Blau - Blocker
         }
 
         vec3 viewDir = normalize(ro - pos);

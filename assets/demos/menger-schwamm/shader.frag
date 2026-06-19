@@ -1,9 +1,9 @@
 precision mediump float;
 
-uniform vec2  u_resolution;
+uniform vec2 u_resolution;
 uniform float u_time;
-uniform float u_iter;  // 0 = 1 Iteration, 1 = 2 Iterationen, 2 = 3 Iterationen
-uniform float u_cut;   // Schnittansicht an/aus
+uniform float u_iter; // 0 = 1 Iteration, 1 = 2 Iterationen, 2 = 3 Iterationen
+uniform float u_cut; // Schnittansicht an/aus
 
 // Quader-SDF
 
@@ -45,7 +45,7 @@ float sdMenger(vec3 p) {
 
 float map(vec3 p) {
     float d = sdMenger(p);
-    if (u_cut > 0.5) d = max(d, p.x);  // Schnittebene bei x = 0
+    if (u_cut > 0.5) d = max(d, p.x); // Schnittebene bei x = 0
     return d;
 }
 
@@ -67,7 +67,7 @@ float rayMarch(vec3 ro, vec3 rd) {
     for (int i = 0; i < 128; i++) {
         float d = map(ro + t * rd);
         if (d < 0.002) return t;
-        if (t > 20.0)  break;
+        if (t > 20.0) break;
         t += d;
     }
     return -1.0;
@@ -77,12 +77,12 @@ float rayMarch(vec3 ro, vec3 rd) {
 
 float softShadow(vec3 ro, vec3 rd, float mint, float maxt, float k) {
     float res = 1.0;
-    float t   = mint;
+    float t = mint;
     for (int i = 0; i < 48; i++) {
         float h = map(ro + rd * t);
         if (h < 0.001) return 0.0;
         res = min(res, k * h / t);
-        t  += clamp(h, 0.01, 0.3);
+        t += clamp(h, 0.01, 0.3);
         if (t > maxt) break;
     }
     return clamp(res, 0.0, 1.0);
@@ -106,9 +106,9 @@ void main() {
     vec2 uv = (gl_FragCoord.xy - 0.5 * u_resolution) / u_resolution.y;
 
     // Kamera umkreist den Schwamm langsam
-    float t  = u_time * 0.4;
-    vec3  ro = vec3(cos(t) * 3.2, 0.9 + sin(t * 0.5) * 0.6, sin(t) * 3.2);
-    vec3  ta = vec3(0.0, -0.1, 0.0);
+    float t = u_time * 0.4;
+    vec3 ro = vec3(cos(t) * 3.2, 0.9 + sin(t * 0.5) * 0.6, sin(t) * 3.2);
+    vec3 ta = vec3(0.0, -0.1, 0.0);
 
     vec3 cw = normalize(ta - ro);
     vec3 cu = normalize(cross(cw, vec3(0.0, 1.0, 0.0)));
@@ -123,19 +123,19 @@ void main() {
 
     float dist = rayMarch(ro, rd);
     if (dist > 0.0) {
-        vec3 pos  = ro + dist * rd;
-        vec3 nor  = calcNormal(pos);
+        vec3 pos = ro + dist * rd;
+        vec3 nor = calcNormal(pos);
 
         // Farbe aus Normalenrichtung: hebt fraktale Kanten und Tunnel hervor
         vec3 base = 0.5 + 0.5 * nor;
 
         float diff = max(dot(nor, ld), 0.0);
         float spec = pow(max(dot(reflect(-ld, nor), -rd), 0.0), 32.0) * 0.5;
-        float ao   = calcAO(pos, nor);
+        float ao = calcAO(pos, nor);
         float shad = softShadow(pos + nor * 0.01, ld, 0.02, 6.0, 8.0);
-        float rim  = pow(1.0 - max(dot(nor, -rd), 0.0), 4.0) * 0.15;
+        float rim = pow(1.0 - max(dot(nor, -rd), 0.0), 4.0) * 0.15;
 
-        col  = base * (0.06 * ao + diff * shad * 0.82 * ao);
+        col = base * (0.06 * ao + diff * shad * 0.82 * ao);
         col += vec3(0.9, 0.95, 1.0) * spec * shad;
         col += base * rim;
     }

@@ -1,9 +1,9 @@
 (function () {
-    const canvas  = document.getElementById('canvas');
+    const canvas = document.getElementById('canvas');
     const sandbox = new GlslCanvas(canvas);
 
     const u = {
-        u_shape:   0.0,
+        u_shape: 0.0,
         u_spacing: 3.0,
         u_shadows: 1.0,
     };
@@ -35,8 +35,8 @@
         for (var i = 0; i < count; i++) {
             var btn = document.getElementById(prefix + i);
             if (!btn) continue;
-            btn.style.background  = i === active ? '#4a90d9' : '#f0f0f0';
-            btn.style.color       = i === active ? '#fff'    : '#333';
+            btn.style.background = i === active ? '#4a90d9' : '#f0f0f0';
+            btn.style.color = i === active ? '#fff' : '#333';
             btn.style.borderColor = i === active ? '#4a90d9' : '#bbb';
         }
     }
@@ -49,10 +49,10 @@
 
     window.toggleEffect = function (key, btnId) {
         u[key] = u[key] > 0.5 ? 0.0 : 1.0;
-        var btn    = document.getElementById(btnId);
+        var btn = document.getElementById(btnId);
         var active = u[key] > 0.5;
-        btn.style.background  = active ? '#4a90d9' : '#f0f0f0';
-        btn.style.color       = active ? '#fff'    : '#333';
+        btn.style.background = active ? '#4a90d9' : '#f0f0f0';
+        btn.style.color = active ? '#fff' : '#333';
         btn.style.borderColor = active ? '#4a90d9' : '#bbb';
         sandbox.setUniform(key, u[key]);
     };
