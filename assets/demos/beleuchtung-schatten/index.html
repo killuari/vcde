@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Beleuchtung &amp; Schatten</title>
+  <script src="https://cdn.jsdelivr.net/npm/glslCanvas@0.2.6/dist/GlslCanvas.min.js"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; padding: 16px; color: #222; }
+  </style>
+</head>
+<body>
+  <div style="margin:1rem 0;">
+
+    <!-- Komponenten-Toggles -->
+    <div style="display:flex; gap:0.5rem; margin-bottom:0.8rem; flex-wrap:wrap; align-items:center;">
+      <strong>Komponenten:</strong>
+      <button id="btn-shadow"   onclick="toggleComponent('shadow')"
+              style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #4a90d9;
+                     background:#4a90d9; color:#fff; cursor:pointer; font-size:0.9rem;">Schatten</button>
+      <button id="btn-specular" onclick="toggleComponent('specular')"
+              style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #4a90d9;
+                     background:#4a90d9; color:#fff; cursor:pointer; font-size:0.9rem;">Specular</button>
+      <button id="btn-ao"       onclick="toggleComponent('ao')"
+              style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                     background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Amb. Okklusion</button>
+    </div>
+
+    <!-- Blocker-Form -->
+    <div style="display:flex; gap:0.5rem; margin-bottom:1.2rem; flex-wrap:wrap; align-items:center;">
+      <strong>Blocker-Form:</strong>
+      <button id="btn-bshape-0" onclick="setBlockerShape(0)"
+              style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #4a90d9;
+                     background:#4a90d9; color:#fff; cursor:pointer; font-size:0.9rem;">Kugel</button>
+      <button id="btn-bshape-1" onclick="setBlockerShape(1)"
+              style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                     background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Box</button>
+    </div>
+
+    <div style="display:flex; flex-wrap:wrap; gap:2rem; align-items:flex-start;">
+
+      <canvas id="canvas" width="450" height="450"
+              style="border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,0.4);">
+      </canvas>
+
+      <div style="display:flex; flex-direction:column; gap:1.5rem; min-width:220px; padding-top:0.5rem;">
+
+        <div style="font-size:0.78rem; font-weight:700; text-transform:uppercase;
+                    letter-spacing:0.06em; color:#888;">Lichtquelle</div>
+
+        <div>
+          <label><strong>Azimut</strong>: <span id="val-az">0&deg;</span></label><br>
+          <input type="range" id="sl-az" min="0" max="360" step="5" value="0"
+                 style="width:100%; margin-top:0.4rem;">
+        </div>
+
+        <div>
+          <label><strong>Höhe</strong>: <span id="val-el">40&deg;</span></label><br>
+          <input type="range" id="sl-el" min="20" max="60" step="5" value="40"
+                 style="width:100%; margin-top:0.4rem;">
+        </div>
+
+        <div id="shine-group">
+          <label><strong>Glanzgrad</strong>: <span id="val-shine">32</span></label><br>
+          <input type="range" id="sl-shine" min="4" max="256" step="1" value="32"
+                 style="width:100%; margin-top:0.4rem;">
+        </div>
+
+        <div style="font-size:0.78rem; font-weight:700; text-transform:uppercase;
+                    letter-spacing:0.06em; color:#888; margin-top:0.3rem;">Blocker</div>
+
+        <div>
+          <label><strong>X-Position</strong>: <span id="val-bx">1.2</span></label><br>
+          <input type="range" id="sl-bx" min="-2.5" max="2.5" step="0.1" value="1.2"
+                 style="width:100%; margin-top:0.4rem;">
+        </div>
+
+        <div>
+          <label><strong>Höhe</strong>: <span id="val-by">1.2</span></label><br>
+          <input type="range" id="sl-by" min="-0.5" max="2.5" step="0.1" value="1.2"
+                 style="width:100%; margin-top:0.4rem;">
+        </div>
+
+        <div>
+          <label><strong>Tiefe (Z)</strong>: <span id="val-bz">0.0</span></label><br>
+          <input type="range" id="sl-bz" min="-2.5" max="2.5" step="0.1" value="0.0"
+                 style="width:100%; margin-top:0.4rem;">
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="demo.js"></script>
+</body>
+</html>

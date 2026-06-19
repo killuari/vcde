@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SDF-Distanzfeld (2D Heatmap)</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; padding: 16px; color: #222; }
+  </style>
+</head>
+<body>
+  <div style="margin:1rem 0;">
+
+    <div style="display:flex; gap:0.5rem; margin-bottom:1.2rem; flex-wrap:wrap; align-items:center;">
+      <strong>Form:</strong>
+      <button id="btn-circle" onclick="setShape('circle')"
+              style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #4a90d9;
+                     background:#4a90d9; color:#fff; cursor:pointer; font-size:0.9rem;">Kreis</button>
+      <button id="btn-rect" onclick="setShape('rect')"
+              style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                     background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Rechteck</button>
+      <button id="btn-capsule" onclick="setShape('capsule')"
+              style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                     background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Kapsel</button>
+    </div>
+
+    <div style="display:flex; flex-wrap:wrap; gap:2rem; align-items:flex-start;">
+
+      <canvas id="canvas" width="400" height="400"
+              style="border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,0.25); max-width:100%;">
+      </canvas>
+
+      <div style="display:flex; flex-direction:column; gap:1.5rem; min-width:210px; padding-top:0.5rem;">
+
+        <div>
+          <label><strong id="label-p1">Radius</strong>: <span id="val-p1">80</span> px</label><br>
+          <input type="range" id="sl-p1" min="15" max="170" step="1" value="80"
+                 style="width:100%; margin-top:0.4rem;">
+        </div>
+
+        <div id="p2-group" style="display:none;">
+          <label><strong id="label-p2">Halbhöhe</strong>: <span id="val-p2">70</span> px</label><br>
+          <input type="range" id="sl-p2" min="10" max="170" step="1" value="70"
+                 style="width:100%; margin-top:0.4rem;">
+        </div>
+
+        <div>
+          <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;">
+            <input type="checkbox" id="cb-iso">
+            Iso-Konturlinien anzeigen
+          </label>
+        </div>
+
+        <div style="font-size:0.85rem; line-height:2.0; margin-top:0.5rem;">
+          <div><span style="display:inline-block;width:14px;height:14px;background:#ff3333;
+                            border-radius:3px;vertical-align:middle;margin-right:6px;"></span>d &lt; 0 &mdash; innen</div>
+          <div><span style="display:inline-block;width:14px;height:14px;background:#ffffff;
+                            border:1px solid #bbb;border-radius:3px;vertical-align:middle;margin-right:6px;"></span>d = 0 &mdash; Oberfläche</div>
+          <div><span style="display:inline-block;width:14px;height:14px;background:#3366ff;
+                            border-radius:3px;vertical-align:middle;margin-right:6px;"></span>d &gt; 0 &mdash; außen</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="demo.js"></script>
+</body>
+</html>

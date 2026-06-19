@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Primitiv-Galerie</title>
+  <script src="https://cdn.jsdelivr.net/npm/glslCanvas@0.2.6/dist/GlslCanvas.min.js"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; padding: 16px; color: #222; }
+  </style>
+</head>
+<body>
+  <div style="margin:1rem 0;">
+
+    <div style="display:flex; gap:0.5rem; margin-bottom:1.2rem; flex-wrap:wrap; align-items:center;">
+      <strong>Form:</strong>
+      <button id="btn-shape-0" onclick="setShape(0)"
+              style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #4a90d9;
+                     background:#4a90d9; color:#fff; cursor:pointer; font-size:0.9rem;">Kugel</button>
+      <button id="btn-shape-1" onclick="setShape(1)"
+              style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                     background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Box</button>
+      <button id="btn-shape-2" onclick="setShape(2)"
+              style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                     background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Torus</button>
+      <button id="btn-shape-3" onclick="setShape(3)"
+              style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                     background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Kapsel</button>
+      <button id="btn-shape-4" onclick="setShape(4)"
+              style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                     background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Zylinder</button>
+      <button id="btn-shape-5" onclick="setShape(5)"
+              style="padding:0.3rem 0.9rem; border-radius:6px; border:2px solid #bbb;
+                     background:#f0f0f0; color:#333; cursor:pointer; font-size:0.9rem;">Oktaeder</button>
+    </div>
+
+    <div style="display:flex; flex-wrap:wrap; gap:2rem; align-items:flex-start;">
+
+      <canvas id="canvas" width="450" height="450"
+              style="border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,0.4);">
+      </canvas>
+
+      <div style="display:flex; flex-direction:column; gap:1.8rem; min-width:220px; padding-top:0.5rem;">
+
+        <div>
+          <label><strong id="label-p1">Radius</strong>: <span id="val-p1">0.60</span></label><br>
+          <input type="range" id="sl-p1" min="0.1" max="1.2" step="0.01" value="0.6"
+                 style="width:100%; margin-top:0.4rem;">
+        </div>
+
+        <div id="p2-group" style="display:none;">
+          <label><strong id="label-p2">&mdash;</strong>: <span id="val-p2">&mdash;</span></label><br>
+          <input type="range" id="sl-p2" min="0.05" max="1.2" step="0.01" value="0.4"
+                 style="width:100%; margin-top:0.4rem;">
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="demo.js"></script>
+</body>
+</html>

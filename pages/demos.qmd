@@ -1,0 +1,40 @@
+---
+title: "Interaktive SDF-Rendering Demos"
+author: "Luis Kahles"
+---
+
+Die folgenden Demos rendern SDF-Primitive und Beleuchtungseffekte direkt im Browser über WebGL-Fragment-Shader.
+
+::: {.panel-tabset}
+
+## Primitiv-Galerie
+
+Sechs klassische SDF-Primitive nach Inigo Quilez — Kugel, Box, Torus, Kapsel, Zylinder und Oktaeder — mit Ray-Marching und Phong-Beleuchtung. Die Form dreht sich kontinuierlich; Form und Parameter lassen sich interaktiv anpassen.
+
+```{=html}
+<div class="demo-wide">
+<iframe
+  src="../assets/demos/primitiv-galerie/index.html"
+  height="620"
+  scrolling="no"
+  title="Primitiv-Galerie">
+</iframe>
+</div>
+```
+
+## Beleuchtung & Schatten
+
+Phong-Shading mit hartem Schatten und optionaler Ambient Occlusion. Lichtquelle und Blocker-Objekt sind frei positionierbar; einzelne Beleuchtungskomponenten können ein- und ausgeschaltet werden.
+
+```{=html}
+<div class="demo-wide">
+<iframe
+  src="../assets/demos/beleuchtung-schatten/index.html"
+  height="720"
+  scrolling="no"
+  title="Beleuchtung und Schatten">
+</iframe>
+</div>
+```
+
+:::

@@ -1,11 +1,12 @@
 project:
   type: website
   render:
-    - index.qmd
     - pages/einfuehrung.qmd
     - pages/theorie.qmd
     - pages/verwandte-methoden.qmd
     - pages/csg.qmd
+    - pages/demos.qmd
+    - pages/interaktive-renderings.qmd
   resources:
     - assets/
 
@@ -23,19 +24,19 @@ format:
 
 website:
   title: "SDF Rendering via Ray Marching"
-  navbar: 
+  navbar:
     left:
-      - href: index.qmd
-        text: "Home"
-
       - href: pages/einfuehrung.qmd
         text: "Einführung"
 
       - href: pages/theorie.qmd
-        text: "Theorie"      
+        text: "Theorie"
 
       - href: pages/verwandte-methoden.qmd
         text: "Verwandte Methoden"
 
       - href: pages/csg.qmd
         text: "CSG"
+
+      - href: pages/demos.qmd
+        text: "Demos"
