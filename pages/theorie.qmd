@@ -52,7 +52,7 @@ $$
 f(\mathbf{p}) = \|\mathbf{p} - \mathbf{c}\| - r
 $$
 
-<iframe class="demo-embed" src="../assets/demos/embedded/sphere-sdf-demo.html" height="650"></iframe>
+<iframe class="demo-embed" src="../assets/demos/embedded/sphere-sdf-demo.html" height="460"></iframe>
 
 ## Primitive Formen und Operationen
 
@@ -64,11 +64,11 @@ Primitive SDFs bilden die Grundlage für die Modellierung komplexerer Szenen. Ä
 
 Die folgende Abbildung zeigt einige typische Primitive sowie ihre jeweiligen Signed Distance Functions.
 
-<iframe class="demo-embed" src="../assets/demos/sdf-heatmap/index.html" height="610"></iframe>
+<iframe class="demo-embed" src="../assets/demos/sdf-heatmap/index.html" height="510"></iframe>
 
 Die folgende 3D-Demo rendert dieselben Primitive per Ray Marching direkt im Browser. Form und Parameter lassen sich interaktiv anpassen.
 
-<iframe class="demo-embed" src="../assets/demos/primitiv-galerie/index.html" height="660"></iframe>
+<iframe class="demo-embed" src="../assets/demos/primitiv-galerie/index.html" height="620"></iframe>
 
 ## Kombination mehrerer Objekte
 
@@ -136,7 +136,7 @@ Die folgende Visualisierung verdeutlicht dieses Vorgehen. Die Schrittweite entsp
 
 ## Animierte Schritte
 
-<iframe class="demo-embed" src="../assets/demos/ray-marching-visualisierer/index.html" height="630"></iframe>
+<iframe class="demo-embed" src="../assets/demos/ray-marching-visualisierer/index.html" height="570"></iframe>
 
 ## Parametrische Steuerung
 

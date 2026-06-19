@@ -62,13 +62,6 @@
         </div>
       </div>
 
-      <!-- Ray-Winkel -->
-      <div class="ctrl-group">
-        <div class="ctrl-label">Ray-Winkel: <strong style="color:#222;" id="val-angle">-34</strong>°</div>
-        <input type="range" id="sl-angle" min="-70" max="15" step="1" value="-34"
-               style="width:160px; accent-color:#4a90d9; margin:0;">
-      </div>
-
       <!-- Szene -->
       <div class="ctrl-group">
         <div class="ctrl-label">Szene</div>
@@ -89,9 +82,21 @@
 
     </div>
 
-    <canvas id="canvas" width="520" height="370"
-            style="border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,0.25); max-width:100%; display:block;">
-    </canvas>
+    <div style="display:flex; flex-wrap:wrap; gap:1.5rem; align-items:flex-start;">
+
+      <canvas id="canvas" width="520" height="370"
+              style="border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,0.25); max-width:100%; display:block; flex-shrink:0;">
+      </canvas>
+
+      <!-- Ray-Winkel (vertical slider) -->
+      <div style="display:flex; flex-direction:column; align-items:center; gap:0.4rem; padding-top:0.3rem; min-width:70px;">
+        <div class="ctrl-label" style="text-align:center;">Ray-<br>Winkel</div>
+        <div style="font-size:0.88rem; color:#222; font-weight:bold;"><span id="val-angle">-34</span>°</div>
+        <input type="range" id="sl-angle" min="-70" max="15" step="1" value="-34"
+               style="height:240px; writing-mode:vertical-lr; accent-color:#4a90d9; cursor:pointer; margin:0;">
+      </div>
+
+    </div>
 
   </div>
   <script src="demo.js"></script>

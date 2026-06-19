@@ -95,7 +95,7 @@
         if (!entries[0].isIntersecting) { wasHidden = true; return; }
         if (!wasHidden) return;
         wasHidden = false;
-        canvas.width = 420; canvas.height = 420;
+        canvas.width = 360; canvas.height = 360;
         if (loadedShader) sandbox.load(loadedShader);
     }, { threshold: 0.01 }).observe(canvas);
 
@@ -131,6 +131,10 @@
             btn.style.color       = active ? '#fff'    : '#333';
             btn.style.borderColor = active ? '#4a90d9' : '#bbb';
         }
+
+        // sdBox (1) and sdOctahedron (5) have 47-char code lines — widen panel slightly
+        document.getElementById('ctrl-panel').style.maxWidth =
+            (idx === 1 || idx === 5) ? '385px' : '360px';
 
         updateInfoPanel(idx);
         applyUniforms();

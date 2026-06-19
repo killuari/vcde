@@ -1,31 +1,115 @@
 [
   {
-    "objectID": "pages/csg.html",
-    "href": "pages/csg.html",
-    "title": "Constructive Solid Geometry",
+    "objectID": "pages/demos.html",
+    "href": "pages/demos.html",
+    "title": "Interaktive SDF-Rendering Demos",
     "section": "",
-    "text": "Constructive Solid Geometry beschreibt komplexe Körper als Kombination einfacher Grundformen. Statt ein Objekt direkt als Mesh zu modellieren, setzt man es aus Primitiven wie Kugeln, Boxen, Tori oder Zylindern zusammen. Bei klassischen Meshes bedeutet das oft geometrische Operationen auf Dreiecken. Bei SDFs reicht dagegen häufig eine einfache mathematische Kombination der Distanzwerte.\nAngenommen, \\(d_1(\\mathbf{p})\\) ist die Distanz zur ersten Form und \\(d_2(\\mathbf{p})\\) die Distanz zur zweiten Form. Dann lassen sich die wichtigsten CSG-Operationen so ausdrücken:\n\n\n\n\n\n\n\n\nOperation\nSDF-Formel\nBedeutung\n\n\n\n\nUnion\n\\(d(\\mathbf{p}) = \\min(d_1(\\mathbf{p}), d_2(\\mathbf{p}))\\)\nbeide Objekte zusammen\n\n\nIntersection\n\\(d(\\mathbf{p}) = \\max(d_1(\\mathbf{p}), d_2(\\mathbf{p}))\\)\nnur der gemeinsame Bereich\n\n\nDifference\n\\(d(\\mathbf{p}) = \\max(d_1(\\mathbf{p}), -d_2(\\mathbf{p}))\\)\nerstes Objekt ohne zweites Objekt\n\n\n\nDie Intuition dahinter:\n\nBei der Union interessiert die näher gelegene Oberfläche. Deshalb nimmt man das Minimum.\nBei der Intersection muss ein Punkt in beiden Körpern liegen. Ein Punkt ist erst dann innen, wenn beide Distanzen negativ sind. Deshalb bestimmt die größere Distanz die Grenze.\nBei der Difference wird das zweite Objekt aus dem ersten herausgeschnitten. Durch \\(-d_2\\) wird innen und außen der zweiten Form vertauscht.\n\n\n\nFür mehr als zwei Objekte wird dieselbe Operation wiederholt. Im Demo beginnt die Szene mit dem ersten Objekt und kombiniert dann nacheinander die weiteren aktiven Objekte:\nfloat d = d1;\nd = min(d, d2);\nd = min(d, d3);\nd = min(d, d4);\nBei Union wächst die Szene dadurch mit jedem Objekt. Bei Difference bleibt Objekt 1 die Basis, und alle weiteren Objekte werden davon abgezogen:\nfloat d = d1;\nd = max(d, -d2);\nd = max(d, -d3);\nDas macht CSG zu einem starken Beispiel für SDFs: Eine Änderung in einer einzigen Formel kann die Topologie der Szene verändern, ohne dass neue Dreiecke erzeugt oder Meshes neu berechnet werden müssen. Für die Präsentation eignet sich das gut, weil man an Union, Intersection und Difference direkt sieht, dass SDFs nicht nur eine andere Rendering-Technik sind, sondern auch eine andere Art, Geometrie zu denken."
+    "text": "Zweidimensionale Animationen zur schrittweisen Erklärung der SDF-Grundkonzepte.\n\nKugel als BeispielSDF-DistanzfeldRay-Marching SchritteRay-Marching Parametrisch\n\n\nSigned Distance Function einer Kugel: Der Slider verschiebt den Abfragepunkt, das Distanzfeld wird live berechnet. → Die Kugel als Beispiel\n\n\n\n\n\n\nSigned Distance Functions für sechs 2D-Primitive. Innenbereich (formspezifische Farbe) und Außenbereich (Dunkelblau) zeigen das Vorzeichen des Distanzwertes. → Primitive Formen und Operationen\n\n\n\n\n\n\nSchrittweise Visualisierung des Sphere-Tracing-Algorithmus. Die gestrichelten Kreise zeigen den jeweils sicheren Schrittradius. → Der Ray-Marching-Algorithmus\n\n\n\n\n\n\nParametrische Steuerung von Schrittweite und Szene. → Der Ray-Marching-Algorithmus"
   },
   {
-    "objectID": "pages/csg.html#constructive-solid-geometry-mit-sdfs",
-    "href": "pages/csg.html#constructive-solid-geometry-mit-sdfs",
-    "title": "Constructive Solid Geometry",
+    "objectID": "pages/demos.html#konzept-visualisierungen",
+    "href": "pages/demos.html#konzept-visualisierungen",
+    "title": "Interaktive SDF-Rendering Demos",
     "section": "",
-    "text": "Constructive Solid Geometry beschreibt komplexe Körper als Kombination einfacher Grundformen. Statt ein Objekt direkt als Mesh zu modellieren, setzt man es aus Primitiven wie Kugeln, Boxen, Tori oder Zylindern zusammen. Bei klassischen Meshes bedeutet das oft geometrische Operationen auf Dreiecken. Bei SDFs reicht dagegen häufig eine einfache mathematische Kombination der Distanzwerte.\nAngenommen, \\(d_1(\\mathbf{p})\\) ist die Distanz zur ersten Form und \\(d_2(\\mathbf{p})\\) die Distanz zur zweiten Form. Dann lassen sich die wichtigsten CSG-Operationen so ausdrücken:\n\n\n\n\n\n\n\n\nOperation\nSDF-Formel\nBedeutung\n\n\n\n\nUnion\n\\(d(\\mathbf{p}) = \\min(d_1(\\mathbf{p}), d_2(\\mathbf{p}))\\)\nbeide Objekte zusammen\n\n\nIntersection\n\\(d(\\mathbf{p}) = \\max(d_1(\\mathbf{p}), d_2(\\mathbf{p}))\\)\nnur der gemeinsame Bereich\n\n\nDifference\n\\(d(\\mathbf{p}) = \\max(d_1(\\mathbf{p}), -d_2(\\mathbf{p}))\\)\nerstes Objekt ohne zweites Objekt\n\n\n\nDie Intuition dahinter:\n\nBei der Union interessiert die näher gelegene Oberfläche. Deshalb nimmt man das Minimum.\nBei der Intersection muss ein Punkt in beiden Körpern liegen. Ein Punkt ist erst dann innen, wenn beide Distanzen negativ sind. Deshalb bestimmt die größere Distanz die Grenze.\nBei der Difference wird das zweite Objekt aus dem ersten herausgeschnitten. Durch \\(-d_2\\) wird innen und außen der zweiten Form vertauscht.\n\n\n\nFür mehr als zwei Objekte wird dieselbe Operation wiederholt. Im Demo beginnt die Szene mit dem ersten Objekt und kombiniert dann nacheinander die weiteren aktiven Objekte:\nfloat d = d1;\nd = min(d, d2);\nd = min(d, d3);\nd = min(d, d4);\nBei Union wächst die Szene dadurch mit jedem Objekt. Bei Difference bleibt Objekt 1 die Basis, und alle weiteren Objekte werden davon abgezogen:\nfloat d = d1;\nd = max(d, -d2);\nd = max(d, -d3);\nDas macht CSG zu einem starken Beispiel für SDFs: Eine Änderung in einer einzigen Formel kann die Topologie der Szene verändern, ohne dass neue Dreiecke erzeugt oder Meshes neu berechnet werden müssen. Für die Präsentation eignet sich das gut, weil man an Union, Intersection und Difference direkt sieht, dass SDFs nicht nur eine andere Rendering-Technik sind, sondern auch eine andere Art, Geometrie zu denken."
+    "text": "Zweidimensionale Animationen zur schrittweisen Erklärung der SDF-Grundkonzepte.\n\nKugel als BeispielSDF-DistanzfeldRay-Marching SchritteRay-Marching Parametrisch\n\n\nSigned Distance Function einer Kugel: Der Slider verschiebt den Abfragepunkt, das Distanzfeld wird live berechnet. → Die Kugel als Beispiel\n\n\n\n\n\n\nSigned Distance Functions für sechs 2D-Primitive. Innenbereich (formspezifische Farbe) und Außenbereich (Dunkelblau) zeigen das Vorzeichen des Distanzwertes. → Primitive Formen und Operationen\n\n\n\n\n\n\nSchrittweise Visualisierung des Sphere-Tracing-Algorithmus. Die gestrichelten Kreise zeigen den jeweils sicheren Schrittradius. → Der Ray-Marching-Algorithmus\n\n\n\n\n\n\nParametrische Steuerung von Schrittweite und Szene. → Der Ray-Marching-Algorithmus"
   },
   {
-    "objectID": "pages/csg.html#glatte-übergänge",
-    "href": "pages/csg.html#glatte-übergänge",
-    "title": "Constructive Solid Geometry",
-    "section": "Glatte Übergänge",
-    "text": "Glatte Übergänge\nDie Demo enthält zusätzlich einen Regler für Verschmelzung. Mathematisch wird dafür die harte min- oder max-Operation durch eine geglättete Variante ersetzt. Für eine weiche Union kann man zum Beispiel zwischen den beiden Distanzwerten interpolieren:\nfloat smoothUnion(float d1, float d2, float k) {\n  float h = clamp(0.5 + 0.5 * (d2 - d1) / k, 0.0, 1.0);\n  return mix(d2, d1, h) - k * h * (1.0 - h);\n}\nDer Parameter k kontrolliert die Breite des Übergangsbereichs. Bei k = 0 bleibt die CSG-Operation hart. Je größer k wird, desto weicher gehen die Oberflächen ineinander über. Das ist ein Beispiel dafür, dass SDFs nicht nur boolesche Geometrieoperationen erlauben, sondern auch kontinuierliche Formmanipulationen."
+    "objectID": "pages/demos.html#glsl-renderings",
+    "href": "pages/demos.html#glsl-renderings",
+    "title": "Interaktive SDF-Rendering Demos",
+    "section": "GLSL-Renderings",
+    "text": "GLSL-Renderings\nVollständige WebGL-Renderer, die SDF-Primitive und Beleuchtungseffekte in Echtzeit im Browser berechnen.\n\nPrimitiv-GalerieBeleuchtung & Schatten\n\n\nSechs klassische SDF-Primitive nach Inigo Quilez — Kugel, Box, Torus, Kapsel, Zylinder und Oktaeder — mit Ray-Marching und Phong-Beleuchtung. → Primitive Formen und Operationen\n\n\n\n\n\n\nPhong-Shading mit hartem Schatten und optionaler Ambient Occlusion. Lichtquelle und Blocker-Objekt sind frei positionierbar; einzelne Beleuchtungskomponenten können ein- und ausgeschaltet werden. → Shading und Beleuchtung"
   },
   {
-    "objectID": "pages/csg.html#csg-live-demo",
-    "href": "pages/csg.html#csg-live-demo",
-    "title": "Constructive Solid Geometry",
-    "section": "CSG Live-Demo",
-    "text": "CSG Live-Demo\nDie Demo zeigt eine kleine SDF-Szene aus mehreren Primitiven. Links ist das Ergebnis des Ray-Marching-Shaders zu sehen, rechts die editierbare Beschreibung der Szene. Die Objektliste wählt die primitiven SDFs aus, und die Kombinationsfunktion zeigt, wie daraus die Szene gebaut wird. Zwischen Union, Intersection und Difference kann gewechselt werden, sodass die Wirkung der CSG-Operationen direkt sichtbar wird."
+    "objectID": "pages/demos.html#csg-demo",
+    "href": "pages/demos.html#csg-demo",
+    "title": "Interaktive SDF-Rendering Demos",
+    "section": "CSG-Demo",
+    "text": "CSG-Demo\nConstructive Solid Geometry: Vereinigung, Schnittmenge und Differenz zweier SDF-Primitive. → Kombination mehrerer Objekte"
+  },
+  {
+    "objectID": "pages/verwandte-methoden.html",
+    "href": "pages/verwandte-methoden.html",
+    "title": "Verwandte Methoden",
+    "section": "",
+    "text": "Dieser Abschnitt fokussiert sich auf die Frage, wie Ray Marching mit SDFs im Vergleich zu bekannteren Rendering-Methoden einzuordnen ist und warum Constructive Solid Geometry (CSG) bei SDFs besonders elegant funktioniert."
+  },
+  {
+    "objectID": "pages/verwandte-methoden.html#einordnung",
+    "href": "pages/verwandte-methoden.html#einordnung",
+    "title": "Verwandte Methoden",
+    "section": "Einordnung",
+    "text": "Einordnung\nIn der klassischen Echtzeitgrafik dominiert Rasterisierung. Dabei werden 3D-Modelle als Dreiecksnetze beschrieben, auf den Bildschirm projiziert und anschließend Pixel für Pixel eingefärbt. Diese Methode ist sehr schnell und bildet die Grundlage moderner Game-Engines. Ihr Nachteil ist, dass jede Form zuerst als Mesh vorliegen muss. Sehr glatte, prozedurale oder topologisch komplexe Formen können dadurch aufwendig werden, weil die Geometrie explizit modelliert, gespeichert und verwaltet werden muss.\nRay Tracing verfolgt dagegen Strahlen von der Kamera in die Szene und berechnet Schnittpunkte mit Objekten. Dadurch lassen sich Reflexionen, Schatten und globale Beleuchtung sehr natürlich beschreiben. Klassisches Ray Tracing braucht jedoch explizite Schnittpunkttests, zum Beispiel zwischen einem Strahl und einem Dreieck, einer Kugel oder einer Ebene. Die Szene besteht also weiterhin aus konkreten geometrischen Primitiven oder Meshes.\nRay Marching mit SDFs arbeitet anders. Ein Strahl wird nicht direkt mit einem Objekt geschnitten. Stattdessen fragt man an jedem Punkt entlang des Strahls: “Wie weit bin ich mindestens von der nächsten Oberfläche entfernt?” Diese Distanz kommt aus der Signed Distance Function. Der Strahl kann dann genau um diese Distanz weiterlaufen, ohne eine Oberfläche zu überspringen. Dieses Verfahren wird bei echten Distanzfunktionen auch Sphere Tracing genannt.\nDer zentrale Unterschied ist also die Repräsentation der Geometrie:\n\n\n\n\n\n\n\n\n\n\nMethode\nGeometrie\nGrundidee\nStärke\nSchwäche\n\n\n\n\nRasterisierung\nDreiecksnetze\nDreiecke auf Bildschirm projizieren\nsehr schnell, etablierter Standard\nkomplexe Formen brauchen viele Polygone\n\n\nRay Tracing\nexplizite Objekte oder Meshes\nStrahlen schneiden Szene\nrealistische Lichtsimulation\nviele Schnittpunkttests, hoher Aufwand\n\n\nRay Marching mit SDFs\nimplizite Distanzfelder\nStrahlen schrittweise anhand von Distanzen bewegen\nprozedurale Formen, CSG, Fraktale\nPerformance hängt stark von Szene und Schrittzahl ab"
+  },
+  {
+    "objectID": "pages/einfuehrung.html",
+    "href": "pages/einfuehrung.html",
+    "title": "Einführung in das Thema",
+    "section": "",
+    "text": "In der Computergrafik werden dreidimensionale Objekte meist durch polygonale Netze beschrieben. Dabei wird die Oberfläche eines Modells durch eine Vielzahl kleiner Dreiecke approximiert. Diese Form der Geometrierepräsentation hat sich über viele Jahrzehnte hinweg etabliert und wird von moderner Grafik-Hardware direkt unterstützt. Aus diesem Grund bilden Polygonnetze die Grundlage nahezu aller heutigen Echtzeit-Rendering-Verfahren.\nEin wesentlicher Vorteil polygonaler Netze liegt in ihrer Flexibilität. Sowohl einfache geometrische Körper als auch komplexe Modelle mit Millionen von Polygonen lassen sich auf diese Weise darstellen. Darüber hinaus existiert ein umfangreiches Ökosystem aus Modellierungswerkzeugen, Dateiformaten und Rendering-Pipelines, das auf dieser Repräsentation basiert.\n\n\n\nTrotz ihrer weiten Verbreitung sind Polygonnetze nicht für jede Anwendung die ideale Lösung. Da die Geometrie explizit durch Vertices und Dreiecke beschrieben wird, steigt der Speicherbedarf mit zunehmendem Detailgrad eines Modells. Besonders bei sehr komplexen oder fein strukturierten Oberflächen kann dies zu großen Datenmengen führen.\nAuch die Modellierung mathematisch definierter Formen oder prozedural erzeugter Szenen gestaltet sich häufig aufwendiger. Sollen beispielsweise mehrere Grundkörper miteinander kombiniert oder komplexe geometrische Strukturen erzeugt werden, müssen die zugrunde liegenden Meshes entsprechend angepasst werden. Obwohl hierfür etablierte Verfahren existieren, kann die Verarbeitung schnell komplex werden.\nDarüber hinaus beschreibt ein Polygonnetz ausschließlich die Oberfläche eines Objekts. Informationen über den umgebenden Raum, beispielsweise Abstände zu Oberflächen oder die Zugehörigkeit eines Punktes zum Inneren oder Äußeren eines Objekts, sind nicht unmittelbar verfügbar und müssen zusätzlich berechnet werden.\n\n\n\nUm einige dieser Einschränkungen zu umgehen, wurden verschiedene alternative Methoden zur Beschreibung von Geometrie entwickelt. Dazu zählen unter anderem Voxeldarstellungen, Punktwolken sowie implizite Oberflächen. Im Gegensatz zu Polygonnetzen wird die Geometrie hierbei nicht zwangsläufig durch eine Menge von Dreiecken beschrieben.\nSigned Distance Functions (SDFs) gehören zu den impliziten Geometrierepräsentationen. Anstatt die Oberfläche eines Objekts direkt zu speichern, wird eine Funktion definiert, die jedem Punkt im Raum einen signierten Abstand zur nächstgelegenen Oberfläche zuordnet. Die eigentliche Geometrie ergibt sich somit indirekt aus dieser Funktion.\nDa bei diesem Ansatz keine expliziten Dreiecke vorhanden sind, können klassische Rasterisierungsverfahren nicht unmittelbar angewendet werden. Stattdessen kommen häufig Ray-Marching-Verfahren zum Einsatz. Dabei werden Strahlen schrittweise durch die Szene verfolgt, bis eine Oberfläche gefunden wird. Die in der Signed Distance Function enthaltenen Distanzinformationen ermöglichen dabei eine effiziente Bestimmung der nächsten Schrittweite.\nDie Kombination aus Signed Distance Functions und Ray Marching hat sich insbesondere für prozedurale Szenen, mathematische Modelle und experimentelle Rendering-Techniken als interessante Alternative zu klassischen Polygonnetzen etabliert."
+  },
+  {
+    "objectID": "pages/einfuehrung.html#klassische-darstellung-von-3d-geometrie",
+    "href": "pages/einfuehrung.html#klassische-darstellung-von-3d-geometrie",
+    "title": "Einführung in das Thema",
+    "section": "",
+    "text": "In der Computergrafik werden dreidimensionale Objekte meist durch polygonale Netze beschrieben. Dabei wird die Oberfläche eines Modells durch eine Vielzahl kleiner Dreiecke approximiert. Diese Form der Geometrierepräsentation hat sich über viele Jahrzehnte hinweg etabliert und wird von moderner Grafik-Hardware direkt unterstützt. Aus diesem Grund bilden Polygonnetze die Grundlage nahezu aller heutigen Echtzeit-Rendering-Verfahren.\nEin wesentlicher Vorteil polygonaler Netze liegt in ihrer Flexibilität. Sowohl einfache geometrische Körper als auch komplexe Modelle mit Millionen von Polygonen lassen sich auf diese Weise darstellen. Darüber hinaus existiert ein umfangreiches Ökosystem aus Modellierungswerkzeugen, Dateiformaten und Rendering-Pipelines, das auf dieser Repräsentation basiert."
+  },
+  {
+    "objectID": "pages/einfuehrung.html#grenzen-polygonaler-netze",
+    "href": "pages/einfuehrung.html#grenzen-polygonaler-netze",
+    "title": "Einführung in das Thema",
+    "section": "",
+    "text": "Trotz ihrer weiten Verbreitung sind Polygonnetze nicht für jede Anwendung die ideale Lösung. Da die Geometrie explizit durch Vertices und Dreiecke beschrieben wird, steigt der Speicherbedarf mit zunehmendem Detailgrad eines Modells. Besonders bei sehr komplexen oder fein strukturierten Oberflächen kann dies zu großen Datenmengen führen.\nAuch die Modellierung mathematisch definierter Formen oder prozedural erzeugter Szenen gestaltet sich häufig aufwendiger. Sollen beispielsweise mehrere Grundkörper miteinander kombiniert oder komplexe geometrische Strukturen erzeugt werden, müssen die zugrunde liegenden Meshes entsprechend angepasst werden. Obwohl hierfür etablierte Verfahren existieren, kann die Verarbeitung schnell komplex werden.\nDarüber hinaus beschreibt ein Polygonnetz ausschließlich die Oberfläche eines Objekts. Informationen über den umgebenden Raum, beispielsweise Abstände zu Oberflächen oder die Zugehörigkeit eines Punktes zum Inneren oder Äußeren eines Objekts, sind nicht unmittelbar verfügbar und müssen zusätzlich berechnet werden."
+  },
+  {
+    "objectID": "pages/einfuehrung.html#alternative-geometrierepräsentationen",
+    "href": "pages/einfuehrung.html#alternative-geometrierepräsentationen",
+    "title": "Einführung in das Thema",
+    "section": "",
+    "text": "Um einige dieser Einschränkungen zu umgehen, wurden verschiedene alternative Methoden zur Beschreibung von Geometrie entwickelt. Dazu zählen unter anderem Voxeldarstellungen, Punktwolken sowie implizite Oberflächen. Im Gegensatz zu Polygonnetzen wird die Geometrie hierbei nicht zwangsläufig durch eine Menge von Dreiecken beschrieben.\nSigned Distance Functions (SDFs) gehören zu den impliziten Geometrierepräsentationen. Anstatt die Oberfläche eines Objekts direkt zu speichern, wird eine Funktion definiert, die jedem Punkt im Raum einen signierten Abstand zur nächstgelegenen Oberfläche zuordnet. Die eigentliche Geometrie ergibt sich somit indirekt aus dieser Funktion.\nDa bei diesem Ansatz keine expliziten Dreiecke vorhanden sind, können klassische Rasterisierungsverfahren nicht unmittelbar angewendet werden. Stattdessen kommen häufig Ray-Marching-Verfahren zum Einsatz. Dabei werden Strahlen schrittweise durch die Szene verfolgt, bis eine Oberfläche gefunden wird. Die in der Signed Distance Function enthaltenen Distanzinformationen ermöglichen dabei eine effiziente Bestimmung der nächsten Schrittweite.\nDie Kombination aus Signed Distance Functions und Ray Marching hat sich insbesondere für prozedurale Szenen, mathematische Modelle und experimentelle Rendering-Techniken als interessante Alternative zu klassischen Polygonnetzen etabliert."
+  },
+  {
+    "objectID": "pages/einfuehrung.html#prozedurale-modellierung",
+    "href": "pages/einfuehrung.html#prozedurale-modellierung",
+    "title": "Einführung in das Thema",
+    "section": "Prozedurale Modellierung",
+    "text": "Prozedurale Modellierung\nEin häufiges Einsatzgebiet von Signed Distance Functions ist die prozedurale Erzeugung von Geometrie. Anstatt Objekte manuell zu modellieren und als Polygonnetz zu speichern, werden Formen durch mathematische Funktionen beschrieben und zur Laufzeit generiert. Dadurch lassen sich komplexe Szenen und Modelle mit vergleichsweise wenig Speicheraufwand erzeugen. Typische Beispiele sind Landschaften, Höhlensysteme oder abstrakte, algorithmisch erzeugte Welten und Sci-Fi-Strukturen.\n[Beispielbild.png]"
+  },
+  {
+    "objectID": "pages/einfuehrung.html#constructive-solid-geometry",
+    "href": "pages/einfuehrung.html#constructive-solid-geometry",
+    "title": "Einführung in das Thema",
+    "section": "Constructive Solid Geometry",
+    "text": "Constructive Solid Geometry\nSigned Distance Functions eignen sich besonders gut für Constructive Solid Geometry (CSG). Dabei werden komplexe Objekte aus einfachen Grundkörpern wie Kugeln, Würfeln oder Zylindern zusammengesetzt. Operationen wie Vereinigung, Schnittmenge oder Differenz können direkt auf den zugrunde liegenden Distanzfunktionen formuliert werden. Dies ermöglicht eine flexible und oft sehr elegante Modellierung komplexer Geometrien.\n[Beispielbild.png]"
+  },
+  {
+    "objectID": "pages/einfuehrung.html#fraktale-und-mathematische-strukturen",
+    "href": "pages/einfuehrung.html#fraktale-und-mathematische-strukturen",
+    "title": "Einführung in das Thema",
+    "section": "Fraktale und mathematische Strukturen",
+    "text": "Fraktale und mathematische Strukturen\nEin weiterer Anwendungsbereich ist die Darstellung mathematisch definierter Objekte und Fraktale. Bekannte Beispiele sind die Mandelbulb oder die Mandelbox. Solche Strukturen weisen häufig eine sehr hohe geometrische Komplexität und feine Details auf, die mit klassischen Polygonnetzen nur schwer darstellbar wären. Durch die mathematische Beschreibung der Geometrie eignen sich SDF-basierte Verfahren besonders gut für die Visualisierung solcher Formen.\n[Beispielbild.png]"
+  },
+  {
+    "objectID": "pages/einfuehrung.html#echtzeit-rendering-und-demo-szene",
+    "href": "pages/einfuehrung.html#echtzeit-rendering-und-demo-szene",
+    "title": "Einführung in das Thema",
+    "section": "Echtzeit-Rendering und Demo-Szene",
+    "text": "Echtzeit-Rendering und Demo-Szene\nGroße Bekanntheit erlangten Signed Distance Functions durch die Demo-Szene und moderne Shader-Programmierung. Da sich komplexe Geometrie direkt im Shader beschreiben lässt, können beeindruckende Szenen mit vergleichsweise wenig Programmcode erzeugt werden. Besonders bei sogenannten 4k- oder 64k-Intros, bei denen die gesamte Anwendung nur wenige Kilobyte groß sein darf, bieten SDFs erhebliche Vorteile gegenüber gespeicherter Polygongeometrie.\n[Beispielbild.png]"
+  },
+  {
+    "objectID": "pages/einfuehrung.html#forschung-und-moderne-anwendungen",
+    "href": "pages/einfuehrung.html#forschung-und-moderne-anwendungen",
+    "title": "Einführung in das Thema",
+    "section": "Forschung und moderne Anwendungen",
+    "text": "Forschung und moderne Anwendungen\nAuch in aktuellen Forschungsgebieten spielen Distanzfunktionen eine wichtige Rolle. Sie werden unter anderem für Kollisionsabfragen, Robotik, 3D-Rekonstruktion und Verfahren des Neural Renderings eingesetzt. Insbesondere die Repräsentation von Geometrie durch Distanzfelder hat in den letzten Jahren neue Ansätze zur Erfassung und Rekonstruktion realer Szenen ermöglicht.\n[Beispielbild.png]"
+  },
+  {
+    "objectID": "pages/einfuehrung.html#einordnung",
+    "href": "pages/einfuehrung.html#einordnung",
+    "title": "Einführung in das Thema",
+    "section": "Einordnung",
+    "text": "Einordnung\nTrotz ihrer vielseitigen Einsatzmöglichkeiten haben Signed Distance Functions klassische Polygonnetze bislang nicht ersetzt. Moderne Grafik-Hardware ist weiterhin stark auf die Verarbeitung polygonaler Geometrie optimiert, weshalb Meshes in den meisten Echtzeit-Anwendungen dominieren. SDFs werden daher vor allem in Bereichen eingesetzt, in denen ihre mathematische Beschreibung und die daraus resultierende Flexibilität besondere Vorteile bieten."
   },
   {
     "objectID": "pages/theorie.html",
@@ -119,122 +203,31 @@
     "text": "Schatten\nDas Beleuchtungsmodell allein entscheidet nur, wie stark ein Punkt beleuchtet würde, wenn ihn das Licht erreicht. Es prüft jedoch nicht automatisch, ob sich zwischen dem Punkt und der Lichtquelle ein anderes Objekt befindet.\nFür Schatten wird daher ein zusätzlicher Strahl verwendet. Nachdem durch Ray Marching ein Oberflächenpunkt gefunden wurde, wird von diesem Punkt aus ein zweiter Strahl in Richtung der Lichtquelle gesendet. Dieser sogenannte Shadow Ray überprüft, ob auf dem Weg zur Lichtquelle ein anderes Objekt getroffen wird.\nFalls der Shadow Ray vor Erreichen der Lichtquelle auf eine Oberfläche trifft, liegt der ursprüngliche Punkt im Schatten. Andernfalls wird er normal beleuchtet.\nDie Schattenberechnung funktioniert damit ähnlich wie beim klassischen Ray Tracing. Der Unterschied liegt darin, dass auch dieser zusätzliche Strahl nicht gegen Dreiecke getestet wird, sondern wieder mithilfe der Signed Distance Function durch die Szene gemarcht wird.\nAuf diese Weise können Schatten direkt in das SDF-basierte Rendering integriert werden, ohne eine separate Schattenkarte oder explizite Geometrie zu benötigen.\nDie folgende Demo demonstriert Phong-Beleuchtung mit hartem Schatten und optionaler Ambient Occlusion. Einzelne Beleuchtungskomponenten lassen sich ein- und ausschalten; Lichtquelle und Blocker-Objekt sind frei positionierbar."
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Konzeptskizze: SDF-Rendering via Ray Marching",
+    "objectID": "pages/csg.html",
+    "href": "pages/csg.html",
+    "title": "Constructive Solid Geometry",
     "section": "",
-    "text": "SDF-Distanzfeld (2D Heatmap)Ray-Marching VisualisiererPrimitiv-GalerieBeleuchtung & Schatten\n\n\n\n\n\n  \n    Form:\n    Kreis\n    Rechteck\n    Kapsel\n  \n\n  \n\n    \n    \n\n    \n\n      \n        Radius: 80 px\n        \n      \n\n      \n        Halbhöhe: 70 px\n        \n      \n\n      \n        \n          \n          Iso-Konturlinien anzeigen\n        \n      \n\n      \n      \n        d &lt; 0 — innen\n        d = 0 — Oberfläche\n        d &gt; 0 — außen\n      \n\n    \n  \n\n\n\n\n\n\n\n  \n  \n    \n      Sichtbare Schritte: 0\n      \n    \n    \n      ▶ Play\n    \n  \n\n  \n  \n\n\n\n\n\n\n\n\n\n  \n    Form:\n    Kugel\n    Box\n    Torus\n    Kapsel\n    Zylinder\n    Oktaeder\n  \n\n  \n\n    \n    \n\n    \n\n      \n        Radius: 0.60\n        \n      \n\n      \n        —: —\n        \n      \n\n    \n  \n\n\n\n\n\n\n\n\n\n\n  \n  \n    Komponenten:\n    Schatten\n    Specular\n    Amb. Okklusion\n  \n\n  \n  \n    Blocker-Form:\n    Kugel\n    Box\n  \n\n  \n\n    \n    \n\n    \n\n      Lichtquelle\n\n      \n        Azimut: 0°\n        \n      \n\n      \n        Höhe: 40°\n        \n      \n\n      \n        Glanzgrad: 32\n        \n      \n\n      Blocker\n\n      \n        X-Position: 1.2\n        \n      \n\n      \n        Höhe: 1.2\n        \n      \n\n      \n        Tiefe (Z): 0.0"
+    "text": "Constructive Solid Geometry beschreibt komplexe Körper als Kombination einfacher Grundformen. Statt ein Objekt direkt als Mesh zu modellieren, setzt man es aus Primitiven wie Kugeln, Boxen, Tori oder Zylindern zusammen. Bei klassischen Meshes bedeutet das oft geometrische Operationen auf Dreiecken. Bei SDFs reicht dagegen häufig eine einfache mathematische Kombination der Distanzwerte.\nAngenommen, \\(d_1(\\mathbf{p})\\) ist die Distanz zur ersten Form und \\(d_2(\\mathbf{p})\\) die Distanz zur zweiten Form. Dann lassen sich die wichtigsten CSG-Operationen so ausdrücken:\n\n\n\n\n\n\n\n\nOperation\nSDF-Formel\nBedeutung\n\n\n\n\nUnion\n\\(d(\\mathbf{p}) = \\min(d_1(\\mathbf{p}), d_2(\\mathbf{p}))\\)\nbeide Objekte zusammen\n\n\nIntersection\n\\(d(\\mathbf{p}) = \\max(d_1(\\mathbf{p}), d_2(\\mathbf{p}))\\)\nnur der gemeinsame Bereich\n\n\nDifference\n\\(d(\\mathbf{p}) = \\max(d_1(\\mathbf{p}), -d_2(\\mathbf{p}))\\)\nerstes Objekt ohne zweites Objekt\n\n\n\nDie Intuition dahinter:\n\nBei der Union interessiert die näher gelegene Oberfläche. Deshalb nimmt man das Minimum.\nBei der Intersection muss ein Punkt in beiden Körpern liegen. Ein Punkt ist erst dann innen, wenn beide Distanzen negativ sind. Deshalb bestimmt die größere Distanz die Grenze.\nBei der Difference wird das zweite Objekt aus dem ersten herausgeschnitten. Durch \\(-d_2\\) wird innen und außen der zweiten Form vertauscht.\n\n\n\nFür mehr als zwei Objekte wird dieselbe Operation wiederholt. Im Demo beginnt die Szene mit dem ersten Objekt und kombiniert dann nacheinander die weiteren aktiven Objekte:\nfloat d = d1;\nd = min(d, d2);\nd = min(d, d3);\nd = min(d, d4);\nBei Union wächst die Szene dadurch mit jedem Objekt. Bei Difference bleibt Objekt 1 die Basis, und alle weiteren Objekte werden davon abgezogen:\nfloat d = d1;\nd = max(d, -d2);\nd = max(d, -d3);\nDas macht CSG zu einem starken Beispiel für SDFs: Eine Änderung in einer einzigen Formel kann die Topologie der Szene verändern, ohne dass neue Dreiecke erzeugt oder Meshes neu berechnet werden müssen. Für die Präsentation eignet sich das gut, weil man an Union, Intersection und Difference direkt sieht, dass SDFs nicht nur eine andere Rendering-Technik sind, sondern auch eine andere Art, Geometrie zu denken."
   },
   {
-    "objectID": "index.html#interaktive-demos",
-    "href": "index.html#interaktive-demos",
-    "title": "Konzeptskizze: SDF-Rendering via Ray Marching",
+    "objectID": "pages/csg.html#constructive-solid-geometry-mit-sdfs",
+    "href": "pages/csg.html#constructive-solid-geometry-mit-sdfs",
+    "title": "Constructive Solid Geometry",
     "section": "",
-    "text": "SDF-Distanzfeld (2D Heatmap)Ray-Marching VisualisiererPrimitiv-GalerieBeleuchtung & Schatten\n\n\n\n\n\n  \n    Form:\n    Kreis\n    Rechteck\n    Kapsel\n  \n\n  \n\n    \n    \n\n    \n\n      \n        Radius: 80 px\n        \n      \n\n      \n        Halbhöhe: 70 px\n        \n      \n\n      \n        \n          \n          Iso-Konturlinien anzeigen\n        \n      \n\n      \n      \n        d &lt; 0 — innen\n        d = 0 — Oberfläche\n        d &gt; 0 — außen\n      \n\n    \n  \n\n\n\n\n\n\n\n  \n  \n    \n      Sichtbare Schritte: 0\n      \n    \n    \n      ▶ Play\n    \n  \n\n  \n  \n\n\n\n\n\n\n\n\n\n  \n    Form:\n    Kugel\n    Box\n    Torus\n    Kapsel\n    Zylinder\n    Oktaeder\n  \n\n  \n\n    \n    \n\n    \n\n      \n        Radius: 0.60\n        \n      \n\n      \n        —: —\n        \n      \n\n    \n  \n\n\n\n\n\n\n\n\n\n\n  \n  \n    Komponenten:\n    Schatten\n    Specular\n    Amb. Okklusion\n  \n\n  \n  \n    Blocker-Form:\n    Kugel\n    Box\n  \n\n  \n\n    \n    \n\n    \n\n      Lichtquelle\n\n      \n        Azimut: 0°\n        \n      \n\n      \n        Höhe: 40°\n        \n      \n\n      \n        Glanzgrad: 32\n        \n      \n\n      Blocker\n\n      \n        X-Position: 1.2\n        \n      \n\n      \n        Höhe: 1.2\n        \n      \n\n      \n        Tiefe (Z): 0.0"
+    "text": "Constructive Solid Geometry beschreibt komplexe Körper als Kombination einfacher Grundformen. Statt ein Objekt direkt als Mesh zu modellieren, setzt man es aus Primitiven wie Kugeln, Boxen, Tori oder Zylindern zusammen. Bei klassischen Meshes bedeutet das oft geometrische Operationen auf Dreiecken. Bei SDFs reicht dagegen häufig eine einfache mathematische Kombination der Distanzwerte.\nAngenommen, \\(d_1(\\mathbf{p})\\) ist die Distanz zur ersten Form und \\(d_2(\\mathbf{p})\\) die Distanz zur zweiten Form. Dann lassen sich die wichtigsten CSG-Operationen so ausdrücken:\n\n\n\n\n\n\n\n\nOperation\nSDF-Formel\nBedeutung\n\n\n\n\nUnion\n\\(d(\\mathbf{p}) = \\min(d_1(\\mathbf{p}), d_2(\\mathbf{p}))\\)\nbeide Objekte zusammen\n\n\nIntersection\n\\(d(\\mathbf{p}) = \\max(d_1(\\mathbf{p}), d_2(\\mathbf{p}))\\)\nnur der gemeinsame Bereich\n\n\nDifference\n\\(d(\\mathbf{p}) = \\max(d_1(\\mathbf{p}), -d_2(\\mathbf{p}))\\)\nerstes Objekt ohne zweites Objekt\n\n\n\nDie Intuition dahinter:\n\nBei der Union interessiert die näher gelegene Oberfläche. Deshalb nimmt man das Minimum.\nBei der Intersection muss ein Punkt in beiden Körpern liegen. Ein Punkt ist erst dann innen, wenn beide Distanzen negativ sind. Deshalb bestimmt die größere Distanz die Grenze.\nBei der Difference wird das zweite Objekt aus dem ersten herausgeschnitten. Durch \\(-d_2\\) wird innen und außen der zweiten Form vertauscht.\n\n\n\nFür mehr als zwei Objekte wird dieselbe Operation wiederholt. Im Demo beginnt die Szene mit dem ersten Objekt und kombiniert dann nacheinander die weiteren aktiven Objekte:\nfloat d = d1;\nd = min(d, d2);\nd = min(d, d3);\nd = min(d, d4);\nBei Union wächst die Szene dadurch mit jedem Objekt. Bei Difference bleibt Objekt 1 die Basis, und alle weiteren Objekte werden davon abgezogen:\nfloat d = d1;\nd = max(d, -d2);\nd = max(d, -d3);\nDas macht CSG zu einem starken Beispiel für SDFs: Eine Änderung in einer einzigen Formel kann die Topologie der Szene verändern, ohne dass neue Dreiecke erzeugt oder Meshes neu berechnet werden müssen. Für die Präsentation eignet sich das gut, weil man an Union, Intersection und Difference direkt sieht, dass SDFs nicht nur eine andere Rendering-Technik sind, sondern auch eine andere Art, Geometrie zu denken."
   },
   {
-    "objectID": "pages/einfuehrung.html",
-    "href": "pages/einfuehrung.html",
-    "title": "Einführung in das Thema",
-    "section": "",
-    "text": "In der Computergrafik werden dreidimensionale Objekte meist durch polygonale Netze beschrieben. Dabei wird die Oberfläche eines Modells durch eine Vielzahl kleiner Dreiecke approximiert. Diese Form der Geometrierepräsentation hat sich über viele Jahrzehnte hinweg etabliert und wird von moderner Grafik-Hardware direkt unterstützt. Aus diesem Grund bilden Polygonnetze die Grundlage nahezu aller heutigen Echtzeit-Rendering-Verfahren.\nEin wesentlicher Vorteil polygonaler Netze liegt in ihrer Flexibilität. Sowohl einfache geometrische Körper als auch komplexe Modelle mit Millionen von Polygonen lassen sich auf diese Weise darstellen. Darüber hinaus existiert ein umfangreiches Ökosystem aus Modellierungswerkzeugen, Dateiformaten und Rendering-Pipelines, das auf dieser Repräsentation basiert.\n\n\n\nTrotz ihrer weiten Verbreitung sind Polygonnetze nicht für jede Anwendung die ideale Lösung. Da die Geometrie explizit durch Vertices und Dreiecke beschrieben wird, steigt der Speicherbedarf mit zunehmendem Detailgrad eines Modells. Besonders bei sehr komplexen oder fein strukturierten Oberflächen kann dies zu großen Datenmengen führen.\nAuch die Modellierung mathematisch definierter Formen oder prozedural erzeugter Szenen gestaltet sich häufig aufwendiger. Sollen beispielsweise mehrere Grundkörper miteinander kombiniert oder komplexe geometrische Strukturen erzeugt werden, müssen die zugrunde liegenden Meshes entsprechend angepasst werden. Obwohl hierfür etablierte Verfahren existieren, kann die Verarbeitung schnell komplex werden.\nDarüber hinaus beschreibt ein Polygonnetz ausschließlich die Oberfläche eines Objekts. Informationen über den umgebenden Raum, beispielsweise Abstände zu Oberflächen oder die Zugehörigkeit eines Punktes zum Inneren oder Äußeren eines Objekts, sind nicht unmittelbar verfügbar und müssen zusätzlich berechnet werden.\n\n\n\nUm einige dieser Einschränkungen zu umgehen, wurden verschiedene alternative Methoden zur Beschreibung von Geometrie entwickelt. Dazu zählen unter anderem Voxeldarstellungen, Punktwolken sowie implizite Oberflächen. Im Gegensatz zu Polygonnetzen wird die Geometrie hierbei nicht zwangsläufig durch eine Menge von Dreiecken beschrieben.\nSigned Distance Functions (SDFs) gehören zu den impliziten Geometrierepräsentationen. Anstatt die Oberfläche eines Objekts direkt zu speichern, wird eine Funktion definiert, die jedem Punkt im Raum einen signierten Abstand zur nächstgelegenen Oberfläche zuordnet. Die eigentliche Geometrie ergibt sich somit indirekt aus dieser Funktion.\nDa bei diesem Ansatz keine expliziten Dreiecke vorhanden sind, können klassische Rasterisierungsverfahren nicht unmittelbar angewendet werden. Stattdessen kommen häufig Ray-Marching-Verfahren zum Einsatz. Dabei werden Strahlen schrittweise durch die Szene verfolgt, bis eine Oberfläche gefunden wird. Die in der Signed Distance Function enthaltenen Distanzinformationen ermöglichen dabei eine effiziente Bestimmung der nächsten Schrittweite.\nDie Kombination aus Signed Distance Functions und Ray Marching hat sich insbesondere für prozedurale Szenen, mathematische Modelle und experimentelle Rendering-Techniken als interessante Alternative zu klassischen Polygonnetzen etabliert."
+    "objectID": "pages/csg.html#glatte-übergänge",
+    "href": "pages/csg.html#glatte-übergänge",
+    "title": "Constructive Solid Geometry",
+    "section": "Glatte Übergänge",
+    "text": "Glatte Übergänge\nDie Demo enthält zusätzlich einen Regler für Verschmelzung. Mathematisch wird dafür die harte min- oder max-Operation durch eine geglättete Variante ersetzt. Für eine weiche Union kann man zum Beispiel zwischen den beiden Distanzwerten interpolieren:\nfloat smoothUnion(float d1, float d2, float k) {\n  float h = clamp(0.5 + 0.5 * (d2 - d1) / k, 0.0, 1.0);\n  return mix(d2, d1, h) - k * h * (1.0 - h);\n}\nDer Parameter k kontrolliert die Breite des Übergangsbereichs. Bei k = 0 bleibt die CSG-Operation hart. Je größer k wird, desto weicher gehen die Oberflächen ineinander über. Das ist ein Beispiel dafür, dass SDFs nicht nur boolesche Geometrieoperationen erlauben, sondern auch kontinuierliche Formmanipulationen."
   },
   {
-    "objectID": "pages/einfuehrung.html#klassische-darstellung-von-3d-geometrie",
-    "href": "pages/einfuehrung.html#klassische-darstellung-von-3d-geometrie",
-    "title": "Einführung in das Thema",
-    "section": "",
-    "text": "In der Computergrafik werden dreidimensionale Objekte meist durch polygonale Netze beschrieben. Dabei wird die Oberfläche eines Modells durch eine Vielzahl kleiner Dreiecke approximiert. Diese Form der Geometrierepräsentation hat sich über viele Jahrzehnte hinweg etabliert und wird von moderner Grafik-Hardware direkt unterstützt. Aus diesem Grund bilden Polygonnetze die Grundlage nahezu aller heutigen Echtzeit-Rendering-Verfahren.\nEin wesentlicher Vorteil polygonaler Netze liegt in ihrer Flexibilität. Sowohl einfache geometrische Körper als auch komplexe Modelle mit Millionen von Polygonen lassen sich auf diese Weise darstellen. Darüber hinaus existiert ein umfangreiches Ökosystem aus Modellierungswerkzeugen, Dateiformaten und Rendering-Pipelines, das auf dieser Repräsentation basiert."
-  },
-  {
-    "objectID": "pages/einfuehrung.html#grenzen-polygonaler-netze",
-    "href": "pages/einfuehrung.html#grenzen-polygonaler-netze",
-    "title": "Einführung in das Thema",
-    "section": "",
-    "text": "Trotz ihrer weiten Verbreitung sind Polygonnetze nicht für jede Anwendung die ideale Lösung. Da die Geometrie explizit durch Vertices und Dreiecke beschrieben wird, steigt der Speicherbedarf mit zunehmendem Detailgrad eines Modells. Besonders bei sehr komplexen oder fein strukturierten Oberflächen kann dies zu großen Datenmengen führen.\nAuch die Modellierung mathematisch definierter Formen oder prozedural erzeugter Szenen gestaltet sich häufig aufwendiger. Sollen beispielsweise mehrere Grundkörper miteinander kombiniert oder komplexe geometrische Strukturen erzeugt werden, müssen die zugrunde liegenden Meshes entsprechend angepasst werden. Obwohl hierfür etablierte Verfahren existieren, kann die Verarbeitung schnell komplex werden.\nDarüber hinaus beschreibt ein Polygonnetz ausschließlich die Oberfläche eines Objekts. Informationen über den umgebenden Raum, beispielsweise Abstände zu Oberflächen oder die Zugehörigkeit eines Punktes zum Inneren oder Äußeren eines Objekts, sind nicht unmittelbar verfügbar und müssen zusätzlich berechnet werden."
-  },
-  {
-    "objectID": "pages/einfuehrung.html#alternative-geometrierepräsentationen",
-    "href": "pages/einfuehrung.html#alternative-geometrierepräsentationen",
-    "title": "Einführung in das Thema",
-    "section": "",
-    "text": "Um einige dieser Einschränkungen zu umgehen, wurden verschiedene alternative Methoden zur Beschreibung von Geometrie entwickelt. Dazu zählen unter anderem Voxeldarstellungen, Punktwolken sowie implizite Oberflächen. Im Gegensatz zu Polygonnetzen wird die Geometrie hierbei nicht zwangsläufig durch eine Menge von Dreiecken beschrieben.\nSigned Distance Functions (SDFs) gehören zu den impliziten Geometrierepräsentationen. Anstatt die Oberfläche eines Objekts direkt zu speichern, wird eine Funktion definiert, die jedem Punkt im Raum einen signierten Abstand zur nächstgelegenen Oberfläche zuordnet. Die eigentliche Geometrie ergibt sich somit indirekt aus dieser Funktion.\nDa bei diesem Ansatz keine expliziten Dreiecke vorhanden sind, können klassische Rasterisierungsverfahren nicht unmittelbar angewendet werden. Stattdessen kommen häufig Ray-Marching-Verfahren zum Einsatz. Dabei werden Strahlen schrittweise durch die Szene verfolgt, bis eine Oberfläche gefunden wird. Die in der Signed Distance Function enthaltenen Distanzinformationen ermöglichen dabei eine effiziente Bestimmung der nächsten Schrittweite.\nDie Kombination aus Signed Distance Functions und Ray Marching hat sich insbesondere für prozedurale Szenen, mathematische Modelle und experimentelle Rendering-Techniken als interessante Alternative zu klassischen Polygonnetzen etabliert."
-  },
-  {
-    "objectID": "pages/einfuehrung.html#prozedurale-modellierung",
-    "href": "pages/einfuehrung.html#prozedurale-modellierung",
-    "title": "Einführung in das Thema",
-    "section": "Prozedurale Modellierung",
-    "text": "Prozedurale Modellierung\nEin häufiges Einsatzgebiet von Signed Distance Functions ist die prozedurale Erzeugung von Geometrie. Anstatt Objekte manuell zu modellieren und als Polygonnetz zu speichern, werden Formen durch mathematische Funktionen beschrieben und zur Laufzeit generiert. Dadurch lassen sich komplexe Szenen und Modelle mit vergleichsweise wenig Speicheraufwand erzeugen. Typische Beispiele sind Landschaften, Höhlensysteme oder abstrakte, algorithmisch erzeugte Welten und Sci-Fi-Strukturen.\n[Beispielbild.png]"
-  },
-  {
-    "objectID": "pages/einfuehrung.html#constructive-solid-geometry",
-    "href": "pages/einfuehrung.html#constructive-solid-geometry",
-    "title": "Einführung in das Thema",
-    "section": "Constructive Solid Geometry",
-    "text": "Constructive Solid Geometry\nSigned Distance Functions eignen sich besonders gut für Constructive Solid Geometry (CSG). Dabei werden komplexe Objekte aus einfachen Grundkörpern wie Kugeln, Würfeln oder Zylindern zusammengesetzt. Operationen wie Vereinigung, Schnittmenge oder Differenz können direkt auf den zugrunde liegenden Distanzfunktionen formuliert werden. Dies ermöglicht eine flexible und oft sehr elegante Modellierung komplexer Geometrien.\n[Beispielbild.png]"
-  },
-  {
-    "objectID": "pages/einfuehrung.html#fraktale-und-mathematische-strukturen",
-    "href": "pages/einfuehrung.html#fraktale-und-mathematische-strukturen",
-    "title": "Einführung in das Thema",
-    "section": "Fraktale und mathematische Strukturen",
-    "text": "Fraktale und mathematische Strukturen\nEin weiterer Anwendungsbereich ist die Darstellung mathematisch definierter Objekte und Fraktale. Bekannte Beispiele sind die Mandelbulb oder die Mandelbox. Solche Strukturen weisen häufig eine sehr hohe geometrische Komplexität und feine Details auf, die mit klassischen Polygonnetzen nur schwer darstellbar wären. Durch die mathematische Beschreibung der Geometrie eignen sich SDF-basierte Verfahren besonders gut für die Visualisierung solcher Formen.\n[Beispielbild.png]"
-  },
-  {
-    "objectID": "pages/einfuehrung.html#echtzeit-rendering-und-demo-szene",
-    "href": "pages/einfuehrung.html#echtzeit-rendering-und-demo-szene",
-    "title": "Einführung in das Thema",
-    "section": "Echtzeit-Rendering und Demo-Szene",
-    "text": "Echtzeit-Rendering und Demo-Szene\nGroße Bekanntheit erlangten Signed Distance Functions durch die Demo-Szene und moderne Shader-Programmierung. Da sich komplexe Geometrie direkt im Shader beschreiben lässt, können beeindruckende Szenen mit vergleichsweise wenig Programmcode erzeugt werden. Besonders bei sogenannten 4k- oder 64k-Intros, bei denen die gesamte Anwendung nur wenige Kilobyte groß sein darf, bieten SDFs erhebliche Vorteile gegenüber gespeicherter Polygongeometrie.\n[Beispielbild.png]"
-  },
-  {
-    "objectID": "pages/einfuehrung.html#forschung-und-moderne-anwendungen",
-    "href": "pages/einfuehrung.html#forschung-und-moderne-anwendungen",
-    "title": "Einführung in das Thema",
-    "section": "Forschung und moderne Anwendungen",
-    "text": "Forschung und moderne Anwendungen\nAuch in aktuellen Forschungsgebieten spielen Distanzfunktionen eine wichtige Rolle. Sie werden unter anderem für Kollisionsabfragen, Robotik, 3D-Rekonstruktion und Verfahren des Neural Renderings eingesetzt. Insbesondere die Repräsentation von Geometrie durch Distanzfelder hat in den letzten Jahren neue Ansätze zur Erfassung und Rekonstruktion realer Szenen ermöglicht.\n[Beispielbild.png]"
-  },
-  {
-    "objectID": "pages/einfuehrung.html#einordnung",
-    "href": "pages/einfuehrung.html#einordnung",
-    "title": "Einführung in das Thema",
-    "section": "Einordnung",
-    "text": "Einordnung\nTrotz ihrer vielseitigen Einsatzmöglichkeiten haben Signed Distance Functions klassische Polygonnetze bislang nicht ersetzt. Moderne Grafik-Hardware ist weiterhin stark auf die Verarbeitung polygonaler Geometrie optimiert, weshalb Meshes in den meisten Echtzeit-Anwendungen dominieren. SDFs werden daher vor allem in Bereichen eingesetzt, in denen ihre mathematische Beschreibung und die daraus resultierende Flexibilität besondere Vorteile bieten."
-  },
-  {
-    "objectID": "pages/verwandte-methoden.html",
-    "href": "pages/verwandte-methoden.html",
-    "title": "Verwandte Methoden",
-    "section": "",
-    "text": "Dieser Abschnitt fokussiert sich auf die Frage, wie Ray Marching mit SDFs im Vergleich zu bekannteren Rendering-Methoden einzuordnen ist und warum Constructive Solid Geometry (CSG) bei SDFs besonders elegant funktioniert."
-  },
-  {
-    "objectID": "pages/verwandte-methoden.html#einordnung",
-    "href": "pages/verwandte-methoden.html#einordnung",
-    "title": "Verwandte Methoden",
-    "section": "Einordnung",
-    "text": "Einordnung\nIn der klassischen Echtzeitgrafik dominiert Rasterisierung. Dabei werden 3D-Modelle als Dreiecksnetze beschrieben, auf den Bildschirm projiziert und anschließend Pixel für Pixel eingefärbt. Diese Methode ist sehr schnell und bildet die Grundlage moderner Game-Engines. Ihr Nachteil ist, dass jede Form zuerst als Mesh vorliegen muss. Sehr glatte, prozedurale oder topologisch komplexe Formen können dadurch aufwendig werden, weil die Geometrie explizit modelliert, gespeichert und verwaltet werden muss.\nRay Tracing verfolgt dagegen Strahlen von der Kamera in die Szene und berechnet Schnittpunkte mit Objekten. Dadurch lassen sich Reflexionen, Schatten und globale Beleuchtung sehr natürlich beschreiben. Klassisches Ray Tracing braucht jedoch explizite Schnittpunkttests, zum Beispiel zwischen einem Strahl und einem Dreieck, einer Kugel oder einer Ebene. Die Szene besteht also weiterhin aus konkreten geometrischen Primitiven oder Meshes.\nRay Marching mit SDFs arbeitet anders. Ein Strahl wird nicht direkt mit einem Objekt geschnitten. Stattdessen fragt man an jedem Punkt entlang des Strahls: “Wie weit bin ich mindestens von der nächsten Oberfläche entfernt?” Diese Distanz kommt aus der Signed Distance Function. Der Strahl kann dann genau um diese Distanz weiterlaufen, ohne eine Oberfläche zu überspringen. Dieses Verfahren wird bei echten Distanzfunktionen auch Sphere Tracing genannt.\nDer zentrale Unterschied ist also die Repräsentation der Geometrie:\n\n\n\n\n\n\n\n\n\n\nMethode\nGeometrie\nGrundidee\nStärke\nSchwäche\n\n\n\n\nRasterisierung\nDreiecksnetze\nDreiecke auf Bildschirm projizieren\nsehr schnell, etablierter Standard\nkomplexe Formen brauchen viele Polygone\n\n\nRay Tracing\nexplizite Objekte oder Meshes\nStrahlen schneiden Szene\nrealistische Lichtsimulation\nviele Schnittpunkttests, hoher Aufwand\n\n\nRay Marching mit SDFs\nimplizite Distanzfelder\nStrahlen schrittweise anhand von Distanzen bewegen\nprozedurale Formen, CSG, Fraktale\nPerformance hängt stark von Szene und Schrittzahl ab"
-  },
-  {
-    "objectID": "pages/interaktive-renderings.html",
-    "href": "pages/interaktive-renderings.html",
-    "title": "Interaktive SDF-Renderings",
-    "section": "",
-    "text": "Diese Seite begleitet die Präsentation SDF-Rendering via Ray Marching und stellt interaktive Visualisierungen zu den behandelten Konzepten bereit."
-  },
-  {
-    "objectID": "pages/interaktive-renderings.html#übersicht-der-demos",
-    "href": "pages/interaktive-renderings.html#übersicht-der-demos",
-    "title": "Interaktive SDF-Renderings",
-    "section": "Übersicht der Demos",
-    "text": "Übersicht der Demos\n\n\n\n\n\n\n\n\nDemo\nKapitel\nInhalt\n\n\n\n\nSDF-Distanzfeld (2D Heatmap)\nTheorie → Primitive Formen\nVorzeichenbehaftetes Distanzfeld für Kreis, Rechteck und Kapsel als Falschfarben-Heatmap mit optionalen Iso-Konturlinien\n\n\nRay-Marching Visualisierer\nTheorie → Ray Marching\nSchrittweise Visualisierung des Sphere-Tracing-Algorithmus mit Play-Funktion\n\n\nPrimitiv-Galerie\nDemos\nSechs klassische 3D-SDF-Primitive (Kugel, Box, Torus, Kapsel, Zylinder, Oktaeder) via GLSL-Shader mit Phong-Beleuchtung\n\n\nBeleuchtung & Schatten\nDemos\nPhong-Shading, harte Schatten und Ambient Occlusion — interaktiv kombinierbar\n\n\n\nAlle Demos laufen vollständig im Browser ohne serverseitige Berechnung."
-  },
-  {
-    "objectID": "pages/demos.html",
-    "href": "pages/demos.html",
-    "title": "Interaktive SDF-Rendering Demos",
-    "section": "",
-    "text": "Die folgenden Demos rendern SDF-Primitive und Beleuchtungseffekte direkt im Browser über WebGL-Fragment-Shader.\n\nPrimitiv-GalerieBeleuchtung & Schatten\n\n\nSechs klassische SDF-Primitive nach Inigo Quilez — Kugel, Box, Torus, Kapsel, Zylinder und Oktaeder — mit Ray-Marching und Phong-Beleuchtung. Die Form dreht sich kontinuierlich; Form und Parameter lassen sich interaktiv anpassen.\n\n\n\n\n\n\nPhong-Shading mit hartem Schatten und optionaler Ambient Occlusion. Lichtquelle und Blocker-Objekt sind frei positionierbar; einzelne Beleuchtungskomponenten können ein- und ausgeschaltet werden."
+    "objectID": "pages/csg.html#csg-live-demo",
+    "href": "pages/csg.html#csg-live-demo",
+    "title": "Constructive Solid Geometry",
+    "section": "CSG Live-Demo",
+    "text": "CSG Live-Demo\nDie Demo zeigt eine kleine SDF-Szene aus mehreren Primitiven. Links ist das Ergebnis des Ray-Marching-Shaders zu sehen, rechts die editierbare Beschreibung der Szene. Die Objektliste wählt die primitiven SDFs aus, und die Kombinationsfunktion zeigt, wie daraus die Szene gebaut wird. Zwischen Union, Intersection und Difference kann gewechselt werden, sodass die Wirkung der CSG-Operationen direkt sichtbar wird."
   }
 ]

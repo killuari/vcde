@@ -41,11 +41,11 @@
 
     <div style="display:flex; flex-wrap:wrap; gap:2rem; align-items:flex-start;">
 
-      <canvas id="canvas" width="420" height="420"
-              style="border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,0.3);">
+      <canvas id="canvas" width="360" height="360"
+              style="border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,0.3); flex-shrink:0;">
       </canvas>
 
-      <div style="display:flex; flex-direction:column; gap:1.1rem; min-width:220px; flex:1; max-width:320px; padding-top:0.4rem;">
+      <div id="ctrl-panel" style="display:flex; flex-direction:column; gap:1.1rem; min-width:220px; flex:1; max-width:360px; padding-top:0.4rem;">
 
         <div>
           <label><strong id="label-p1">Radius</strong>: <span id="val-p1">0.60</span></label><br>
@@ -69,8 +69,8 @@
         <div style="background:#0d1117; border-radius:8px; padding:0.75rem 1rem;">
           <div class="info-label">GLSL-Implementierung</div>
           <pre id="code-display"
-               style="margin:0; font-size:0.73rem; line-height:1.52; max-height:170px;
-                      overflow-y:auto; overflow-x:auto; white-space:pre; color:#e6edf3;
+               style="margin:0; font-size:0.73rem; line-height:1.52;
+                      overflow-x:auto; white-space:pre; color:#e6edf3;
                       scrollbar-color:#30363d #0d1117;"></pre>
         </div>
 
