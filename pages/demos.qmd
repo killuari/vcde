@@ -15,7 +15,7 @@ Sechs klassische SDF-Primitive nach Inigo Quilez — Kugel, Box, Torus, Kapsel, 
 <div class="demo-wide">
 <iframe
   src="../assets/demos/primitiv-galerie/index.html"
-  height="620"
+  height="660"
   scrolling="no"
   title="Primitiv-Galerie">
 </iframe>

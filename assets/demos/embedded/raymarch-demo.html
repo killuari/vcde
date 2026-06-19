@@ -9,7 +9,8 @@
     font-family: system-ui, sans-serif;
     margin: 0;
     padding: 16px;
-    color: #222;
+    background: #fff;
+    color: #333;
   }
 
   .layout {
@@ -19,21 +20,30 @@
   }
 
   canvas {
-    border: 1px solid #ccc;
-    background: #fafafa;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.6);
   }
 
   .controls {
-    width: 260px;
+    width: 220px;
+    padding-top: 0.4rem;
   }
 
   label {
     display: block;
     margin-top: 14px;
+    font-size: 0.9rem;
+    color: #555;
   }
 
-  input {
+  label strong {
+    color: #222;
+  }
+
+  input[type="range"] {
     width: 100%;
+    accent-color: #4a90d9;
+    margin-top: 4px;
   }
 </style>
 </head>
@@ -41,21 +51,21 @@
 <body>
 
 <div class="layout">
-  <canvas id="canvas" width="620" height="420"></canvas>
+  <canvas id="canvas" width="480" height="380"></canvas>
 
   <div class="controls">
     <label>
-      Kreisradius:
+      <strong>Kreisradius</strong>: <span id="val-radius">90</span> px
       <input id="radius" type="range" min="40" max="150" value="90">
     </label>
 
     <label>
-      Ray-Winkel:
+      <strong>Ray-Winkel</strong>: <span id="val-angle">0</span>°
       <input id="angle" type="range" min="-35" max="35" value="0">
     </label>
 
     <label>
-      Max Steps:
+      <strong>Max. Schritte</strong>: <span id="val-steps">10</span>
       <input id="maxSteps" type="range" min="1" max="25" value="10">
     </label>
   </div>
@@ -63,13 +73,14 @@
 
 <script>
 const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+const ctx    = canvas.getContext("2d");
+const W = canvas.width, H = canvas.height;
 
-const radiusSlider = document.getElementById("radius");
-const angleSlider = document.getElementById("angle");
+const radiusSlider   = document.getElementById("radius");
+const angleSlider    = document.getElementById("angle");
 const maxStepsSlider = document.getElementById("maxSteps");
 
-const EPSILON = 1.0;
+const EPSILON      = 1.0;
 const MAX_DISTANCE = 1000.0;
 
 function sdfCircle(p, center, radius) {
@@ -79,47 +90,71 @@ function sdfCircle(p, center, radius) {
 }
 
 function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#0d1117';
+  ctx.fillRect(0, 0, W, H);
 
-  const center = { x: 420, y: 210 };
-  const radius = Number(radiusSlider.value);
+  // Grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+  ctx.lineWidth   = 1;
+  for (let gx = 0; gx <= W; gx += 40) {
+    ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke();
+  }
+  for (let gy = 0; gy <= H; gy += 40) {
+    ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke();
+  }
+
+  const center   = { x: 340, y: 190 };
+  const radius   = Number(radiusSlider.value);
   const maxSteps = Number(maxStepsSlider.value);
+  const angle    = Number(angleSlider.value) * Math.PI / 180;
+  const rayOrigin = { x: 50, y: 190 };
+  const rayDir    = { x: Math.cos(angle), y: Math.sin(angle) };
 
-  const rayOrigin = { x: 60, y: 210 };
-  const angle = Number(angleSlider.value) * Math.PI / 180;
-
-  const rayDir = {
-    x: Math.cos(angle),
-    y: Math.sin(angle)
-  };
-
-  // Objekt zeichnen
+  // Object
   ctx.beginPath();
   ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
-  ctx.strokeStyle = "#111";
-  ctx.lineWidth = 3;
+  ctx.fillStyle   = 'rgba(70,110,160,0.22)';
+  ctx.fill();
+  ctx.strokeStyle = '#5588bb';
+  ctx.lineWidth   = 2;
   ctx.stroke();
+  ctx.fillStyle = '#7799cc';
+  ctx.font      = '12px monospace';
+  ctx.fillText('Objekt', center.x - 21, center.y + 4);
 
-  let p = { ...rayOrigin };
-  let totalDistance = 0.0;
-  let hit = false;
+  // Dashed ray guideline
+  ctx.save();
+  ctx.strokeStyle = 'rgba(255,204,51,0.12)';
+  ctx.lineWidth   = 1;
+  ctx.setLineDash([6, 5]);
+  ctx.beginPath();
+  ctx.moveTo(rayOrigin.x, rayOrigin.y);
+  ctx.lineTo(rayOrigin.x + rayDir.x * 700, rayOrigin.y + rayDir.y * 700);
+  ctx.stroke();
+  ctx.restore();
 
-  const points = [{ ...p }];
+  let p             = { ...rayOrigin };
+  let totalDistance = 0;
+  let hit           = false;
+  const points      = [{ ...p }];
 
   for (let i = 0; i < maxSteps; i++) {
     const d = sdfCircle(p, center, radius);
 
-    // Distanzkreis zeichnen
+    // Distance circle
     ctx.beginPath();
     ctx.arc(p.x, p.y, Math.abs(d), 0, Math.PI * 2);
-    ctx.strokeStyle = "rgba(25, 118, 210, 0.35)";
-    ctx.lineWidth = 1;
+    ctx.save();
+    ctx.strokeStyle = 'rgba(50,210,230,0.30)';
+    ctx.setLineDash([5, 3]);
+    ctx.lineWidth   = 1.2;
     ctx.stroke();
+    ctx.restore();
 
-    // Abtastpunkt zeichnen
+    // Sample dot
     ctx.beginPath();
-    ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
-    ctx.fillStyle = "#d32f2f";
+    ctx.arc(p.x, p.y, 3.5, 0, Math.PI * 2);
+    ctx.fillStyle = '#99bbdd';
     ctx.fill();
 
     if (d < EPSILON) {
@@ -128,46 +163,58 @@ function draw() {
     }
 
     totalDistance += d;
+    if (totalDistance > MAX_DISTANCE) break;
 
-    if (totalDistance > MAX_DISTANCE) {
-      break;
-    }
-
-    p = {
-      x: p.x + rayDir.x * d,
-      y: p.y + rayDir.y * d
-    };
-
+    p = { x: p.x + rayDir.x * d, y: p.y + rayDir.y * d };
     points.push({ ...p });
 
-    if (p.x < -200 || p.x > canvas.width + 200 || p.y < -200 || p.y > canvas.height + 200) {
-      break;
-    }
+    if (p.x < -200 || p.x > W + 200 || p.y < -200 || p.y > H + 200) break;
   }
 
-  // Ray-Linie entlang der tatsächlichen Marching-Schritte zeichnen
+  // Ray segments
   ctx.beginPath();
   ctx.moveTo(points[0].x, points[0].y);
-
-  for (const point of points) {
-    ctx.lineTo(point.x, point.y);
-  }
-
-  ctx.strokeStyle = "#c62828";
-  ctx.lineWidth = 2;
+  for (const pt of points) { ctx.lineTo(pt.x, pt.y); }
+  ctx.strokeStyle = '#ffcc33';
+  ctx.lineWidth   = 1.8;
   ctx.stroke();
 
-  // Endpunkt hervorheben
-  const lastPoint = points[points.length - 1];
-
+  // Last point
+  const last = points[points.length - 1];
   ctx.beginPath();
-  ctx.arc(lastPoint.x, lastPoint.y, 7, 0, Math.PI * 2);
-  ctx.fillStyle = hit ? "#2e7d32" : "#d32f2f";
+  ctx.arc(last.x, last.y, 7, 0, Math.PI * 2);
+  ctx.fillStyle   = hit ? '#44ff88' : '#ffcc33';
   ctx.fill();
+  ctx.strokeStyle = hit ? '#22cc66' : '#cc9900';
+  ctx.lineWidth   = 1.5;
+  ctx.stroke();
+
+  // Camera
+  ctx.fillStyle = '#ffffff';
+  ctx.beginPath();
+  ctx.arc(rayOrigin.x, rayOrigin.y, 5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#bbbbbb';
+  ctx.font      = '12px monospace';
+  ctx.fillText('Kamera', rayOrigin.x + 8, rayOrigin.y + 4);
+
+  // Status
+  ctx.fillStyle = hit ? '#44ff88' : '#c9d1d9';
+  ctx.font      = 'bold 13px monospace';
+  ctx.fillText(hit ? 'Treffer nach ' + points.length + ' Schritten' : 'Kein Treffer (' + points.length + ' Schritte)', 10, 22);
 }
 
-[radiusSlider, angleSlider, maxStepsSlider].forEach(slider => {
-  slider.addEventListener("input", draw);
+radiusSlider.addEventListener('input', function () {
+  document.getElementById('val-radius').textContent = this.value;
+  draw();
+});
+angleSlider.addEventListener('input', function () {
+  document.getElementById('val-angle').textContent = this.value;
+  draw();
+});
+maxStepsSlider.addEventListener('input', function () {
+  document.getElementById('val-steps').textContent = this.value;
+  draw();
 });
 
 draw();
