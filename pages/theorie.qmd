@@ -52,8 +52,7 @@ $$
 f(\mathbf{p}) = \|\mathbf{p} - \mathbf{c}\| - r
 $$
 
-[Platz für interaktive Visualisierung der SDF einer Kugel]
-<iframe class="demo-embed" src="../assets/demos/embedded/sphere-sdf-demo.html" height="650"></iframe>
+<iframe class="demo-embed" src="../assets/demos/embedded/sphere-sdf-demo.html" height="460"></iframe>
 
 ## Primitive Formen und Operationen
 
@@ -65,7 +64,11 @@ Primitive SDFs bilden die Grundlage für die Modellierung komplexerer Szenen. Ä
 
 Die folgende Abbildung zeigt einige typische Primitive sowie ihre jeweiligen Signed Distance Functions.
 
-[Beispielbild.png]
+<iframe class="demo-embed" src="../assets/demos/sdf-heatmap/index.html" height="510"></iframe>
+
+Die folgende 3D-Demo rendert dieselben Primitive per Ray Marching direkt im Browser. Form und Parameter lassen sich interaktiv anpassen.
+
+<iframe class="demo-embed" src="../assets/demos/primitiv-galerie/index.html" height="620"></iframe>
 
 ## Kombination mehrerer Objekte
 
@@ -93,7 +96,6 @@ $$
 
 Dadurch lassen sich komplexe Formen auf einfache Weise aus wenigen Grundkörpern erzeugen. Die mathematische Beschreibung der Geometrie bleibt dabei kompakt und kann flexibel erweitert oder verändert werden.
 
-[Platz für interaktive Visualisierung von CSG-Operationen]
 <iframe class="demo-embed" src="../assets/demos/embedded/csg-demo.html" height="650"></iframe>
 
 Die Möglichkeit, Geometrie durch mathematische Operationen zu kombinieren, zählt zu den zentralen Stärken von Signed Distance Functions und ist ein wesentlicher Grund für ihren Einsatz in der prozeduralen Modellierung und beim Ray-Marching-Rendering.
@@ -130,8 +132,17 @@ Der grundlegende Ablauf lässt sich wie folgt zusammenfassen:
 
 Die folgende Visualisierung verdeutlicht dieses Vorgehen. Die Schrittweite entspricht dabei jeweils dem Abstand zur nächstgelegenen Oberfläche. Mit jeder Iteration nähert sich der Strahl dem Objekt an, bis schließlich ein Schnittpunkt gefunden wird.
 
-[Platz für interaktive Visualisierung des Ray-Marching-Algorithmus]
-<iframe class="demo-embed" src="../assets/demos/embedded/raymarch-demo.html" height="650"></iframe>
+::: {.panel-tabset}
+
+## Animierte Schritte
+
+<iframe class="demo-embed" src="../assets/demos/ray-marching-visualisierer/index.html" height="570"></iframe>
+
+## Parametrische Steuerung
+
+<iframe class="demo-embed" src="../assets/demos/embedded/raymarch-demo.html" height="480"></iframe>
+
+:::
 
 Das hier beschriebene Verfahren wird häufig als Ray Marching bezeichnet. Genauer handelt es sich aber um eine spezielle Form des Ray Marching, die als Sphere Tracing bekannt ist. Sie wurde 1995 von John C. Hart vorgestellt und nutzt die Distanzinformationen einer Signed Distance Function, um die Schrittweite adaptiv anzupassen.
 
@@ -201,6 +212,10 @@ Falls der Shadow Ray vor Erreichen der Lichtquelle auf eine Oberfläche trifft, 
 Die Schattenberechnung funktioniert damit ähnlich wie beim klassischen Ray Tracing. Der Unterschied liegt darin, dass auch dieser zusätzliche Strahl nicht gegen Dreiecke getestet wird, sondern wieder mithilfe der Signed Distance Function durch die Szene gemarcht wird.
 
 Auf diese Weise können Schatten direkt in das SDF-basierte Rendering integriert werden, ohne eine separate Schattenkarte oder explizite Geometrie zu benötigen.
+
+Die folgende Demo demonstriert Phong-Beleuchtung mit hartem Schatten und optionaler Ambient Occlusion. Einzelne Beleuchtungskomponenten lassen sich ein- und ausschalten; Lichtquelle und Blocker-Objekt sind frei positionierbar.
+
+<iframe class="demo-embed" src="../assets/demos/beleuchtung-schatten/index.html" height="730"></iframe>
 
 # Quellenverzeichnis
 

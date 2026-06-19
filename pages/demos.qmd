@@ -1,0 +1,170 @@
+---
+title: "Interaktive SDF-Rendering Demos"
+author: "Luis Kahles"
+---
+
+## Konzept-Visualisierungen
+
+Zweidimensionale Animationen zur schrittweisen Erklärung der SDF-Grundkonzepte.
+
+::: {.panel-tabset}
+
+## Kugel als Beispiel
+
+Signed Distance Function einer Kugel: Der Slider verschiebt den Abfragepunkt, das Distanzfeld wird live berechnet. → [Die Kugel als Beispiel](theorie.qmd#die-kugel-als-beispiel)
+
+```{=html}
+<div class="demo-wide">
+<iframe
+  src="../assets/demos/embedded/sphere-sdf-demo.html"
+  height="460"
+  scrolling="no"
+  title="Kugel SDF Demo">
+</iframe>
+</div>
+```
+
+## SDF-Distanzfeld
+
+Signed Distance Functions für sechs 2D-Primitive. Innenbereich (formspezifische Farbe) und Außenbereich (Dunkelblau) zeigen das Vorzeichen des Distanzwertes. → [Primitive Formen und Operationen](theorie.qmd#primitive-formen-und-operationen)
+
+```{=html}
+<div class="demo-wide">
+<iframe
+  src="../assets/demos/sdf-heatmap/index.html"
+  height="510"
+  scrolling="no"
+  title="SDF-Distanzfeld">
+</iframe>
+</div>
+```
+
+## Ray-Marching Schritte
+
+Schrittweise Visualisierung des Sphere-Tracing-Algorithmus. Die gestrichelten Kreise zeigen den jeweils sicheren Schrittradius. → [Der Ray-Marching-Algorithmus](theorie.qmd#der-ray-marching-algorithmus)
+
+```{=html}
+<div class="demo-wide">
+<iframe
+  src="../assets/demos/ray-marching-visualisierer/index.html"
+  height="570"
+  scrolling="no"
+  title="Ray-Marching Schritte">
+</iframe>
+</div>
+```
+
+## Ray-Marching Parametrisch
+
+Parametrische Steuerung von Schrittweite und Szene. → [Der Ray-Marching-Algorithmus](theorie.qmd#der-ray-marching-algorithmus)
+
+```{=html}
+<div class="demo-wide">
+<iframe
+  src="../assets/demos/embedded/raymarch-demo.html"
+  height="480"
+  scrolling="no"
+  title="Ray-Marching Parametrisch">
+</iframe>
+</div>
+```
+
+:::
+
+## GLSL-Renderings
+
+Vollständige WebGL-Renderer, die SDF-Primitive und Beleuchtungseffekte in Echtzeit im Browser berechnen.
+
+::: {.panel-tabset}
+
+## Primitiv-Galerie
+
+Sechs klassische SDF-Primitive nach Inigo Quilez - Kugel, Box, Torus, Kapsel, Zylinder und Oktaeder - mit Ray-Marching und Phong-Beleuchtung. → [Primitive Formen und Operationen](theorie.qmd#primitive-formen-und-operationen)
+
+```{=html}
+<div class="demo-wide">
+<iframe
+  src="../assets/demos/primitiv-galerie/index.html"
+  height="620"
+  scrolling="no"
+  title="Primitiv-Galerie">
+</iframe>
+</div>
+```
+
+## Beleuchtung & Schatten
+
+Phong-Shading mit hartem Schatten und optionaler Ambient Occlusion. Lichtquelle und Blocker-Objekt sind frei positionierbar; einzelne Beleuchtungskomponenten können ein- und ausgeschaltet werden. → [Shading und Beleuchtung](theorie.qmd#shading-und-beleuchtung)
+
+```{=html}
+<div class="demo-wide">
+<iframe
+  src="../assets/demos/beleuchtung-schatten/index.html"
+  height="720"
+  scrolling="no"
+  title="Beleuchtung und Schatten">
+</iframe>
+</div>
+```
+
+## Unendliche Repetition
+
+Domain-Repetition mit `mod()`: Ein einzelnes SDF-Objekt wird durch eine Faltung des Koordinatenraums unendlich oft wiederholt - ohne Mehraufwand zur Laufzeit. Die Kamera fliegt automatisch durch das Feld; Farben, Schatten und Ambient Occlusion werden prozedural berechnet.
+
+```{=html}
+<div class="demo-wide">
+<iframe
+  src="../assets/demos/unendliche-repetition/index.html"
+  height="560"
+  scrolling="no"
+  title="Unendliche Repetition">
+</iframe>
+</div>
+```
+
+## Prozedurale Landschaft
+
+Eine vollständig prozedurale Berglandschaft - kein einziges Polygon. Die Geometrie entsteht aus Fractional Brownian Motion (FBM) als Terrain-SDF. Mit WASD oder den Pfeiltasten durch die Szene navigieren; die Detail-Stufe zeigt, wie mehr FBM-Oktaven feinere Strukturen erzeugen.
+
+```{=html}
+<div class="demo-wide">
+<iframe
+  src="../assets/demos/prozedurale-landschaft/index.html"
+  height="610"
+  scrolling="yes"
+  title="Prozedurale Landschaft">
+</iframe>
+</div>
+```
+
+## Menger-Schwamm
+
+Iteriertes CSG: Ein Würfel wird durch dreifaches Subtrahieren von Kreuzformen zum Menger-Schwamm - einem klassischen 3D-Fraktal. Jede Iterationsstufe verfeinert die Struktur um Faktor 3; die Schnittansicht zeigt das fraktale Innenleben. → [Fraktale und mathematische Strukturen](einfuehrung.qmd#fraktale-und-mathematische-strukturen)
+
+```{=html}
+<div class="demo-wide">
+<iframe
+  src="../assets/demos/menger-schwamm/index.html"
+  height="560"
+  scrolling="no"
+  title="Menger-Schwamm">
+</iframe>
+</div>
+```
+
+:::
+
+## CSG-Demo
+
+Constructive Solid Geometry: Vereinigung, Schnittmenge und Differenz zweier SDF-Primitive - mit einstellbarer Verschmelzung und frei wählbaren Grundkörpern. → [CSG Live-Demo](csg.qmd#csg-live-demo)
+
+```{=html}
+<div class="demo-wide">
+<iframe
+  src="../assets/demos/csg-live/index.html"
+  height="650"
+  scrolling="no"
+  title="CSG-Demo">
+</iframe>
+</div>
+```

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Unendliche Repetition</title>
+  <script src="https://cdn.jsdelivr.net/npm/glslCanvas@0.2.6/dist/GlslCanvas.min.js"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; padding: 16px; color: #222; }
+    .ctrl-row  { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin-bottom: 0.75rem; }
+    .ctrl-label { font-weight: 700; white-space: nowrap; }
+    .ctrl-btn {
+      padding: 0.3rem 0.85rem; border-radius: 6px; border: 2px solid #bbb;
+      background: #f0f0f0; color: #333; cursor: pointer; font-size: 0.9rem;
+    }
+    .ctrl-btn.active { background: #4a90d9; color: #fff; border-color: #4a90d9; }
+    input[type=range] { accent-color: #4a90d9; }
+  </style>
+</head>
+<body>
+
+  <!-- Objekt-Auswahl -->
+  <div class="ctrl-row">
+    <span class="ctrl-label">Objekt:</span>
+    <button id="btn-shape-0" class="ctrl-btn active" onclick="setShape(0)">Torus</button>
+    <button id="btn-shape-1" class="ctrl-btn"        onclick="setShape(1)">Box</button>
+    <button id="btn-shape-2" class="ctrl-btn"        onclick="setShape(2)">Kapsel</button>
+  </div>
+
+  <!-- Haupt-Layout -->
+  <div style="display:flex; flex-wrap:wrap; gap:2rem; align-items:flex-start;">
+
+    <canvas id="canvas" width="520" height="340"
+            style="border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,0.4);">
+    </canvas>
+
+    <div style="display:flex; flex-direction:column; gap:1.4rem; min-width:190px; padding-top:0.4rem;">
+
+      <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase;
+                  letter-spacing:0.06em; color:#888;">Gitter</div>
+
+      <div>
+        <label><strong>Abstand</strong>: <span id="val-spacing">3.0</span></label><br>
+        <input type="range" id="sl-spacing" min="2.0" max="5.0" step="0.25" value="3.0"
+               style="width:100%; margin-top:0.4rem; accent-color:#4a90d9;">
+      </div>
+
+      <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase;
+                  letter-spacing:0.06em; color:#888; margin-top:0.2rem;">Effekte</div>
+
+      <div class="ctrl-row" style="margin-bottom:0;">
+        <button id="btn-shadows" class="ctrl-btn active"
+                onclick="toggleEffect('u_shadows','btn-shadows')">Soft Shadows</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="demo.js"></script>
+</body>
+</html>

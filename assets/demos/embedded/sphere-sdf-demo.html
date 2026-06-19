@@ -2,224 +2,203 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SDF einer Kugel</title>
-
 <style>
   body {
     font-family: system-ui, sans-serif;
     margin: 0;
-    padding: 16px;
+    padding: 14px 16px;
     color: #222;
   }
-
-  .layout {
-    display: flex;
-    gap: 24px;
-    align-items: flex-start;
+  .ctrl-label {
+    font-size: 0.75rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.15rem;
   }
-
-  canvas {
-    border: 1px solid #ccc;
-    background: #fafafa;
+  .info-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #8b949e;
+    margin-bottom: 0.35rem;
   }
-
-  .controls {
-    width: 280px;
-  }
-
-  label {
-    display: block;
-    margin-top: 14px;
-  }
-
-  input[type="range"] {
-    width: 100%;
-  }
-
-  .value-box {
-    margin-top: 18px;
-    padding: 10px;
-    background: #f2f2f2;
-    border-radius: 6px;
-    line-height: 1.5;
-  }
+  input[type="range"] { accent-color: #4a90d9; }
 </style>
 </head>
-
 <body>
+<div style="display:flex; flex-wrap:wrap; gap:2rem; align-items:flex-start;">
 
-<div class="layout">
-  <canvas id="canvas" width="620" height="420"></canvas>
+  <canvas id="canvas" width="480" height="360"
+          style="border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,0.22); max-width:100%;">
+  </canvas>
 
-  <div class="controls">
-    <label>
-      Radius r:
-      <input id="radius" type="range" min="40" max="150" value="100">
-    </label>
+  <div style="display:flex; flex-direction:column; gap:1.2rem; min-width:220px; flex:1; max-width:340px; padding-top:0.3rem;">
 
-    <label>
-      Punkt x:
-      <input id="pointX" type="range" min="-250" max="250" value="160">
-    </label>
+    <div>
+      <div class="ctrl-label">Radius r: <strong style="color:#222;" id="val-r">100</strong></div>
+      <input type="range" id="sl-r" min="40" max="150" value="100" style="width:100%; margin-top:0.3rem;">
+    </div>
 
-    <label>
-      Punkt y:
-      <input id="pointY" type="range" min="-160" max="160" value="0">
-    </label>
+    <div>
+      <div class="ctrl-label">Punkt p.x: <strong style="color:#222;" id="val-px">160</strong></div>
+      <input type="range" id="sl-px" min="-220" max="220" value="160" style="width:100%; margin-top:0.3rem;">
+    </div>
 
-    <div class="value-box" id="valueBox"></div>
+    <div>
+      <div class="ctrl-label">Punkt p.y: <strong style="color:#222;" id="val-py">0</strong></div>
+      <input type="range" id="sl-py" min="-160" max="160" value="0" style="width:100%; margin-top:0.3rem;">
+    </div>
+
+    <!-- Formula -->
+    <div style="background:#0d1117; border-radius:8px; padding:0.75rem 1rem;">
+      <div class="info-label">SDF-Formel</div>
+      <div style="color:#e6edf3; font-size:0.9rem; line-height:1.7;">
+        f(<b>p</b>) = &#x2016;<b>p</b> &minus; <b>c</b>&#x2016; &minus; r
+      </div>
+    </div>
+
+    <!-- Computed values -->
+    <div id="value-box" style="background:#0d1117; border-radius:8px; padding:0.75rem 1rem;
+         color:#e6edf3; font-size:0.83rem; line-height:1.9; font-family:monospace;">
+    </div>
+
   </div>
 </div>
 
 <script>
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+const canvas = document.getElementById('canvas');
+const ctx    = canvas.getContext('2d');
+const W = canvas.width, H = canvas.height;
 
-const radiusSlider = document.getElementById("radius");
-const pointXSlider = document.getElementById("pointX");
-const pointYSlider = document.getElementById("pointY");
-const valueBox = document.getElementById("valueBox");
-
-function length2(v) {
-  return Math.sqrt(v.x * v.x + v.y * v.y);
-}
-
-function sdfCircle(p, center, radius) {
-  return length2({
-    x: p.x - center.x,
-    y: p.y - center.y
-  }) - radius;
-}
-
-function drawArrow(from, to) {
-  const dx = to.x - from.x;
-  const dy = to.y - from.y;
-  const len = Math.sqrt(dx * dx + dy * dy);
-
-  if (len < 0.001) return;
-
-  const dir = {
-    x: dx / len,
-    y: dy / len
-  };
-
-  ctx.beginPath();
-  ctx.moveTo(from.x, from.y);
-  ctx.lineTo(to.x, to.y);
-  ctx.strokeStyle = "#666";
-  ctx.lineWidth = 2;
-  ctx.stroke();
-
-  const angle = Math.atan2(dir.y, dir.x);
-  const headLength = 9;
-
-  ctx.beginPath();
-  ctx.moveTo(to.x, to.y);
-  ctx.lineTo(
-    to.x - headLength * Math.cos(angle - Math.PI / 6),
-    to.y - headLength * Math.sin(angle - Math.PI / 6)
-  );
-  ctx.lineTo(
-    to.x - headLength * Math.cos(angle + Math.PI / 6),
-    to.y - headLength * Math.sin(angle + Math.PI / 6)
-  );
-  ctx.closePath();
-  ctx.fillStyle = "#666";
-  ctx.fill();
-}
+const slR  = document.getElementById('sl-r');
+const slPx = document.getElementById('sl-px');
+const slPy = document.getElementById('sl-py');
 
 function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const r   = Number(slR.value);
+    const cx  = W / 2, cy = H / 2;
+    const px  = cx + Number(slPx.value);
+    const py  = cy + Number(slPy.value);
+    const dx  = px - cx, dy = py - cy;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    const sdf  = dist - r;
 
-  const center = {
-    x: canvas.width / 2,
-    y: canvas.height / 2
-  };
+    document.getElementById('val-r').textContent  = r;
+    document.getElementById('val-px').textContent = Number(slPx.value);
+    document.getElementById('val-py').textContent = Number(slPy.value);
 
-  const radius = Number(radiusSlider.value);
+    // Background + grid
+    ctx.fillStyle = '#0d1117';
+    ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+    ctx.lineWidth   = 1;
+    for (let gx = 0; gx <= W; gx += 40) {
+        ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke();
+    }
+    for (let gy = 0; gy <= H; gy += 40) {
+        ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke();
+    }
 
-  const point = {
-    x: center.x + Number(pointXSlider.value),
-    y: center.y + Number(pointYSlider.value)
-  };
+    // Sphere fill + stroke
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fillStyle   = 'rgba(70,110,160,0.22)';
+    ctx.fill();
+    ctx.strokeStyle = '#5588bb';
+    ctx.lineWidth   = 2;
+    ctx.stroke();
 
-  const distanceToCenter = length2({
-    x: point.x - center.x,
-    y: point.y - center.y
-  });
+    // f(p)=0 label on sphere
+    ctx.fillStyle = '#7799cc';
+    ctx.font      = '12px monospace';
+    ctx.fillText('f(p) = 0', cx + r + 6, cy - 6);
 
-  const sdfValue = sdfCircle(point, center, radius);
+    // Arrow from center c to point p
+    const arrowLen = dist;
+    if (arrowLen > 2) {
+        const ux = dx / arrowLen, uy = dy / arrowLen;
+        const tipX = cx + ux * arrowLen, tipY = cy + uy * arrowLen;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(tipX, tipY);
+        ctx.strokeStyle = '#ffcc33';
+        ctx.lineWidth   = 1.8;
+        ctx.stroke();
+        const headLen = 9;
+        const angle   = Math.atan2(uy, ux);
+        ctx.beginPath();
+        ctx.moveTo(tipX, tipY);
+        ctx.lineTo(tipX - headLen * Math.cos(angle - Math.PI/6), tipY - headLen * Math.sin(angle - Math.PI/6));
+        ctx.lineTo(tipX - headLen * Math.cos(angle + Math.PI/6), tipY - headLen * Math.sin(angle + Math.PI/6));
+        ctx.closePath();
+        ctx.fillStyle = '#ffcc33';
+        ctx.fill();
+    }
 
-  // Innenbereich der Kugel
-  ctx.beginPath();
-  ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
-  ctx.fillStyle = "rgba(25, 118, 210, 0.15)";
-  ctx.fill();
+    // Distance circle around p (|sdf| radius)
+    if (Math.abs(sdf) > 1) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(px, py, Math.abs(sdf), 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(50,210,230,0.45)';
+        ctx.lineWidth   = 1.5;
+        ctx.setLineDash([5, 3]);
+        ctx.stroke();
+        ctx.restore();
+    }
 
-  // Oberfläche f(p)=0
-  ctx.beginPath();
-  ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
-  ctx.strokeStyle = "#111";
-  ctx.lineWidth = 3;
-  ctx.stroke();
+    // Center dot c
+    ctx.fillStyle = '#aaccee';
+    ctx.beginPath();
+    ctx.arc(cx, cy, 4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#99bbdd';
+    ctx.font      = '13px monospace';
+    ctx.fillText('c', cx + 7, cy + 15);
 
-  // Mittelpunkt
-  ctx.beginPath();
-  ctx.arc(center.x, center.y, 4, 0, Math.PI * 2);
-  ctx.fillStyle = "#111";
-  ctx.fill();
+    // Point p
+    const insideColor  = sdf < 0 ? '#59b8ff' : '#ffcc33';
+    ctx.fillStyle = insideColor;
+    ctx.beginPath();
+    ctx.arc(px, py, 6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = sdf < 0 ? '#3388cc' : '#cc9900';
+    ctx.lineWidth   = 1.5;
+    ctx.stroke();
+    ctx.fillStyle = '#c9d1d9';
+    ctx.font      = '13px monospace';
+    ctx.fillText('p', px + 9, py - 8);
 
-  // Label c für den Mittelpunkt
-  ctx.fillStyle = "#222";
-  ctx.font = "14px system-ui";
-  ctx.fillText("c", center.x + 8, center.y + 18);
+    // Distance label on arrow
+    if (arrowLen > 40) {
+        const midX = cx + dx * 0.5, midY = cy + dy * 0.5;
+        ctx.fillStyle = 'rgba(255,204,51,0.85)';
+        ctx.font      = '11px monospace';
+        ctx.fillText('‖p−c‖=' + dist.toFixed(0), midX + 6, midY - 4);
+    }
 
-  // Linie vom Mittelpunkt zum Punkt
-  drawArrow(center, point);
+    // Value box
+    const sign  = sdf < 0 ? '&minus;' : '+';
+    const color = sdf < 0 ? '#59b8ff' : '#ffcc33';
+    const msg   = sdf < 0
+        ? 'p liegt <b style="color:#59b8ff">innerhalb</b>'
+        : Math.abs(sdf) < 2
+            ? 'p liegt <b style="color:#44ff88">auf der Oberfläche</b>'
+            : 'p liegt <b style="color:#ffcc33">außerhalb</b>';
 
-  // Abstandskreis um den Punkt: Radius = |SDF|
-  ctx.beginPath();
-  ctx.arc(point.x, point.y, Math.abs(sdfValue), 0, Math.PI * 2);
-  ctx.strokeStyle = "rgba(198, 40, 40, 0.35)";
-  ctx.lineWidth = 2;
-  ctx.stroke();
-
-  // Punkt p
-  ctx.beginPath();
-  ctx.arc(point.x, point.y, 7, 0, Math.PI * 2);
-  ctx.fillStyle = sdfValue < 0 ? "#1565c0" : "#c62828";
-  ctx.fill();
-
-  // Label p
-  ctx.fillStyle = "#222";
-  ctx.font = "14px system-ui";
-  ctx.fillText("p", point.x + 10, point.y - 10);
-
-  // Kurze Anzeige direkt im Canvas
-  ctx.fillStyle = "#222";
-  ctx.fillText("f(p) = 0", center.x + radius + 10, center.y - 8);
-
-  valueBox.innerHTML =
-    `<strong>Formel:</strong><br>` +
-    `f(p) = ||p - c|| - r<br><br>` +
-    `<strong>Aktuelle Werte:</strong><br>` +
-    `||p - c|| = ${distanceToCenter.toFixed(2)}<br>` +
-    `r = ${radius.toFixed(2)}<br>` +
-    `f(p) = ${distanceToCenter.toFixed(2)} - ${radius.toFixed(2)} = <strong>${sdfValue.toFixed(2)}</strong><br><br>` +
-    `<strong>Interpretation:</strong><br>` +
-    `${sdfValue < 0
-      ? "Der Punkt liegt innerhalb der Kugel."
-      : Math.abs(sdfValue) < 1
-        ? "Der Punkt liegt ungefähr auf der Oberfläche."
-        : "Der Punkt liegt außerhalb der Kugel."}`;
+    document.getElementById('value-box').innerHTML =
+        '<span style="color:#8b949e">‖p − c‖</span> = ' + dist.toFixed(1) + '<br>' +
+        '<span style="color:#8b949e">r</span>       = ' + r + '<br>' +
+        '<span style="color:#8b949e">f(p)</span>    = ' + dist.toFixed(1) + ' − ' + r + ' = ' +
+        '<b style="color:' + color + '">' + sdf.toFixed(1) + '</b><br><br>' +
+        msg;
 }
 
-[radiusSlider, pointXSlider, pointYSlider].forEach(input => {
-  input.addEventListener("input", draw);
-});
-
+[slR, slPx, slPy].forEach(function(sl) { sl.addEventListener('input', draw); });
 draw();
 </script>
-
 </body>
 </html>
