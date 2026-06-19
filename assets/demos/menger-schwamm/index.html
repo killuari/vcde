@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Menger-Schwamm</title>
+  <script src="https://cdn.jsdelivr.net/npm/glslCanvas@0.2.6/dist/GlslCanvas.min.js"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; padding: 16px; color: #222; }
+    .ctrl-row  { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin-bottom: 0.75rem; }
+    .ctrl-label { font-weight: 700; white-space: nowrap; }
+    .ctrl-btn {
+      padding: 0.3rem 0.85rem; border-radius: 6px; border: 2px solid #bbb;
+      background: #f0f0f0; color: #333; cursor: pointer; font-size: 0.9rem;
+    }
+    .ctrl-btn.active { background: #4a90d9; color: #fff; border-color: #4a90d9; }
+    input[type=range] { accent-color: #4a90d9; }
+  </style>
+</head>
+<body>
+
+  <div style="display:flex; flex-wrap:wrap; gap:2rem; align-items:flex-start;">
+
+    <canvas id="canvas" width="520" height="380"
+            style="border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,0.4);">
+    </canvas>
+
+    <div style="display:flex; flex-direction:column; gap:1.4rem; min-width:190px; padding-top:0.4rem;">
+
+      <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase;
+                  letter-spacing:0.06em; color:#888;">Iterationen</div>
+
+      <div class="ctrl-row" style="margin-bottom:0;">
+        <button id="btn-iter-0" class="ctrl-btn"        onclick="setDetail(0)">1</button>
+        <button id="btn-iter-1" class="ctrl-btn"        onclick="setDetail(1)">2</button>
+        <button id="btn-iter-2" class="ctrl-btn active" onclick="setDetail(2)">3</button>
+      </div>
+
+      <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase;
+                  letter-spacing:0.06em; color:#888; margin-top:0.2rem;">Ansicht</div>
+
+      <div class="ctrl-row" style="margin-bottom:0;">
+        <button id="btn-cut" class="ctrl-btn" onclick="toggleCut()">Schnittansicht</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="demo.js"></script>
+</body>
+</html>

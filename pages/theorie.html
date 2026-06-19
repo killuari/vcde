@@ -123,10 +123,6 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
-<span class="menu-text">Home</span></a>
-  </li>  
-  <li class="nav-item">
     <a class="nav-link" href="../pages/einfuehrung.html"> 
 <span class="menu-text">Einführung</span></a>
   </li>  
@@ -141,6 +137,10 @@ window.Quarto = {
   <li class="nav-item">
     <a class="nav-link" href="../pages/csg.html"> 
 <span class="menu-text">CSG</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../pages/demos.html"> 
+<span class="menu-text">Demos</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -244,7 +244,8 @@ f(\mathbf p)=||\mathbf p||-r
 <p>Diese Formel gilt für eine Kugel mit Mittelpunkt im Ursprung. Für eine Kugel mit einem beliebigen Mittelpunkt <span class="math inline">\(\mathbf c\)</span> lässt sich die Funktion entsprechend anpassen: <span class="math display">\[
 f(\mathbf{p}) = \|\mathbf{p} - \mathbf{c}\| - r
 \]</span></p>
-<p>[Platz für interaktive Visualisierung der SDF einer Kugel] <iframe class="demo-embed" src="../assets/demos/embedded/sphere-sdf-demo.html" height="650"></iframe></p>
+<iframe class="demo-embed" src="../assets/demos/embedded/sphere-sdf-demo.html" height="460">
+</iframe>
 </section>
 <section id="primitive-formen-und-operationen" class="level2">
 <h2 class="anchored" data-anchor-id="primitive-formen-und-operationen">Primitive Formen und Operationen</h2>
@@ -252,7 +253,11 @@ f(\mathbf{p}) = \|\mathbf{p} - \mathbf{c}\| - r
 <p>Zu den häufig verwendeten Primitiven gehören unter anderem Kugeln, Ebenen, Quader, Zylinder und Torusse. Obwohl sich die zugrunde liegenden Formeln teilweise deutlich unterscheiden, verfolgen sie alle dasselbe Ziel: Die Geometrie eines Objekts wird durch eine mathematische Beschreibung seiner Oberfläche definiert.</p>
 <p>Primitive SDFs bilden die Grundlage für die Modellierung komplexerer Szenen. Ähnlich wie bei der klassischen 3D-Modellierung werden zunächst einfache Grundformen definiert, aus denen anschließend komplexe Strukturen aufgebaut werden können.</p>
 <p>Die folgende Abbildung zeigt einige typische Primitive sowie ihre jeweiligen Signed Distance Functions.</p>
-<p>[Beispielbild.png]</p>
+<iframe class="demo-embed" src="../assets/demos/sdf-heatmap/index.html" height="510">
+</iframe>
+<p>Die folgende 3D-Demo rendert dieselben Primitive per Ray Marching direkt im Browser. Form und Parameter lassen sich interaktiv anpassen.</p>
+<iframe class="demo-embed" src="../assets/demos/primitiv-galerie/index.html" height="620">
+</iframe>
 </section>
 <section id="kombination-mehrerer-objekte" class="level2">
 <h2 class="anchored" data-anchor-id="kombination-mehrerer-objekte">Kombination mehrerer Objekte</h2>
@@ -271,7 +276,8 @@ d = \max(d_1, d_2)
 d = \max(d_1, -d_2)
 \]</span></p>
 <p>Dadurch lassen sich komplexe Formen auf einfache Weise aus wenigen Grundkörpern erzeugen. Die mathematische Beschreibung der Geometrie bleibt dabei kompakt und kann flexibel erweitert oder verändert werden.</p>
-<p>[Platz für interaktive Visualisierung von CSG-Operationen] <iframe class="demo-embed" src="../assets/demos/embedded/csg-demo.html" height="650"></iframe></p>
+<iframe class="demo-embed" src="../assets/demos/embedded/csg-demo.html" height="650">
+</iframe>
 <p>Die Möglichkeit, Geometrie durch mathematische Operationen zu kombinieren, zählt zu den zentralen Stärken von Signed Distance Functions und ist ein wesentlicher Grund für ihren Einsatz in der prozeduralen Modellierung und beim Ray-Marching-Rendering.</p>
 </section>
 </section>
@@ -301,7 +307,19 @@ d = \max(d_1, -d_2)
 <li>Breche ab, sobald die Oberfläche erreicht wurde oder der Strahl die Szene verlässt.</li>
 </ol>
 <p>Die folgende Visualisierung verdeutlicht dieses Vorgehen. Die Schrittweite entspricht dabei jeweils dem Abstand zur nächstgelegenen Oberfläche. Mit jeder Iteration nähert sich der Strahl dem Objekt an, bis schließlich ein Schnittpunkt gefunden wird.</p>
-<p>[Platz für interaktive Visualisierung des Ray-Marching-Algorithmus] <iframe class="demo-embed" src="../assets/demos/embedded/raymarch-demo.html" height="650"></iframe></p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Animierte Schritte</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Parametrische Steuerung</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<iframe class="demo-embed" src="../assets/demos/ray-marching-visualisierer/index.html" height="570">
+</iframe>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<iframe class="demo-embed" src="../assets/demos/embedded/raymarch-demo.html" height="480">
+</iframe>
+</div>
+</div>
+</div>
 <p>Das hier beschriebene Verfahren wird häufig als Ray Marching bezeichnet. Genauer handelt es sich aber um eine spezielle Form des Ray Marching, die als Sphere Tracing bekannt ist. Sie wurde 1995 von John C. Hart vorgestellt und nutzt die Distanzinformationen einer Signed Distance Function, um die Schrittweite adaptiv anzupassen.</p>
 </section>
 <section id="abbruchbedingungen" class="level2">
@@ -355,6 +373,9 @@ I_d = \max(0,\mathbf n \cdot \mathbf l)
 <p>Falls der Shadow Ray vor Erreichen der Lichtquelle auf eine Oberfläche trifft, liegt der ursprüngliche Punkt im Schatten. Andernfalls wird er normal beleuchtet.</p>
 <p>Die Schattenberechnung funktioniert damit ähnlich wie beim klassischen Ray Tracing. Der Unterschied liegt darin, dass auch dieser zusätzliche Strahl nicht gegen Dreiecke getestet wird, sondern wieder mithilfe der Signed Distance Function durch die Szene gemarcht wird.</p>
 <p>Auf diese Weise können Schatten direkt in das SDF-basierte Rendering integriert werden, ohne eine separate Schattenkarte oder explizite Geometrie zu benötigen.</p>
+<p>Die folgende Demo demonstriert Phong-Beleuchtung mit hartem Schatten und optionaler Ambient Occlusion. Einzelne Beleuchtungskomponenten lassen sich ein- und ausschalten; Lichtquelle und Blocker-Objekt sind frei positionierbar.</p>
+<iframe class="demo-embed" src="../assets/demos/beleuchtung-schatten/index.html" height="730">
+</iframe>
 </section>
 </section>
 <section id="quellenverzeichnis" class="level1">

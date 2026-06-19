@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prozedurale Landschaft</title>
+  <script src="https://cdn.jsdelivr.net/npm/glslCanvas@0.2.6/dist/GlslCanvas.min.js"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 0; padding: 16px; color: #222; }
+    .ctrl-row  { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin-bottom: 0.75rem; }
+    .ctrl-label { font-weight: 700; white-space: nowrap; }
+    .ctrl-btn {
+      padding: 0.3rem 0.85rem; border-radius: 6px; border: 2px solid #bbb;
+      background: #f0f0f0; color: #333; cursor: pointer; font-size: 0.9rem;
+    }
+    .ctrl-btn.active { background: #4a90d9; color: #fff; border-color: #4a90d9; }
+    .hint {
+      font-size: 0.82rem; color: #666; background: #f5f5f5;
+      border-radius: 8px; padding: 0.5rem 0.75rem; line-height: 1.5;
+    }
+    input[type=range] { accent-color: #4a90d9; }
+  </style>
+</head>
+<body>
+
+  <!-- Steuerung-Hinweis -->
+  <div class="ctrl-row">
+    <div class="hint">
+      🎮 <strong>WASD</strong> oder <strong>Pfeiltasten</strong> zum Bewegen
+    </div>
+  </div>
+
+  <!-- Haupt-Layout -->
+  <div style="display:flex; flex-wrap:wrap; gap:2rem; align-items:flex-start;">
+
+    <canvas id="canvas" width="560" height="380"
+            style="border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,0.4); cursor:pointer;">
+    </canvas>
+
+    <div style="display:flex; flex-direction:column; gap:1.4rem; min-width:190px; padding-top:0.4rem;">
+
+      <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase;
+                  letter-spacing:0.06em; color:#888;">FBM-Detailstufe</div>
+
+      <div class="ctrl-row" style="margin-bottom:0;">
+        <button id="btn-detail-0" class="ctrl-btn"        onclick="setDetail(0)">Grob</button>
+        <button id="btn-detail-1" class="ctrl-btn active" onclick="setDetail(1)">Mittel</button>
+        <button id="btn-detail-2" class="ctrl-btn"        onclick="setDetail(2)">Fein</button>
+      </div>
+
+      <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase;
+                  letter-spacing:0.06em; color:#888; margin-top:0.2rem;">Atmosphäre</div>
+
+      <div>
+        <label><strong>Nebel</strong>: <span id="val-fog">31%</span></label><br>
+        <input type="range" id="sl-fog" min="0.0" max="0.08" step="0.005" value="0.025"
+               style="width:100%; margin-top:0.4rem; accent-color:#4a90d9;">
+      </div>
+
+
+    </div>
+  </div>
+
+  <script src="demo.js"></script>
+</body>
+</html>

@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Tobias Jäkel">
+<meta name="author" content="Luis Kahles">
 
-<title>Einführung in das Thema – SDF Rendering via Ray Marching</title>
+<title>Interaktive SDF-Rendering Demos – SDF Rendering via Ray Marching</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -94,7 +94,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="../pages/einfuehrung.html" aria-current="page"> 
+    <a class="nav-link" href="../pages/einfuehrung.html"> 
 <span class="menu-text">Einführung</span></a>
   </li>  
   <li class="nav-item">
@@ -110,7 +110,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">CSG</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../pages/demos.html"> 
+    <a class="nav-link active" href="../pages/demos.html" aria-current="page"> 
 <span class="menu-text">Demos</span></a>
   </li>  
 </ul>
@@ -129,23 +129,9 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Auf dieser Seite</h2>
    
   <ul class="collapse">
-  <li><a href="#motivation" id="toc-motivation" class="nav-link active" data-scroll-target="#motivation">Motivation</a>
-  <ul class="collapse">
-  <li><a href="#klassische-darstellung-von-3d-geometrie" id="toc-klassische-darstellung-von-3d-geometrie" class="nav-link" data-scroll-target="#klassische-darstellung-von-3d-geometrie">Klassische Darstellung von 3D-Geometrie</a></li>
-  <li><a href="#grenzen-polygonaler-netze" id="toc-grenzen-polygonaler-netze" class="nav-link" data-scroll-target="#grenzen-polygonaler-netze">Grenzen polygonaler Netze</a></li>
-  <li><a href="#alternative-geometrierepräsentationen" id="toc-alternative-geometrierepräsentationen" class="nav-link" data-scroll-target="#alternative-geometrierepräsentationen">Alternative Geometrierepräsentationen</a></li>
-  </ul></li>
-  <li><a href="#typische-anwendungsgebiete" id="toc-typische-anwendungsgebiete" class="nav-link" data-scroll-target="#typische-anwendungsgebiete">Typische Anwendungsgebiete</a>
-  <ul class="collapse">
-  <li><a href="#prozedurale-modellierung" id="toc-prozedurale-modellierung" class="nav-link" data-scroll-target="#prozedurale-modellierung">Prozedurale Modellierung</a></li>
-  <li><a href="#constructive-solid-geometry" id="toc-constructive-solid-geometry" class="nav-link" data-scroll-target="#constructive-solid-geometry">Constructive Solid Geometry</a></li>
-  <li><a href="#fraktale-und-mathematische-strukturen" id="toc-fraktale-und-mathematische-strukturen" class="nav-link" data-scroll-target="#fraktale-und-mathematische-strukturen">Fraktale und mathematische Strukturen</a></li>
-  <li><a href="#echtzeit-rendering-und-demo-szene" id="toc-echtzeit-rendering-und-demo-szene" class="nav-link" data-scroll-target="#echtzeit-rendering-und-demo-szene">Echtzeit-Rendering und Demo-Szene</a></li>
-  <li><a href="#forschung-und-moderne-anwendungen" id="toc-forschung-und-moderne-anwendungen" class="nav-link" data-scroll-target="#forschung-und-moderne-anwendungen">Forschung und moderne Anwendungen</a></li>
-  <li><a href="#einordnung" id="toc-einordnung" class="nav-link" data-scroll-target="#einordnung">Einordnung</a></li>
-  </ul></li>
-  <li><a href="#historischer-überblick" id="toc-historischer-überblick" class="nav-link" data-scroll-target="#historischer-überblick">Historischer Überblick</a></li>
-  <li><a href="#quellenverzeichnis" id="toc-quellenverzeichnis" class="nav-link" data-scroll-target="#quellenverzeichnis">Quellenverzeichnis</a></li>
+  <li><a href="#konzept-visualisierungen" id="toc-konzept-visualisierungen" class="nav-link active" data-scroll-target="#konzept-visualisierungen">Konzept-Visualisierungen</a></li>
+  <li><a href="#glsl-renderings" id="toc-glsl-renderings" class="nav-link" data-scroll-target="#glsl-renderings">GLSL-Renderings</a></li>
+  <li><a href="#csg-demo" id="toc-csg-demo" class="nav-link" data-scroll-target="#csg-demo">CSG-Demo</a></li>
   </ul>
 </nav>
     </div>
@@ -154,7 +140,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Einführung in das Thema</h1>
+<h1 class="title">Interaktive SDF-Rendering Demos</h1>
 </div>
 
 
@@ -164,7 +150,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Autor:in</div>
     <div class="quarto-title-meta-contents">
-             <p>Tobias Jäkel </p>
+             <p>Luis Kahles </p>
           </div>
   </div>
     
@@ -177,78 +163,94 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="motivation" class="level1">
-<h1>Motivation</h1>
-<section id="klassische-darstellung-von-3d-geometrie" class="level2">
-<h2 class="anchored" data-anchor-id="klassische-darstellung-von-3d-geometrie">Klassische Darstellung von 3D-Geometrie</h2>
-<p>In der Computergrafik werden dreidimensionale Objekte meist durch polygonale Netze beschrieben. Dabei wird die Oberfläche eines Modells durch eine Vielzahl kleiner Dreiecke approximiert. Diese Form der Geometrierepräsentation hat sich über viele Jahrzehnte hinweg etabliert und wird von moderner Grafik-Hardware direkt unterstützt. Aus diesem Grund bilden Polygonnetze die Grundlage nahezu aller heutigen Echtzeit-Rendering-Verfahren.</p>
-<p>Ein wesentlicher Vorteil polygonaler Netze liegt in ihrer Flexibilität. Sowohl einfache geometrische Körper als auch komplexe Modelle mit Millionen von Polygonen lassen sich auf diese Weise darstellen. Darüber hinaus existiert ein umfangreiches Ökosystem aus Modellierungswerkzeugen, Dateiformaten und Rendering-Pipelines, das auf dieser Repräsentation basiert.</p>
+<section id="konzept-visualisierungen" class="level2">
+<h2 class="anchored" data-anchor-id="konzept-visualisierungen">Konzept-Visualisierungen</h2>
+<p>Zweidimensionale Animationen zur schrittweisen Erklärung der SDF-Grundkonzepte.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Kugel als Beispiel</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">SDF-Distanzfeld</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">Ray-Marching Schritte</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false" href="">Ray-Marching Parametrisch</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p>Signed Distance Function einer Kugel: Der Slider verschiebt den Abfragepunkt, das Distanzfeld wird live berechnet. → <a href="../pages/theorie.html#die-kugel-als-beispiel">Die Kugel als Beispiel</a></p>
+<div class="demo-wide">
+<iframe src="../assets/demos/embedded/sphere-sdf-demo.html" height="460" scrolling="no" title="Kugel SDF Demo">
+</iframe>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p>Signed Distance Functions für sechs 2D-Primitive. Innenbereich (formspezifische Farbe) und Außenbereich (Dunkelblau) zeigen das Vorzeichen des Distanzwertes. → <a href="../pages/theorie.html#primitive-formen-und-operationen">Primitive Formen und Operationen</a></p>
+<div class="demo-wide">
+<iframe src="../assets/demos/sdf-heatmap/index.html" height="510" scrolling="no" title="SDF-Distanzfeld">
+</iframe>
+</div>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<p>Schrittweise Visualisierung des Sphere-Tracing-Algorithmus. Die gestrichelten Kreise zeigen den jeweils sicheren Schrittradius. → <a href="../pages/theorie.html#der-ray-marching-algorithmus">Der Ray-Marching-Algorithmus</a></p>
+<div class="demo-wide">
+<iframe src="../assets/demos/ray-marching-visualisierer/index.html" height="570" scrolling="no" title="Ray-Marching Schritte">
+</iframe>
+</div>
+</div>
+<div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
+<p>Parametrische Steuerung von Schrittweite und Szene. → <a href="../pages/theorie.html#der-ray-marching-algorithmus">Der Ray-Marching-Algorithmus</a></p>
+<div class="demo-wide">
+<iframe src="../assets/demos/embedded/raymarch-demo.html" height="480" scrolling="no" title="Ray-Marching Parametrisch">
+</iframe>
+</div>
+</div>
+</div>
+</div>
 </section>
-<section id="grenzen-polygonaler-netze" class="level2">
-<h2 class="anchored" data-anchor-id="grenzen-polygonaler-netze">Grenzen polygonaler Netze</h2>
-<p>Trotz ihrer weiten Verbreitung sind Polygonnetze nicht für jede Anwendung die ideale Lösung. Da die Geometrie explizit durch Vertices und Dreiecke beschrieben wird, steigt der Speicherbedarf mit zunehmendem Detailgrad eines Modells. Besonders bei sehr komplexen oder fein strukturierten Oberflächen kann dies zu großen Datenmengen führen.</p>
-<p>Auch die Modellierung mathematisch definierter Formen oder prozedural erzeugter Szenen gestaltet sich häufig aufwendiger. Sollen beispielsweise mehrere Grundkörper miteinander kombiniert oder komplexe geometrische Strukturen erzeugt werden, müssen die zugrunde liegenden Meshes entsprechend angepasst werden. Obwohl hierfür etablierte Verfahren existieren, kann die Verarbeitung schnell komplex werden.</p>
-<p>Darüber hinaus beschreibt ein Polygonnetz ausschließlich die Oberfläche eines Objekts. Informationen über den umgebenden Raum, beispielsweise Abstände zu Oberflächen oder die Zugehörigkeit eines Punktes zum Inneren oder Äußeren eines Objekts, sind nicht unmittelbar verfügbar und müssen zusätzlich berechnet werden.</p>
-</section>
-<section id="alternative-geometrierepräsentationen" class="level2">
-<h2 class="anchored" data-anchor-id="alternative-geometrierepräsentationen">Alternative Geometrierepräsentationen</h2>
-<p>Um einige dieser Einschränkungen zu umgehen, wurden verschiedene alternative Methoden zur Beschreibung von Geometrie entwickelt. Dazu zählen unter anderem Voxeldarstellungen, Punktwolken sowie implizite Oberflächen. Im Gegensatz zu Polygonnetzen wird die Geometrie hierbei nicht zwangsläufig durch eine Menge von Dreiecken beschrieben.</p>
-<p>Signed Distance Functions (SDFs) gehören zu den impliziten Geometrierepräsentationen. Anstatt die Oberfläche eines Objekts direkt zu speichern, wird eine Funktion definiert, die jedem Punkt im Raum einen signierten Abstand zur nächstgelegenen Oberfläche zuordnet. Die eigentliche Geometrie ergibt sich somit indirekt aus dieser Funktion.</p>
-<p>Da bei diesem Ansatz keine expliziten Dreiecke vorhanden sind, können klassische Rasterisierungsverfahren nicht unmittelbar angewendet werden. Stattdessen kommen häufig Ray-Marching-Verfahren zum Einsatz. Dabei werden Strahlen schrittweise durch die Szene verfolgt, bis eine Oberfläche gefunden wird. Die in der Signed Distance Function enthaltenen Distanzinformationen ermöglichen dabei eine effiziente Bestimmung der nächsten Schrittweite.</p>
-<p>Die Kombination aus Signed Distance Functions und Ray Marching hat sich insbesondere für prozedurale Szenen, mathematische Modelle und experimentelle Rendering-Techniken als interessante Alternative zu klassischen Polygonnetzen etabliert.</p>
-</section>
-</section>
-<section id="typische-anwendungsgebiete" class="level1">
-<h1>Typische Anwendungsgebiete</h1>
-<section id="prozedurale-modellierung" class="level2">
-<h2 class="anchored" data-anchor-id="prozedurale-modellierung">Prozedurale Modellierung</h2>
-<p>Ein häufiges Einsatzgebiet von Signed Distance Functions ist die prozedurale Erzeugung von Geometrie. Anstatt Objekte manuell zu modellieren und als Polygonnetz zu speichern, werden Formen durch mathematische Funktionen beschrieben und zur Laufzeit generiert. Dadurch lassen sich komplexe Szenen und Modelle mit vergleichsweise wenig Speicheraufwand erzeugen. Typische Beispiele sind Landschaften, Höhlensysteme oder abstrakte, algorithmisch erzeugte Welten und Sci-Fi-Strukturen.</p>
+<section id="glsl-renderings" class="level2">
+<h2 class="anchored" data-anchor-id="glsl-renderings">GLSL-Renderings</h2>
+<p>Vollständige WebGL-Renderer, die SDF-Primitive und Beleuchtungseffekte in Echtzeit im Browser berechnen.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Primitiv-Galerie</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Beleuchtung &amp; Schatten</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false" href="">Unendliche Repetition</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-4" role="tab" aria-controls="tabset-2-4" aria-selected="false" href="">Prozedurale Landschaft</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-5" role="tab" aria-controls="tabset-2-5" aria-selected="false" href="">Menger-Schwamm</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<p>Sechs klassische SDF-Primitive nach Inigo Quilez - Kugel, Box, Torus, Kapsel, Zylinder und Oktaeder - mit Ray-Marching und Phong-Beleuchtung. → <a href="../pages/theorie.html#primitive-formen-und-operationen">Primitive Formen und Operationen</a></p>
+<div class="demo-wide">
+<iframe src="../assets/demos/primitiv-galerie/index.html" height="620" scrolling="no" title="Primitiv-Galerie">
+</iframe>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<p>Phong-Shading mit hartem Schatten und optionaler Ambient Occlusion. Lichtquelle und Blocker-Objekt sind frei positionierbar; einzelne Beleuchtungskomponenten können ein- und ausgeschaltet werden. → <a href="../pages/theorie.html#shading-und-beleuchtung">Shading und Beleuchtung</a></p>
+<div class="demo-wide">
+<iframe src="../assets/demos/beleuchtung-schatten/index.html" height="720" scrolling="no" title="Beleuchtung und Schatten">
+</iframe>
+</div>
+</div>
+<div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
+<p>Domain-Repetition mit <code>mod()</code>: Ein einzelnes SDF-Objekt wird durch eine Faltung des Koordinatenraums unendlich oft wiederholt - ohne Mehraufwand zur Laufzeit. Die Kamera fliegt automatisch durch das Feld; Farben, Schatten und Ambient Occlusion werden prozedural berechnet.</p>
+<div class="demo-wide">
+<iframe src="../assets/demos/unendliche-repetition/index.html" height="560" scrolling="no" title="Unendliche Repetition">
+</iframe>
+</div>
+</div>
+<div id="tabset-2-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-4-tab">
+<p>Eine vollständig prozedurale Berglandschaft - kein einziges Polygon. Die Geometrie entsteht aus Fractional Brownian Motion (FBM) als Terrain-SDF. Mit WASD oder den Pfeiltasten durch die Szene navigieren; die Detail-Stufe zeigt, wie mehr FBM-Oktaven feinere Strukturen erzeugen.</p>
 <div class="demo-wide">
 <iframe src="../assets/demos/prozedurale-landschaft/index.html" height="610" scrolling="yes" title="Prozedurale Landschaft">
 </iframe>
 </div>
-</section>
-<section id="constructive-solid-geometry" class="level2">
-<h2 class="anchored" data-anchor-id="constructive-solid-geometry">Constructive Solid Geometry</h2>
-<p>Signed Distance Functions eignen sich besonders gut für Constructive Solid Geometry (CSG). Dabei werden komplexe Objekte aus einfachen Grundkörpern wie Kugeln, Würfeln oder Zylindern zusammengesetzt. Operationen wie Vereinigung, Schnittmenge oder Differenz können direkt auf den zugrunde liegenden Distanzfunktionen formuliert werden. Dies ermöglicht eine flexible und oft sehr elegante Modellierung komplexer Geometrien.</p>
-<p>[Beispielbild.png]</p>
-</section>
-<section id="fraktale-und-mathematische-strukturen" class="level2">
-<h2 class="anchored" data-anchor-id="fraktale-und-mathematische-strukturen">Fraktale und mathematische Strukturen</h2>
-<p>Ein weiterer Anwendungsbereich ist die Darstellung mathematisch definierter Objekte und Fraktale. Bekannte Beispiele sind die Mandelbulb oder die Mandelbox. Solche Strukturen weisen häufig eine sehr hohe geometrische Komplexität und feine Details auf, die mit klassischen Polygonnetzen nur schwer darstellbar wären. Durch die mathematische Beschreibung der Geometrie eignen sich SDF-basierte Verfahren besonders gut für die Visualisierung solcher Formen.</p>
+</div>
+<div id="tabset-2-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-5-tab">
+<p>Iteriertes CSG: Ein Würfel wird durch dreifaches Subtrahieren von Kreuzformen zum Menger-Schwamm - einem klassischen 3D-Fraktal. Jede Iterationsstufe verfeinert die Struktur um Faktor 3; die Schnittansicht zeigt das fraktale Innenleben. → <a href="../pages/einfuehrung.html#fraktale-und-mathematische-strukturen">Fraktale und mathematische Strukturen</a></p>
 <div class="demo-wide">
-<iframe src="../assets/demos/menger-schwamm/index.html" height="580" scrolling="no" title="Menger-Schwamm">
+<iframe src="../assets/demos/menger-schwamm/index.html" height="560" scrolling="no" title="Menger-Schwamm">
 </iframe>
 </div>
+</div>
+</div>
+</div>
 </section>
-<section id="echtzeit-rendering-und-demo-szene" class="level2">
-<h2 class="anchored" data-anchor-id="echtzeit-rendering-und-demo-szene">Echtzeit-Rendering und Demo-Szene</h2>
-<p>Große Bekanntheit erlangten Signed Distance Functions durch die Demo-Szene und moderne Shader-Programmierung. Da sich komplexe Geometrie direkt im Shader beschreiben lässt, können beeindruckende Szenen mit vergleichsweise wenig Programmcode erzeugt werden. Besonders bei sogenannten 4k- oder 64k-Intros, bei denen die gesamte Anwendung nur wenige Kilobyte groß sein darf, bieten SDFs erhebliche Vorteile gegenüber gespeicherter Polygongeometrie.</p>
-<p>[Beispielbild.png]</p>
-</section>
-<section id="forschung-und-moderne-anwendungen" class="level2">
-<h2 class="anchored" data-anchor-id="forschung-und-moderne-anwendungen">Forschung und moderne Anwendungen</h2>
-<p>Auch in aktuellen Forschungsgebieten spielen Distanzfunktionen eine wichtige Rolle. Sie werden unter anderem für Kollisionsabfragen, Robotik, 3D-Rekonstruktion und Verfahren des Neural Renderings eingesetzt. Insbesondere die Repräsentation von Geometrie durch Distanzfelder hat in den letzten Jahren neue Ansätze zur Erfassung und Rekonstruktion realer Szenen ermöglicht.</p>
-<p>[Beispielbild.png]</p>
-</section>
-<section id="einordnung" class="level2">
-<h2 class="anchored" data-anchor-id="einordnung">Einordnung</h2>
-<p>Trotz ihrer vielseitigen Einsatzmöglichkeiten haben Signed Distance Functions klassische Polygonnetze bislang nicht ersetzt. Moderne Grafik-Hardware ist weiterhin stark auf die Verarbeitung polygonaler Geometrie optimiert, weshalb Meshes in den meisten Echtzeit-Anwendungen dominieren. SDFs werden daher vor allem in Bereichen eingesetzt, in denen ihre mathematische Beschreibung und die daraus resultierende Flexibilität besondere Vorteile bieten.</p>
-</section>
-</section>
-<section id="historischer-überblick" class="level1">
-<h1>Historischer Überblick</h1>
-<p>Die Idee, Geometrie durch mathematische Funktionen zu beschreiben, reicht deutlich weiter zurück als moderne Echtzeit-Rendering-Verfahren. Bereits in frühen Arbeiten zu impliziten Oberflächen wurden Formen nicht durch Polygonnetze dargestellt, sondern durch Funktionen definiert, deren Nullstellen die Oberfläche eines Objekts beschreiben. Solche Ansätze wurden vor allem im wissenschaftlichen Umfeld und in der geometrischen Modellierung untersucht.</p>
-<p>Im Laufe der Zeit entstand das Konzept von Distanzfunktionen, bei denen nicht nur die Lage einer Oberfläche, sondern auch der Abstand zu ihr beschrieben wird. Daraus entwickelten sich schließlich Signed Distance Functions, die zusätzlich zwischen Punkten innerhalb und außerhalb eines Objekts unterscheiden können. Diese Repräsentation erwies sich als besonders nützlich, da sie neben der Beschreibung der Geometrie auch Informationen über den umgebenden Raum bereitstellt.</p>
-<p>Ein entscheidender Meilenstein folgte 1995 mit der Veröffentlichung des Sphere-Tracing-Verfahrens durch John C. Hart. Die grundlegende Idee bestand darin, die in einer Signed Distance Function enthaltenen Abstandsinformationen zu nutzen, um Strahlen effizient durch eine Szene zu verfolgen. Im Gegensatz zu klassischen Verfahren kann dabei die Schrittweite eines Strahls direkt aus der Distanz zur nächsten Oberfläche abgeleitet werden.</p>
-<p>Die Kombination aus Signed Distance Functions und Sphere Tracing bildet bis heute die theoretische Grundlage vieler Ray-Marching-Verfahren und stellt einen wichtigen Entwicklungsschritt im Bereich impliziter Geometrierepräsentationen dar.</p>
-</section>
-<section id="quellenverzeichnis" class="level1">
-<h1>Quellenverzeichnis</h1>
-<p>Sphere Tracing: A Geometric Method for the Antialiased Ray Tracing of Implicit Surfaces, John C. Hart, 1995, https://www.researchgate.net/publication/2792108_Sphere_Tracing_A_Geometric_Method_for_the_Antialiased_Ray_Tracing_of_Implicit_Surfaces</p>
-<p>Distance Functions, Inigo Quilez, https://iquilezles.org/articles/distfunctions/</p>
-<p>Ray Marching, Inigo Quilez, https://iquilezles.org/articles/raymarchingdf/</p>
-<p>Ray Marching and Signed Distance Functions, Jamie Wong, https://jamie-wong.com/2016/07/15/ray-marching-signed-distance-functions/</p>
+<section id="csg-demo" class="level2">
+<h2 class="anchored" data-anchor-id="csg-demo">CSG-Demo</h2>
+<p>Constructive Solid Geometry: Vereinigung, Schnittmenge und Differenz zweier SDF-Primitive - mit einstellbarer Verschmelzung und frei wählbaren Grundkörpern. → <a href="../pages/csg.html#csg-live-demo">CSG Live-Demo</a></p>
+<div class="demo-wide">
+<iframe src="../assets/demos/csg-live/index.html" height="650" scrolling="no" title="CSG-Demo">
+</iframe>
+</div>
 
 
 </section>

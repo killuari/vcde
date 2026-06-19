@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ray-Marching Visualisierer</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 0;
+      padding: 12px 16px 10px;
+      background: #fff;
+      color: #333;
+    }
+    .ctrl-btn {
+      padding: 0.28rem 0.8rem;
+      border-radius: 6px;
+      border: 2px solid #bbb;
+      background: #f0f0f0;
+      color: #333;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-family: system-ui, sans-serif;
+      white-space: nowrap;
+    }
+    .ctrl-btn.active {
+      background: #4a90d9;
+      color: #fff;
+      border-color: #4a90d9;
+    }
+    .ctrl-group { display: flex; flex-direction: column; gap: 0.3rem; }
+    .ctrl-label { font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.04em; }
+    .btn-row    { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+  <div>
+
+    <div style="display:flex; flex-wrap:wrap; gap:1.1rem; align-items:flex-end; margin-bottom:0.9rem;">
+
+      <!-- Schritte + Play/Reset -->
+      <div class="ctrl-group">
+        <div class="ctrl-label">Schritte: <strong style="color:#222;" id="val-steps">0</strong></div>
+        <input type="range" id="sl-steps" min="0" max="20" step="1" value="0"
+               style="width:200px; accent-color:#4a90d9; margin:0;">
+        <div class="btn-row">
+          <button id="btn-play" class="ctrl-btn"
+                  style="background:#44aa66; border-color:#44aa66; color:#fff; padding:0.3rem 1rem;">
+            &#9654; Play
+          </button>
+          <button id="btn-reset" class="ctrl-btn">&#8635; Reset</button>
+        </div>
+      </div>
+
+      <!-- Geschwindigkeit -->
+      <div class="ctrl-group">
+        <div class="ctrl-label">Geschwindigkeit</div>
+        <div class="btn-row">
+          <button id="btn-speed-slow"   class="ctrl-btn"        onclick="setSpeed('slow')">Langsam</button>
+          <button id="btn-speed-normal" class="ctrl-btn active" onclick="setSpeed('normal')">Normal</button>
+          <button id="btn-speed-fast"   class="ctrl-btn"        onclick="setSpeed('fast')">Schnell</button>
+        </div>
+      </div>
+
+      <!-- Szene -->
+      <div class="ctrl-group">
+        <div class="ctrl-label">Szene</div>
+        <div class="btn-row">
+          <button id="btn-scene-0" class="ctrl-btn active" onclick="setScene(0)">1 Objekt</button>
+          <button id="btn-scene-1" class="ctrl-btn"        onclick="setScene(1)">2 Objekte</button>
+        </div>
+      </div>
+
+      <!-- Anzeige -->
+      <div class="ctrl-group">
+        <div class="ctrl-label">Anzeige</div>
+        <div class="btn-row">
+          <button id="btn-circles" class="ctrl-btn active" onclick="toggleCircles()">Distanzkreise</button>
+          <button id="btn-labels"  class="ctrl-btn active" onclick="toggleLabels()">Labels</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="display:flex; flex-wrap:wrap; gap:1.5rem; align-items:flex-start;">
+
+      <canvas id="canvas" width="520" height="370"
+              style="border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,0.25); max-width:100%; display:block; flex-shrink:0;">
+      </canvas>
+
+      <!-- Ray-Winkel (vertical slider) -->
+      <div style="display:flex; flex-direction:column; align-items:center; gap:0.4rem; padding-top:0.3rem; min-width:70px;">
+        <div class="ctrl-label" style="text-align:center;">Ray-<br>Winkel</div>
+        <div style="font-size:0.88rem; color:#222; font-weight:bold;"><span id="val-angle">-34</span>°</div>
+        <input type="range" id="sl-angle" min="-70" max="15" step="1" value="-34"
+               style="height:240px; writing-mode:vertical-lr; accent-color:#4a90d9; cursor:pointer; margin:0;">
+      </div>
+
+    </div>
+
+  </div>
+  <script src="demo.js"></script>
+</body>
+</html>
