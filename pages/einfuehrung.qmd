@@ -35,7 +35,16 @@ Die Kombination aus Signed Distance Functions und Ray Marching hat sich insbeson
 
 Ein häufiges Einsatzgebiet von Signed Distance Functions ist die prozedurale Erzeugung von Geometrie. Anstatt Objekte manuell zu modellieren und als Polygonnetz zu speichern, werden Formen durch mathematische Funktionen beschrieben und zur Laufzeit generiert. Dadurch lassen sich komplexe Szenen und Modelle mit vergleichsweise wenig Speicheraufwand erzeugen. Typische Beispiele sind Landschaften, Höhlensysteme oder abstrakte, algorithmisch erzeugte Welten und Sci-Fi-Strukturen.
 
-[Beispielbild.png]
+```{=html}
+<div class="demo-wide">
+<iframe
+  src="../assets/demos/prozedurale-landschaft/index.html"
+  height="610"
+  scrolling="yes"
+  title="Prozedurale Landschaft">
+</iframe>
+</div>
+```
 
 ## Constructive Solid Geometry
 

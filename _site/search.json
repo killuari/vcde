@@ -18,14 +18,14 @@
     "href": "pages/demos.html#glsl-renderings",
     "title": "Interaktive SDF-Rendering Demos",
     "section": "GLSL-Renderings",
-    "text": "GLSL-Renderings\nVollständige WebGL-Renderer, die SDF-Primitive und Beleuchtungseffekte in Echtzeit im Browser berechnen.\n\nPrimitiv-GalerieBeleuchtung & Schatten\n\n\nSechs klassische SDF-Primitive nach Inigo Quilez — Kugel, Box, Torus, Kapsel, Zylinder und Oktaeder — mit Ray-Marching und Phong-Beleuchtung. → Primitive Formen und Operationen\n\n\n\n\n\n\nPhong-Shading mit hartem Schatten und optionaler Ambient Occlusion. Lichtquelle und Blocker-Objekt sind frei positionierbar; einzelne Beleuchtungskomponenten können ein- und ausgeschaltet werden. → Shading und Beleuchtung"
+    "text": "GLSL-Renderings\nVollständige WebGL-Renderer, die SDF-Primitive und Beleuchtungseffekte in Echtzeit im Browser berechnen.\n\nPrimitiv-GalerieBeleuchtung & SchattenUnendliche RepetitionProzedurale Landschaft\n\n\nSechs klassische SDF-Primitive nach Inigo Quilez - Kugel, Box, Torus, Kapsel, Zylinder und Oktaeder - mit Ray-Marching und Phong-Beleuchtung. → Primitive Formen und Operationen\n\n\n\n\n\n\nPhong-Shading mit hartem Schatten und optionaler Ambient Occlusion. Lichtquelle und Blocker-Objekt sind frei positionierbar; einzelne Beleuchtungskomponenten können ein- und ausgeschaltet werden. → Shading und Beleuchtung\n\n\n\n\n\n\nDomain-Repetition mit mod(): Ein einzelnes SDF-Objekt wird durch eine Faltung des Koordinatenraums unendlich oft wiederholt - ohne Mehraufwand zur Laufzeit. Die Kamera fliegt automatisch durch das Feld; Farben, Schatten und Ambient Occlusion werden prozedural berechnet.\n\n\n\n\n\n\nEine vollständig prozedurale Berglandschaft - kein einziges Polygon. Die Geometrie entsteht aus Fractional Brownian Motion (FBM) als Terrain-SDF. Mit WASD oder den Pfeiltasten durch die Szene navigieren; die Detail-Stufe zeigt, wie mehr FBM-Oktaven feinere Strukturen erzeugen."
   },
   {
     "objectID": "pages/demos.html#csg-demo",
     "href": "pages/demos.html#csg-demo",
     "title": "Interaktive SDF-Rendering Demos",
     "section": "CSG-Demo",
-    "text": "CSG-Demo\nConstructive Solid Geometry: Vereinigung, Schnittmenge und Differenz zweier SDF-Primitive. → Kombination mehrerer Objekte"
+    "text": "CSG-Demo\nConstructive Solid Geometry: Vereinigung, Schnittmenge und Differenz zweier SDF-Primitive - mit einstellbarer Verschmelzung und frei wählbaren Grundkörpern. → CSG Live-Demo"
   },
   {
     "objectID": "pages/verwandte-methoden.html",
@@ -74,7 +74,7 @@
     "href": "pages/einfuehrung.html#prozedurale-modellierung",
     "title": "Einführung in das Thema",
     "section": "Prozedurale Modellierung",
-    "text": "Prozedurale Modellierung\nEin häufiges Einsatzgebiet von Signed Distance Functions ist die prozedurale Erzeugung von Geometrie. Anstatt Objekte manuell zu modellieren und als Polygonnetz zu speichern, werden Formen durch mathematische Funktionen beschrieben und zur Laufzeit generiert. Dadurch lassen sich komplexe Szenen und Modelle mit vergleichsweise wenig Speicheraufwand erzeugen. Typische Beispiele sind Landschaften, Höhlensysteme oder abstrakte, algorithmisch erzeugte Welten und Sci-Fi-Strukturen.\n[Beispielbild.png]"
+    "text": "Prozedurale Modellierung\nEin häufiges Einsatzgebiet von Signed Distance Functions ist die prozedurale Erzeugung von Geometrie. Anstatt Objekte manuell zu modellieren und als Polygonnetz zu speichern, werden Formen durch mathematische Funktionen beschrieben und zur Laufzeit generiert. Dadurch lassen sich komplexe Szenen und Modelle mit vergleichsweise wenig Speicheraufwand erzeugen. Typische Beispiele sind Landschaften, Höhlensysteme oder abstrakte, algorithmisch erzeugte Welten und Sci-Fi-Strukturen."
   },
   {
     "objectID": "pages/einfuehrung.html#constructive-solid-geometry",

@@ -79,7 +79,7 @@ Vollständige WebGL-Renderer, die SDF-Primitive und Beleuchtungseffekte in Echtz
 
 ## Primitiv-Galerie
 
-Sechs klassische SDF-Primitive nach Inigo Quilez — Kugel, Box, Torus, Kapsel, Zylinder und Oktaeder — mit Ray-Marching und Phong-Beleuchtung. → [Primitive Formen und Operationen](theorie.qmd#primitive-formen-und-operationen)
+Sechs klassische SDF-Primitive nach Inigo Quilez - Kugel, Box, Torus, Kapsel, Zylinder und Oktaeder - mit Ray-Marching und Phong-Beleuchtung. → [Primitive Formen und Operationen](theorie.qmd#primitive-formen-und-operationen)
 
 ```{=html}
 <div class="demo-wide">
@@ -107,16 +107,46 @@ Phong-Shading mit hartem Schatten und optionaler Ambient Occlusion. Lichtquelle 
 </div>
 ```
 
-:::
+## Unendliche Repetition
 
-## CSG-Demo
-
-Constructive Solid Geometry: Vereinigung, Schnittmenge und Differenz zweier SDF-Primitive. → [Kombination mehrerer Objekte](theorie.qmd#kombination-mehrerer-objekte)
+Domain-Repetition mit `mod()`: Ein einzelnes SDF-Objekt wird durch eine Faltung des Koordinatenraums unendlich oft wiederholt - ohne Mehraufwand zur Laufzeit. Die Kamera fliegt automatisch durch das Feld; Farben, Schatten und Ambient Occlusion werden prozedural berechnet.
 
 ```{=html}
 <div class="demo-wide">
 <iframe
-  src="../assets/demos/embedded/csg-demo.html"
+  src="../assets/demos/unendliche-repetition/index.html"
+  height="560"
+  scrolling="no"
+  title="Unendliche Repetition">
+</iframe>
+</div>
+```
+
+## Prozedurale Landschaft
+
+Eine vollständig prozedurale Berglandschaft - kein einziges Polygon. Die Geometrie entsteht aus Fractional Brownian Motion (FBM) als Terrain-SDF. Mit WASD oder den Pfeiltasten durch die Szene navigieren; die Detail-Stufe zeigt, wie mehr FBM-Oktaven feinere Strukturen erzeugen.
+
+```{=html}
+<div class="demo-wide">
+<iframe
+  src="../assets/demos/prozedurale-landschaft/index.html"
+  height="610"
+  scrolling="yes"
+  title="Prozedurale Landschaft">
+</iframe>
+</div>
+```
+
+:::
+
+## CSG-Demo
+
+Constructive Solid Geometry: Vereinigung, Schnittmenge und Differenz zweier SDF-Primitive - mit einstellbarer Verschmelzung und frei wählbaren Grundkörpern. → [CSG Live-Demo](csg.qmd#csg-live-demo)
+
+```{=html}
+<div class="demo-wide">
+<iframe
+  src="../assets/demos/csg-live/index.html"
   height="650"
   scrolling="no"
   title="CSG-Demo">

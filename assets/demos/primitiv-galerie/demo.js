@@ -132,7 +132,7 @@
             btn.style.borderColor = active ? '#4a90d9' : '#bbb';
         }
 
-        // sdBox (1) and sdOctahedron (5) have 47-char code lines — widen panel slightly
+        // sdBox (1) and sdOctahedron (5) have 47-char code lines - widen panel slightly
         document.getElementById('ctrl-panel').style.maxWidth =
             (idx === 1 || idx === 5) ? '385px' : '360px';
 
