@@ -56,7 +56,16 @@ Signed Distance Functions eignen sich besonders gut für Constructive Solid Geom
 
 Ein weiterer Anwendungsbereich ist die Darstellung mathematisch definierter Objekte und Fraktale. Bekannte Beispiele sind die Mandelbulb oder die Mandelbox. Solche Strukturen weisen häufig eine sehr hohe geometrische Komplexität und feine Details auf, die mit klassischen Polygonnetzen nur schwer darstellbar wären. Durch die mathematische Beschreibung der Geometrie eignen sich SDF-basierte Verfahren besonders gut für die Visualisierung solcher Formen.
 
-[Beispielbild.png]
+```{=html}
+<div class="demo-wide">
+<iframe
+  src="../assets/demos/menger-schwamm/index.html"
+  height="580"
+  scrolling="no"
+  title="Menger-Schwamm">
+</iframe>
+</div>
+```
 
 ## Echtzeit-Rendering und Demo-Szene
 

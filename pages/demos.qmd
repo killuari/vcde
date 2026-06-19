@@ -137,6 +137,21 @@ Eine vollständig prozedurale Berglandschaft - kein einziges Polygon. Die Geomet
 </div>
 ```
 
+## Menger-Schwamm
+
+Iteriertes CSG: Ein Würfel wird durch dreifaches Subtrahieren von Kreuzformen zum Menger-Schwamm - einem klassischen 3D-Fraktal. Jede Iterationsstufe verfeinert die Struktur um Faktor 3; die Schnittansicht zeigt das fraktale Innenleben. → [Fraktale und mathematische Strukturen](einfuehrung.qmd#fraktale-und-mathematische-strukturen)
+
+```{=html}
+<div class="demo-wide">
+<iframe
+  src="../assets/demos/menger-schwamm/index.html"
+  height="560"
+  scrolling="no"
+  title="Menger-Schwamm">
+</iframe>
+</div>
+```
+
 :::
 
 ## CSG-Demo
