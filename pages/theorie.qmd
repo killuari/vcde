@@ -70,36 +70,6 @@ Die folgende 3D-Demo rendert dieselben Primitive per Ray Marching direkt im Brow
 
 <iframe class="demo-embed" src="../assets/demos/primitiv-galerie/index.html" height="620"></iframe>
 
-## Kombination mehrerer Objekte
-
-Während einzelne Primitive bereits einfache geometrische Formen beschreiben können, entstehen interessante Szenen meist erst durch die Kombination mehrerer Objekte. Ein großer Vorteil von Signed Distance Functions besteht darin, dass solche Kombinationen direkt auf den zugrunde liegenden Distanzfunktionen durchgeführt werden können.
-
-Eine häufig verwendete Technik ist die sogenannte Constructive Solid Geometry (CSG). Dabei werden komplexe Objekte aus einfachen Grundkörpern zusammengesetzt. Die wichtigsten Operationen sind die Vereinigung, die Schnittmenge und die Differenz zweier Objekte.
-
-Für die Vereinigung zweier Objekte wird jeweils die kleinere der beiden Distanzen verwendet:
-
-$$
-d = \min(d_1, d_2)
-$$
-
-Die Schnittmenge kann durch das Maximum beider Distanzen beschrieben werden:
-
-$$
-d = \max(d_1, d_2)
-$$
-
-Für die Differenz eines Objekts (d_1) und eines Objekts (d_2) ergibt sich:
-
-$$
-d = \max(d_1, -d_2)
-$$
-
-Dadurch lassen sich komplexe Formen auf einfache Weise aus wenigen Grundkörpern erzeugen. Die mathematische Beschreibung der Geometrie bleibt dabei kompakt und kann flexibel erweitert oder verändert werden.
-
-<iframe class="demo-embed" src="../assets/demos/embedded/csg-demo.html" height="650"></iframe>
-
-Die Möglichkeit, Geometrie durch mathematische Operationen zu kombinieren, zählt zu den zentralen Stärken von Signed Distance Functions und ist ein wesentlicher Grund für ihren Einsatz in der prozeduralen Modellierung und beim Ray-Marching-Rendering.
-
 # Ray Marching
 
 ## Grundidee
@@ -148,7 +118,7 @@ Das hier beschriebene Verfahren wird häufig als Ray Marching bezeichnet. Genaue
 
 ## Abbruchbedingungen
 
-Da eine Oberfläche in der Praxis selten exakt getroffen wird, wird ein kleiner Schwellwert (\varepsilon) definiert. Unterschreitet die berechnete Distanz diesen Wert, gilt die Oberfläche als erreicht.
+Da eine Oberfläche in der Praxis selten exakt getroffen wird, wird ein kleiner Schwellwert $\varepsilon$ definiert. Unterschreitet die berechnete Distanz diesen Wert, gilt die Oberfläche als erreicht.
 
 Zusätzlich werden maximale Grenzen für die Anzahl der Iterationen und die zurückgelegte Distanz festgelegt. Dadurch wird verhindert, dass ein Strahl unbegrenzt weiterläuft, falls keine Oberfläche getroffen wird.
 
@@ -211,7 +181,23 @@ Falls der Shadow Ray vor Erreichen der Lichtquelle auf eine Oberfläche trifft, 
 
 Die Schattenberechnung funktioniert damit ähnlich wie beim klassischen Ray Tracing. Der Unterschied liegt darin, dass auch dieser zusätzliche Strahl nicht gegen Dreiecke getestet wird, sondern wieder mithilfe der Signed Distance Function durch die Szene gemarcht wird.
 
-Auf diese Weise können Schatten direkt in das SDF-basierte Rendering integriert werden, ohne eine separate Schattenkarte oder explizite Geometrie zu benötigen.
+Auf diese Weise können Schatten direkt in das SDF-basierte Rendering integriert werden, ohne eine separate Schattenkarte (Shadow Map) oder explizite Geometrie zu benötigen.
+
+## Ambient Occlusion
+
+Ambient Occlusion (AO) ist eine Technik, die zur Verbesserung der Tiefenwahrnehmung und Realismus in 3D-Szenen eingesetzt wird.
+
+Die Grundidee besteht darin, abzuschätzen, wie stark ein Punkt auf einer Oberfläche von seiner Umgebung verdeckt wird. Befindet sich ein Punkt in einer offenen Region, kann Umgebungslicht ihn nahezu ungehindert erreichen. Liegt er dagegen in einer Ecke, einer Vertiefung oder nahe an anderen Objekten, wird ein Teil dieses Lichts blockiert und die Stelle erscheint dunkler.
+
+Bei SDF-basiertem Rendering lässt sich Ambient Occlusion vergleichsweise einfach berechnen. Ausgehend vom Oberflächenpunkt werden entlang der Oberflächennormalen mehrere Punkte in kleinen Abständen $h_i$ abgetastet. Für jeden dieser Punkte wird die Signed Distance Function ausgewertet und ein Distanzwert $d_i$ bestimmt.
+
+In einer offenen Umgebung entspricht die von der SDF zurückgegebene Distanz ungefähr dem gewählten Abtastabstand ($d_i \approx h_i$). Dies deutet darauf hin, dass sich entlang der Normalen keine weitere Geometrie in unmittelbarer Nähe befindet und der Punkt nur gering verdeckt wird. Befinden sich dagegen andere Oberflächen in der Nähe, fallen die gemessenen Distanzwerte kleiner aus als erwartet ($d_i < h_i$). Dies weist auf eine stärkere Verdeckung hin und reduziert den Ambient-Occlusion-Wert.
+
+Auf diese Weise lässt sich abschätzen, wie stark die Umgebung eines Punktes das einfallende Umgebungslicht blockiert. Bereiche mit hoher Verdeckung erscheinen dunkler, während offene Bereiche heller dargestellt werden.
+
+Im Gegensatz zu klassischen Schatten hängt Ambient Occlusion also nicht von einer bestimmten Lichtquelle ab. Stattdessen beschreibt sie die lokale geometrische Umgebung eines Punktes und erzeugt dadurch zusätzliche Tiefen- und Kontaktinformationen.
+
+## Demo
 
 Die folgende Demo demonstriert Phong-Beleuchtung mit hartem Schatten und optionaler Ambient Occlusion. Einzelne Beleuchtungskomponenten lassen sich ein- und ausschalten; Lichtquelle und Blocker-Objekt sind frei positionierbar.
 
