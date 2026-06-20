@@ -164,7 +164,6 @@ window.Quarto = {
   <li><a href="#formale-definition" id="toc-formale-definition" class="nav-link" data-scroll-target="#formale-definition">Formale Definition</a></li>
   <li><a href="#die-kugel-als-beispiel" id="toc-die-kugel-als-beispiel" class="nav-link" data-scroll-target="#die-kugel-als-beispiel">Die Kugel als Beispiel</a></li>
   <li><a href="#primitive-formen-und-operationen" id="toc-primitive-formen-und-operationen" class="nav-link" data-scroll-target="#primitive-formen-und-operationen">Primitive Formen und Operationen</a></li>
-  <li><a href="#kombination-mehrerer-objekte" id="toc-kombination-mehrerer-objekte" class="nav-link" data-scroll-target="#kombination-mehrerer-objekte">Kombination mehrerer Objekte</a></li>
   </ul></li>
   <li><a href="#ray-marching" id="toc-ray-marching" class="nav-link" data-scroll-target="#ray-marching">Ray Marching</a>
   <ul class="collapse">
@@ -178,6 +177,8 @@ window.Quarto = {
   <li><a href="#oberflächennormalen" id="toc-oberflächennormalen" class="nav-link" data-scroll-target="#oberflächennormalen">Oberflächennormalen</a></li>
   <li><a href="#phong-beleuchtungsmodell" id="toc-phong-beleuchtungsmodell" class="nav-link" data-scroll-target="#phong-beleuchtungsmodell">Phong-Beleuchtungsmodell</a></li>
   <li><a href="#schatten" id="toc-schatten" class="nav-link" data-scroll-target="#schatten">Schatten</a></li>
+  <li><a href="#ambient-occlusion" id="toc-ambient-occlusion" class="nav-link" data-scroll-target="#ambient-occlusion">Ambient Occlusion</a></li>
+  <li><a href="#demo" id="toc-demo" class="nav-link" data-scroll-target="#demo">Demo</a></li>
   </ul></li>
   <li><a href="#quellenverzeichnis" id="toc-quellenverzeichnis" class="nav-link" data-scroll-target="#quellenverzeichnis">Quellenverzeichnis</a></li>
   </ul>
@@ -259,27 +260,6 @@ f(\mathbf{p}) = \|\mathbf{p} - \mathbf{c}\| - r
 <iframe class="demo-embed" src="../assets/demos/primitiv-galerie/index.html" height="620">
 </iframe>
 </section>
-<section id="kombination-mehrerer-objekte" class="level2">
-<h2 class="anchored" data-anchor-id="kombination-mehrerer-objekte">Kombination mehrerer Objekte</h2>
-<p>Während einzelne Primitive bereits einfache geometrische Formen beschreiben können, entstehen interessante Szenen meist erst durch die Kombination mehrerer Objekte. Ein großer Vorteil von Signed Distance Functions besteht darin, dass solche Kombinationen direkt auf den zugrunde liegenden Distanzfunktionen durchgeführt werden können.</p>
-<p>Eine häufig verwendete Technik ist die sogenannte Constructive Solid Geometry (CSG). Dabei werden komplexe Objekte aus einfachen Grundkörpern zusammengesetzt. Die wichtigsten Operationen sind die Vereinigung, die Schnittmenge und die Differenz zweier Objekte.</p>
-<p>Für die Vereinigung zweier Objekte wird jeweils die kleinere der beiden Distanzen verwendet:</p>
-<p><span class="math display">\[
-d = \min(d_1, d_2)
-\]</span></p>
-<p>Die Schnittmenge kann durch das Maximum beider Distanzen beschrieben werden:</p>
-<p><span class="math display">\[
-d = \max(d_1, d_2)
-\]</span></p>
-<p>Für die Differenz eines Objekts (d_1) und eines Objekts (d_2) ergibt sich:</p>
-<p><span class="math display">\[
-d = \max(d_1, -d_2)
-\]</span></p>
-<p>Dadurch lassen sich komplexe Formen auf einfache Weise aus wenigen Grundkörpern erzeugen. Die mathematische Beschreibung der Geometrie bleibt dabei kompakt und kann flexibel erweitert oder verändert werden.</p>
-<iframe class="demo-embed" src="../assets/demos/embedded/csg-demo.html" height="650">
-</iframe>
-<p>Die Möglichkeit, Geometrie durch mathematische Operationen zu kombinieren, zählt zu den zentralen Stärken von Signed Distance Functions und ist ein wesentlicher Grund für ihren Einsatz in der prozeduralen Modellierung und beim Ray-Marching-Rendering.</p>
-</section>
 </section>
 <section id="ray-marching" class="level1">
 <h1>Ray Marching</h1>
@@ -324,7 +304,7 @@ d = \max(d_1, -d_2)
 </section>
 <section id="abbruchbedingungen" class="level2">
 <h2 class="anchored" data-anchor-id="abbruchbedingungen">Abbruchbedingungen</h2>
-<p>Da eine Oberfläche in der Praxis selten exakt getroffen wird, wird ein kleiner Schwellwert () definiert. Unterschreitet die berechnete Distanz diesen Wert, gilt die Oberfläche als erreicht.</p>
+<p>Da eine Oberfläche in der Praxis selten exakt getroffen wird, wird ein kleiner Schwellwert <span class="math inline">\(\varepsilon\)</span> definiert. Unterschreitet die berechnete Distanz diesen Wert, gilt die Oberfläche als erreicht.</p>
 <p>Zusätzlich werden maximale Grenzen für die Anzahl der Iterationen und die zurückgelegte Distanz festgelegt. Dadurch wird verhindert, dass ein Strahl unbegrenzt weiterläuft, falls keine Oberfläche getroffen wird.</p>
 <p>Diese Abbruchbedingungen stellen sicher, dass der Algorithmus auch für komplexe Szenen in einer endlichen Anzahl von Schritten terminiert.</p>
 </section>
@@ -372,7 +352,19 @@ I_d = \max(0,\mathbf n \cdot \mathbf l)
 <p>Für Schatten wird daher ein zusätzlicher Strahl verwendet. Nachdem durch Ray Marching ein Oberflächenpunkt gefunden wurde, wird von diesem Punkt aus ein zweiter Strahl in Richtung der Lichtquelle gesendet. Dieser sogenannte Shadow Ray überprüft, ob auf dem Weg zur Lichtquelle ein anderes Objekt getroffen wird.</p>
 <p>Falls der Shadow Ray vor Erreichen der Lichtquelle auf eine Oberfläche trifft, liegt der ursprüngliche Punkt im Schatten. Andernfalls wird er normal beleuchtet.</p>
 <p>Die Schattenberechnung funktioniert damit ähnlich wie beim klassischen Ray Tracing. Der Unterschied liegt darin, dass auch dieser zusätzliche Strahl nicht gegen Dreiecke getestet wird, sondern wieder mithilfe der Signed Distance Function durch die Szene gemarcht wird.</p>
-<p>Auf diese Weise können Schatten direkt in das SDF-basierte Rendering integriert werden, ohne eine separate Schattenkarte oder explizite Geometrie zu benötigen.</p>
+<p>Auf diese Weise können Schatten direkt in das SDF-basierte Rendering integriert werden, ohne eine separate Schattenkarte (Shadow Map) oder explizite Geometrie zu benötigen.</p>
+</section>
+<section id="ambient-occlusion" class="level2">
+<h2 class="anchored" data-anchor-id="ambient-occlusion">Ambient Occlusion</h2>
+<p>Ambient Occlusion (AO) ist eine Technik, die zur Verbesserung der Tiefenwahrnehmung und Realismus in 3D-Szenen eingesetzt wird.</p>
+<p>Die Grundidee besteht darin, abzuschätzen, wie stark ein Punkt auf einer Oberfläche von seiner Umgebung verdeckt wird. Befindet sich ein Punkt in einer offenen Region, kann Umgebungslicht ihn nahezu ungehindert erreichen. Liegt er dagegen in einer Ecke, einer Vertiefung oder nahe an anderen Objekten, wird ein Teil dieses Lichts blockiert und die Stelle erscheint dunkler.</p>
+<p>Bei SDF-basiertem Rendering lässt sich Ambient Occlusion vergleichsweise einfach berechnen. Ausgehend vom Oberflächenpunkt werden entlang der Oberflächennormalen mehrere Punkte in kleinen Abständen <span class="math inline">\(h_i\)</span> abgetastet. Für jeden dieser Punkte wird die Signed Distance Function ausgewertet und ein Distanzwert <span class="math inline">\(d_i\)</span> bestimmt.</p>
+<p>In einer offenen Umgebung entspricht die von der SDF zurückgegebene Distanz ungefähr dem gewählten Abtastabstand (<span class="math inline">\(d_i \approx h_i\)</span>). Dies deutet darauf hin, dass sich entlang der Normalen keine weitere Geometrie in unmittelbarer Nähe befindet und der Punkt nur gering verdeckt wird. Befinden sich dagegen andere Oberflächen in der Nähe, fallen die gemessenen Distanzwerte kleiner aus als erwartet (<span class="math inline">\(d_i &lt; h_i\)</span>). Dies weist auf eine stärkere Verdeckung hin und reduziert den Ambient-Occlusion-Wert.</p>
+<p>Auf diese Weise lässt sich abschätzen, wie stark die Umgebung eines Punktes das einfallende Umgebungslicht blockiert. Bereiche mit hoher Verdeckung erscheinen dunkler, während offene Bereiche heller dargestellt werden.</p>
+<p>Im Gegensatz zu klassischen Schatten hängt Ambient Occlusion also nicht von einer bestimmten Lichtquelle ab. Stattdessen beschreibt sie die lokale geometrische Umgebung eines Punktes und erzeugt dadurch zusätzliche Tiefen- und Kontaktinformationen.</p>
+</section>
+<section id="demo" class="level2">
+<h2 class="anchored" data-anchor-id="demo">Demo</h2>
 <p>Die folgende Demo demonstriert Phong-Beleuchtung mit hartem Schatten und optionaler Ambient Occlusion. Einzelne Beleuchtungskomponenten lassen sich ein- und ausschalten; Lichtquelle und Blocker-Objekt sind frei positionierbar.</p>
 <iframe class="demo-embed" src="../assets/demos/beleuchtung-schatten/index.html" height="730">
 </iframe>
