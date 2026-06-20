@@ -24,7 +24,26 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -110,6 +129,10 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">CSG</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="../pages/grenzen-artefakte.html"> 
+<span class="menu-text">Grenzen &amp; Artefakte</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link active" href="../pages/demos.html" aria-current="page"> 
 <span class="menu-text">Demos</span></a>
   </li>  
@@ -132,6 +155,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#konzept-visualisierungen" id="toc-konzept-visualisierungen" class="nav-link active" data-scroll-target="#konzept-visualisierungen">Konzept-Visualisierungen</a></li>
   <li><a href="#glsl-renderings" id="toc-glsl-renderings" class="nav-link" data-scroll-target="#glsl-renderings">GLSL-Renderings</a></li>
   <li><a href="#csg-demo" id="toc-csg-demo" class="nav-link" data-scroll-target="#csg-demo">CSG-Demo</a></li>
+  <li><a href="#quellenverzeichnis" id="toc-quellenverzeichnis" class="nav-link" data-scroll-target="#quellenverzeichnis">Quellenverzeichnis</a></li>
   </ul>
 </nav>
     </div>
@@ -204,31 +228,31 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="glsl-renderings">GLSL-Renderings</h2>
 <p>Vollständige WebGL-Renderer, die SDF-Primitive und Beleuchtungseffekte in Echtzeit im Browser berechnen.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Primitiv-Galerie</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Beleuchtung &amp; Schatten</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false" href="">Unendliche Repetition</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-4" role="tab" aria-controls="tabset-2-4" aria-selected="false" href="">Prozedurale Landschaft</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-5" role="tab" aria-controls="tabset-2-5" aria-selected="false" href="">Menger-Schwamm</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Primitiv-Galerie</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Beleuchtung &amp; Schatten</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false" href="">Unendliche Repetition</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-4" role="tab" aria-controls="tabset-2-4" aria-selected="false" href="">Prozedurale Landschaft</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-5" role="tab" aria-controls="tabset-2-5" aria-selected="false" href="">Menger-Schwamm</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-6" role="tab" aria-controls="tabset-2-6" aria-selected="false" href="">Schrittlimit</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-7-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-7" role="tab" aria-controls="tabset-2-7" aria-selected="false" href="">Abstandsschwelle</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
-<p>Sechs klassische SDF-Primitive nach Inigo Quilez - Kugel, Box, Torus, Kapsel, Zylinder und Oktaeder - mit Ray-Marching und Phong-Beleuchtung. → <a href="../pages/theorie.html#primitive-formen-und-operationen">Primitive Formen und Operationen</a></p>
+<p>Sechs klassische SDF-Primitive nach Inigo Quilez - Kugel, Box, Torus, Kapsel, Zylinder und Oktaeder - mit Ray-Marching und Phong-Beleuchtung <span class="citation" data-cites="quilez_distfunctions">(<a href="#ref-quilez_distfunctions" role="doc-biblioref">Quilez, o.&nbsp;J.-b</a>)</span>. → <a href="../pages/theorie.html#primitive-formen-und-operationen">Primitive Formen und Operationen</a></p>
 <div class="demo-wide">
 <iframe src="../assets/demos/primitiv-galerie/index.html" height="620" scrolling="no" title="Primitiv-Galerie">
 </iframe>
 </div>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
-<p>Phong-Shading mit hartem Schatten und optionaler Ambient Occlusion. Lichtquelle und Blocker-Objekt sind frei positionierbar; einzelne Beleuchtungskomponenten können ein- und ausgeschaltet werden. → <a href="../pages/theorie.html#shading-und-beleuchtung">Shading und Beleuchtung</a></p>
+<p>Phong-Shading mit hartem Schatten und optionaler Ambient Occlusion. Lichtquelle und Blocker-Objekt sind frei positionierbar; einzelne Beleuchtungskomponenten können ein- und ausgeschaltet werden <span class="citation" data-cites="quilez_rmshadows quilez_ao">(<a href="#ref-quilez_rmshadows" role="doc-biblioref">Quilez, o.&nbsp;J.-e</a>, <a href="#ref-quilez_ao" role="doc-biblioref">o.&nbsp;J.-a</a>)</span>. → <a href="../pages/theorie.html#shading-und-beleuchtung">Shading und Beleuchtung</a></p>
 <div class="demo-wide">
 <iframe src="../assets/demos/beleuchtung-schatten/index.html" height="720" scrolling="no" title="Beleuchtung und Schatten">
 </iframe>
 </div>
 </div>
 <div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
-<p>Domain-Repetition mit <code>mod()</code>: Ein einzelnes SDF-Objekt wird durch eine Faltung des Koordinatenraums unendlich oft wiederholt - ohne Mehraufwand zur Laufzeit. Die Kamera fliegt automatisch durch das Feld; Farben, Schatten und Ambient Occlusion werden prozedural berechnet.</p>
+<p>Domain-Repetition mit <code>mod()</code>: Ein einzelnes SDF-Objekt wird durch eine Faltung des Koordinatenraums unendlich oft wiederholt - ohne Mehraufwand zur Laufzeit <span class="citation" data-cites="quilez_distfunctions">(<a href="#ref-quilez_distfunctions" role="doc-biblioref">Quilez, o.&nbsp;J.-b</a>)</span>. Die Kamera fliegt automatisch durch das Feld; Farben, Schatten und Ambient Occlusion werden prozedural berechnet.</p>
 <div class="demo-wide">
 <iframe src="../assets/demos/unendliche-repetition/index.html" height="560" scrolling="no" title="Unendliche Repetition">
 </iframe>
 </div>
 </div>
 <div id="tabset-2-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-4-tab">
-<p>Eine vollständig prozedurale Berglandschaft - kein einziges Polygon. Die Geometrie entsteht aus Fractional Brownian Motion (FBM) als Terrain-SDF. Mit WASD oder den Pfeiltasten durch die Szene navigieren; die Detail-Stufe zeigt, wie mehr FBM-Oktaven feinere Strukturen erzeugen.</p>
+<p>Eine vollständig prozedurale Berglandschaft - kein einziges Polygon. Die Geometrie entsteht aus Fractional Brownian Motion (FBM) als Terrain-SDF <span class="citation" data-cites="quilez_fbm">(<a href="#ref-quilez_fbm" role="doc-biblioref">Quilez, o.&nbsp;J.-c</a>)</span>. Mit WASD oder den Pfeiltasten durch die Szene navigieren; die Detail-Stufe zeigt, wie mehr FBM-Oktaven feinere Strukturen erzeugen.</p>
 <div class="demo-wide">
 <iframe src="../assets/demos/prozedurale-landschaft/index.html" height="610" scrolling="yes" title="Prozedurale Landschaft">
 </iframe>
@@ -241,15 +265,49 @@ ul.task-list li input[type="checkbox"] {
 </iframe>
 </div>
 </div>
+<div id="tabset-2-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-6-tab">
+<p>Einstellbares <code>MAX_STEPS</code>-Limit macht sichtbar, wie weit entfernte Geometrie und flache Auftreffwinkel auf der Bodenebene mehr Marching-Iterationen benoetigen - und was passiert, wenn das Budget erschoepft ist. → <a href="../pages/grenzen-artefakte.html#schrittlimit">Grenzen &amp; Artefakte</a></p>
+<div class="demo-wide">
+<iframe src="../assets/demos/schrittlimit/index.html" height="620" scrolling="no" title="Schrittlimit">
+</iframe>
+</div>
+</div>
+<div id="tabset-2-7" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-7-tab">
+<p>Einstellbarer Treffschwellenwert <code>epsilon</code> zeigt, wie zu gross gewaehlte Werte Oberflächen aufgeblaest erscheinen lassen und eng beieinander liegende Formen optisch verschmelzen. → <a href="../pages/grenzen-artefakte.html#abstandsschwelle">Grenzen &amp; Artefakte</a></p>
+<div class="demo-wide">
+<iframe src="../assets/demos/abstandsschwelle/index.html" height="620" scrolling="no" title="Abstandsschwelle">
+</iframe>
+</div>
+</div>
 </div>
 </div>
 </section>
 <section id="csg-demo" class="level2">
 <h2 class="anchored" data-anchor-id="csg-demo">CSG-Demo</h2>
-<p>Constructive Solid Geometry: Vereinigung, Schnittmenge und Differenz zweier SDF-Primitive - mit einstellbarer Verschmelzung und frei wählbaren Grundkörpern. → <a href="../pages/csg.html#csg-live-demo">CSG Live-Demo</a></p>
+<p>Constructive Solid Geometry: Vereinigung, Schnittmenge und Differenz zweier SDF-Primitive - mit einstellbarer Verschmelzung und frei wählbaren Grundkörpern <span class="citation" data-cites="quilez_distfunctions quilez_smin">(<a href="#ref-quilez_distfunctions" role="doc-biblioref">Quilez, o.&nbsp;J.-b</a>, <a href="#ref-quilez_smin" role="doc-biblioref">o.&nbsp;J.-d</a>)</span>. → <a href="../pages/csg.html#csg-live-demo">CSG Live-Demo</a></p>
 <div class="demo-wide">
 <iframe src="../assets/demos/csg-live/index.html" height="650" scrolling="no" title="CSG-Demo">
 </iframe>
+</div>
+</section>
+<section id="quellenverzeichnis" class="level1 unnumbered">
+<h1 class="unnumbered">Quellenverzeichnis</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-quilez_ao" class="csl-entry" role="listitem">
+Quilez, Inigo. o.&nbsp;J.-a. <span>„Ambient Occlusion“</span>. Zugegriffen 20. Juni 2026. <a href="https://iquilezles.org/articles/ao/">https://iquilezles.org/articles/ao/</a>.
+</div>
+<div id="ref-quilez_distfunctions" class="csl-entry" role="listitem">
+Quilez, Inigo. o.&nbsp;J.-b. <span>„Distance Functions“</span>. Zugegriffen 20. Juni 2026. <a href="https://iquilezles.org/articles/distfunctions/">https://iquilezles.org/articles/distfunctions/</a>.
+</div>
+<div id="ref-quilez_fbm" class="csl-entry" role="listitem">
+Quilez, Inigo. o.&nbsp;J.-c. <span>„Fractional Brownian Motion“</span>. Zugegriffen 20. Juni 2026. <a href="https://iquilezles.org/articles/fbm/">https://iquilezles.org/articles/fbm/</a>.
+</div>
+<div id="ref-quilez_smin" class="csl-entry" role="listitem">
+Quilez, Inigo. o.&nbsp;J.-d. <span>„Smooth Minimum“</span>. Zugegriffen 20. Juni 2026. <a href="https://iquilezles.org/articles/smin/">https://iquilezles.org/articles/smin/</a>.
+</div>
+<div id="ref-quilez_rmshadows" class="csl-entry" role="listitem">
+Quilez, Inigo. o.&nbsp;J.-e. <span>„Soft Shadows in Raymarched Scenes“</span>. Zugegriffen 20. Juni 2026. <a href="https://iquilezles.org/articles/rmshadows/">https://iquilezles.org/articles/rmshadows/</a>.
+</div>
 </div>
 
 

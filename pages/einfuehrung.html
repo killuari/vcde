@@ -24,7 +24,26 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -110,6 +129,10 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">CSG</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="../pages/grenzen-artefakte.html"> 
+<span class="menu-text">Grenzen &amp; Artefakte</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../pages/demos.html"> 
 <span class="menu-text">Demos</span></a>
   </li>  
@@ -181,7 +204,7 @@ ul.task-list li input[type="checkbox"] {
 <h1>Motivation</h1>
 <section id="klassische-darstellung-von-3d-geometrie" class="level2">
 <h2 class="anchored" data-anchor-id="klassische-darstellung-von-3d-geometrie">Klassische Darstellung von 3D-Geometrie</h2>
-<p>In der Computergrafik werden dreidimensionale Objekte meist durch polygonale Netze beschrieben. Dabei wird die Oberfläche eines Modells durch eine Vielzahl kleiner Dreiecke approximiert. Diese Form der Geometrierepräsentation hat sich über viele Jahrzehnte hinweg etabliert und wird von moderner Grafik-Hardware direkt unterstützt. Aus diesem Grund bilden Polygonnetze die Grundlage nahezu aller heutigen Echtzeit-Rendering-Verfahren.</p>
+<p>In der Computergrafik werden dreidimensionale Objekte meist durch polygonale Netze beschrieben. Dabei wird die Oberfläche eines Modells durch eine Vielzahl kleiner Dreiecke approximiert. Diese Form der Geometrierepräsentation hat sich über viele Jahrzehnte hinweg etabliert und wird von moderner Grafik-Hardware direkt unterstützt. Aus diesem Grund bilden Polygonnetze die Grundlage nahezu aller heutigen Echtzeit-Rendering-Verfahren <span class="citation" data-cites="vc_geo">(<a href="#ref-vc_geo" role="doc-biblioref">Friedrich 2025</a>)</span>.</p>
 <p>Ein wesentlicher Vorteil polygonaler Netze liegt in ihrer Flexibilität. Sowohl einfache geometrische Körper als auch komplexe Modelle mit Millionen von Polygonen lassen sich auf diese Weise darstellen. Darüber hinaus existiert ein umfangreiches Ökosystem aus Modellierungswerkzeugen, Dateiformaten und Rendering-Pipelines, das auf dieser Repräsentation basiert.</p>
 </section>
 <section id="grenzen-polygonaler-netze" class="level2">
@@ -195,7 +218,7 @@ ul.task-list li input[type="checkbox"] {
 <p>Um einige dieser Einschränkungen zu umgehen, wurden verschiedene alternative Methoden zur Beschreibung von Geometrie entwickelt. Dazu zählen unter anderem Voxeldarstellungen, Punktwolken sowie implizite Oberflächen. Im Gegensatz zu Polygonnetzen wird die Geometrie hierbei nicht zwangsläufig durch eine Menge von Dreiecken beschrieben.</p>
 <p>Signed Distance Functions (SDFs) gehören zu den impliziten Geometrierepräsentationen. Anstatt die Oberfläche eines Objekts direkt zu speichern, wird eine Funktion definiert, die jedem Punkt im Raum einen signierten Abstand zur nächstgelegenen Oberfläche zuordnet. Die eigentliche Geometrie ergibt sich somit indirekt aus dieser Funktion.</p>
 <p>Da bei diesem Ansatz keine expliziten Dreiecke vorhanden sind, können klassische Rasterisierungsverfahren nicht unmittelbar angewendet werden. Stattdessen kommen häufig Ray-Marching-Verfahren zum Einsatz. Dabei werden Strahlen schrittweise durch die Szene verfolgt, bis eine Oberfläche gefunden wird. Die in der Signed Distance Function enthaltenen Distanzinformationen ermöglichen dabei eine effiziente Bestimmung der nächsten Schrittweite.</p>
-<p>Die Kombination aus Signed Distance Functions und Ray Marching hat sich insbesondere für prozedurale Szenen, mathematische Modelle und experimentelle Rendering-Techniken als interessante Alternative zu klassischen Polygonnetzen etabliert.</p>
+<p>Die Kombination aus Signed Distance Functions und Ray Marching hat sich insbesondere für prozedurale Szenen, mathematische Modelle und experimentelle Rendering-Techniken als interessante Alternative zu klassischen Polygonnetzen etabliert <span class="citation" data-cites="quilez_distfunctions wong2016">(<a href="#ref-quilez_distfunctions" role="doc-biblioref">Quilez, o.&nbsp;J.</a>; <a href="#ref-wong2016" role="doc-biblioref">Wong 2016</a>)</span>.</p>
 </section>
 </section>
 <section id="typische-anwendungsgebiete" class="level1">
@@ -240,15 +263,25 @@ ul.task-list li input[type="checkbox"] {
 <h1>Historischer Überblick</h1>
 <p>Die Idee, Geometrie durch mathematische Funktionen zu beschreiben, reicht deutlich weiter zurück als moderne Echtzeit-Rendering-Verfahren. Bereits in frühen Arbeiten zu impliziten Oberflächen wurden Formen nicht durch Polygonnetze dargestellt, sondern durch Funktionen definiert, deren Nullstellen die Oberfläche eines Objekts beschreiben. Solche Ansätze wurden vor allem im wissenschaftlichen Umfeld und in der geometrischen Modellierung untersucht.</p>
 <p>Im Laufe der Zeit entstand das Konzept von Distanzfunktionen, bei denen nicht nur die Lage einer Oberfläche, sondern auch der Abstand zu ihr beschrieben wird. Daraus entwickelten sich schließlich Signed Distance Functions, die zusätzlich zwischen Punkten innerhalb und außerhalb eines Objekts unterscheiden können. Diese Repräsentation erwies sich als besonders nützlich, da sie neben der Beschreibung der Geometrie auch Informationen über den umgebenden Raum bereitstellt.</p>
-<p>Ein entscheidender Meilenstein folgte 1995 mit der Veröffentlichung des Sphere-Tracing-Verfahrens durch John C. Hart. Die grundlegende Idee bestand darin, die in einer Signed Distance Function enthaltenen Abstandsinformationen zu nutzen, um Strahlen effizient durch eine Szene zu verfolgen. Im Gegensatz zu klassischen Verfahren kann dabei die Schrittweite eines Strahls direkt aus der Distanz zur nächsten Oberfläche abgeleitet werden.</p>
+<p>Ein entscheidender Meilenstein folgte 1996 mit der Veröffentlichung des Sphere-Tracing-Verfahrens durch John C. Hart <span class="citation" data-cites="hart1996">(<a href="#ref-hart1996" role="doc-biblioref">Hart 1996</a>)</span>. Die grundlegende Idee bestand darin, die in einer Signed Distance Function enthaltenen Abstandsinformationen zu nutzen, um Strahlen effizient durch eine Szene zu verfolgen. Im Gegensatz zu klassischen Verfahren kann dabei die Schrittweite eines Strahls direkt aus der Distanz zur nächsten Oberfläche abgeleitet werden.</p>
 <p>Die Kombination aus Signed Distance Functions und Sphere Tracing bildet bis heute die theoretische Grundlage vieler Ray-Marching-Verfahren und stellt einen wichtigen Entwicklungsschritt im Bereich impliziter Geometrierepräsentationen dar.</p>
 </section>
-<section id="quellenverzeichnis" class="level1">
-<h1>Quellenverzeichnis</h1>
-<p>Sphere Tracing: A Geometric Method for the Antialiased Ray Tracing of Implicit Surfaces, John C. Hart, 1995, https://www.researchgate.net/publication/2792108_Sphere_Tracing_A_Geometric_Method_for_the_Antialiased_Ray_Tracing_of_Implicit_Surfaces</p>
-<p>Distance Functions, Inigo Quilez, https://iquilezles.org/articles/distfunctions/</p>
-<p>Ray Marching, Inigo Quilez, https://iquilezles.org/articles/raymarchingdf/</p>
-<p>Ray Marching and Signed Distance Functions, Jamie Wong, https://jamie-wong.com/2016/07/15/ray-marching-signed-distance-functions/</p>
+<section id="quellenverzeichnis" class="level1 unnumbered">
+<h1 class="unnumbered">Quellenverzeichnis</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-vc_geo" class="csl-entry" role="listitem">
+Friedrich, Markus. 2025. <em>Visual Computing: Syntheseparadigmen Geometriebeschreibung</em>.
+</div>
+<div id="ref-hart1996" class="csl-entry" role="listitem">
+Hart, John C. 1996. <span>„Sphere Tracing: A Geometric Method for the Antialiased Ray Tracing of Implicit Surfaces“</span>. <em>The Visual Computer</em> 12 (10): 527–45. <a href="https://www.researchgate.net/publication/2792108_Sphere_Tracing_A_Geometric_Method_for_the_Antialiased_Ray_Tracing_of_Implicit_Surfaces">https://www.researchgate.net/publication/2792108_Sphere_Tracing_A_Geometric_Method_for_the_Antialiased_Ray_Tracing_of_Implicit_Surfaces</a>.
+</div>
+<div id="ref-quilez_distfunctions" class="csl-entry" role="listitem">
+Quilez, Inigo. o.&nbsp;J. <span>„Distance Functions“</span>. Zugegriffen 20. Juni 2026. <a href="https://iquilezles.org/articles/distfunctions/">https://iquilezles.org/articles/distfunctions/</a>.
+</div>
+<div id="ref-wong2016" class="csl-entry" role="listitem">
+Wong, Jamie. 2016. <span>„Ray Marching and Signed Distance Functions“</span>. <a href="https://jamie-wong.com/2016/07/15/ray-marching-signed-distance-functions/">https://jamie-wong.com/2016/07/15/ray-marching-signed-distance-functions/</a>.
+</div>
+</div>
 
 
 </section>

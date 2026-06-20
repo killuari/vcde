@@ -24,7 +24,26 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -139,6 +158,10 @@ window.Quarto = {
 <span class="menu-text">CSG</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="../pages/grenzen-artefakte.html"> 
+<span class="menu-text">Grenzen &amp; Artefakte</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../pages/demos.html"> 
 <span class="menu-text">Demos</span></a>
   </li>  
@@ -231,7 +254,7 @@ window.Quarto = {
 f:\mathbb R^3 \rightarrow \mathbb R
 \]</span></p>
 <p>aufgefasst werden, die jedem Punkt im dreidimensionalen Raum einen signierten Abstand zur nächstgelegenen Oberfläche zuordnet.</p>
-<p>Da eine SDF nicht nur Informationen über die Oberfläche, sondern über den gesamten Raum enthält, eignet sie sich besonders gut für geometrische Abfragen und Verfahren wie Ray Marching, die direkt auf diesen Distanzinformationen aufbauen.</p>
+<p>Da eine SDF nicht nur Informationen über die Oberfläche, sondern über den gesamten Raum enthält, eignet sie sich besonders gut für geometrische Abfragen und Verfahren wie Ray Marching, die direkt auf diesen Distanzinformationen aufbauen <span class="citation" data-cites="vc_geo wong2016">(<a href="#ref-vc_geo" role="doc-biblioref">Friedrich 2025b</a>; <a href="#ref-wong2016" role="doc-biblioref">Wong 2016</a>)</span>.</p>
 </section>
 <section id="die-kugel-als-beispiel" class="level2">
 <h2 class="anchored" data-anchor-id="die-kugel-als-beispiel">Die Kugel als Beispiel</h2>
@@ -253,7 +276,7 @@ f(\mathbf{p}) = \|\mathbf{p} - \mathbf{c}\| - r
 <p>Die Kugel stellt das einfachste Beispiel einer Signed Distance Function dar. Das zugrunde liegende Konzept lässt sich jedoch auf viele weitere geometrische Grundkörper übertragen. Für jede Form existiert eine Funktion, die für einen beliebigen Punkt im Raum den Abstand zur nächstgelegenen Oberfläche berechnet.</p>
 <p>Zu den häufig verwendeten Primitiven gehören unter anderem Kugeln, Ebenen, Quader, Zylinder und Torusse. Obwohl sich die zugrunde liegenden Formeln teilweise deutlich unterscheiden, verfolgen sie alle dasselbe Ziel: Die Geometrie eines Objekts wird durch eine mathematische Beschreibung seiner Oberfläche definiert.</p>
 <p>Primitive SDFs bilden die Grundlage für die Modellierung komplexerer Szenen. Ähnlich wie bei der klassischen 3D-Modellierung werden zunächst einfache Grundformen definiert, aus denen anschließend komplexe Strukturen aufgebaut werden können.</p>
-<p>Die folgende Abbildung zeigt einige typische Primitive sowie ihre jeweiligen Signed Distance Functions.</p>
+<p>Die folgende Abbildung zeigt einige typische Primitive sowie ihre jeweiligen Signed Distance Functions <span class="citation" data-cites="quilez_distfunctions">(<a href="#ref-quilez_distfunctions" role="doc-biblioref">Quilez, o.&nbsp;J.-b</a>)</span>.</p>
 <iframe class="demo-embed" src="../assets/demos/sdf-heatmap/index.html" height="510">
 </iframe>
 <p>Die folgende 3D-Demo rendert dieselben Primitive per Ray Marching direkt im Browser. Form und Parameter lassen sich interaktiv anpassen.</p>
@@ -300,7 +323,7 @@ f(\mathbf{p}) = \|\mathbf{p} - \mathbf{c}\| - r
 </div>
 </div>
 </div>
-<p>Das hier beschriebene Verfahren wird häufig als Ray Marching bezeichnet. Genauer handelt es sich aber um eine spezielle Form des Ray Marching, die als Sphere Tracing bekannt ist. Sie wurde 1995 von John C. Hart vorgestellt und nutzt die Distanzinformationen einer Signed Distance Function, um die Schrittweite adaptiv anzupassen.</p>
+<p>Das hier beschriebene Verfahren wird häufig als Ray Marching bezeichnet. Genauer handelt es sich aber um eine spezielle Form des Ray Marching, die als Sphere Tracing bekannt ist. Sie wurde 1996 von John C. Hart vorgestellt und nutzt die Distanzinformationen einer Signed Distance Function, um die Schrittweite adaptiv anzupassen <span class="citation" data-cites="hart1996">(<a href="#ref-hart1996" role="doc-biblioref">Hart 1996</a>)</span>.</p>
 </section>
 <section id="abbruchbedingungen" class="level2">
 <h2 class="anchored" data-anchor-id="abbruchbedingungen">Abbruchbedingungen</h2>
@@ -328,7 +351,7 @@ f(x,y+\varepsilon,z)-f(x,y-\varepsilon,z) \\
 f(x,y,z+\varepsilon)-f(x,y,z-\varepsilon)
 \end{bmatrix}
 \]</span></p>
-<p>Der resultierende Vektor wird anschließend normalisiert, da für die Beleuchtung nur die Richtung der Normalen relevant ist.</p>
+<p>Der resultierende Vektor wird anschließend normalisiert, da für die Beleuchtung nur die Richtung der Normalen relevant ist <span class="citation" data-cites="vc_geo quilez_raymarch">(<a href="#ref-vc_geo" role="doc-biblioref">Friedrich 2025b</a>; <a href="#ref-quilez_raymarch" role="doc-biblioref">Quilez, o.&nbsp;J.-c</a>)</span>.</p>
 </section>
 <section id="phong-beleuchtungsmodell" class="level2">
 <h2 class="anchored" data-anchor-id="phong-beleuchtungsmodell">Phong-Beleuchtungsmodell</h2>
@@ -344,15 +367,15 @@ f(x,y,z+\varepsilon)-f(x,y,z-\varepsilon)
 I_d = \max(0,\mathbf n \cdot \mathbf l)
 \]</span></p>
 <p>Flächen, die direkt zur Lichtquelle zeigen, werden dadurch stärker beleuchtet als Flächen, die in einem flachen Winkel zur Lichtquelle stehen.</p>
-<p>Durch die Kombination von Ambient-, Diffuse- und Specular-Komponente entsteht ein deutlich realistischeres Erscheinungsbild der Szene. Die zuvor berechneten Oberflächennormalen spielen dabei eine zentrale Rolle, da sie die Grundlage für sämtliche Beleuchtungsberechnungen bilden.</p>
+<p>Durch die Kombination von Ambient-, Diffuse- und Specular-Komponente entsteht ein deutlich realistischeres Erscheinungsbild der Szene. Die zuvor berechneten Oberflächennormalen spielen dabei eine zentrale Rolle, da sie die Grundlage für sämtliche Beleuchtungsberechnungen bilden <span class="citation" data-cites="vc_frag">(<a href="#ref-vc_frag" role="doc-biblioref">Friedrich 2025a</a>)</span>.</p>
 </section>
 <section id="schatten" class="level2">
 <h2 class="anchored" data-anchor-id="schatten">Schatten</h2>
-<p>Das Beleuchtungsmodell allein entscheidet nur, wie stark ein Punkt beleuchtet würde, wenn ihn das Licht erreicht. Es prüft jedoch nicht automatisch, ob sich zwischen dem Punkt und der Lichtquelle ein anderes Objekt befindet.</p>
+<p>Das Beleuchtungsmodell allein entscheidet nur, wie stark ein Punkt beleuchtet würde, wenn ihn das Licht erreicht. Es prüft jedoch nicht automatisch, ob sich zwischen dem Punkt und der Lichtquelle ein anderes Objekt befindet. Im Gegensatz zum vereinfachten lokalen Beleuchtungsmodell der Vorlesung <span class="citation" data-cites="vc_frag">(<a href="#ref-vc_frag" role="doc-biblioref">Friedrich 2025a</a>)</span> lassen sich beim SDF-basierten Ray Marching Schatten direkt ohne separate Shadow Maps realisieren.</p>
 <p>Für Schatten wird daher ein zusätzlicher Strahl verwendet. Nachdem durch Ray Marching ein Oberflächenpunkt gefunden wurde, wird von diesem Punkt aus ein zweiter Strahl in Richtung der Lichtquelle gesendet. Dieser sogenannte Shadow Ray überprüft, ob auf dem Weg zur Lichtquelle ein anderes Objekt getroffen wird.</p>
 <p>Falls der Shadow Ray vor Erreichen der Lichtquelle auf eine Oberfläche trifft, liegt der ursprüngliche Punkt im Schatten. Andernfalls wird er normal beleuchtet.</p>
 <p>Die Schattenberechnung funktioniert damit ähnlich wie beim klassischen Ray Tracing. Der Unterschied liegt darin, dass auch dieser zusätzliche Strahl nicht gegen Dreiecke getestet wird, sondern wieder mithilfe der Signed Distance Function durch die Szene gemarcht wird.</p>
-<p>Auf diese Weise können Schatten direkt in das SDF-basierte Rendering integriert werden, ohne eine separate Schattenkarte (Shadow Map) oder explizite Geometrie zu benötigen.</p>
+<p>Auf diese Weise können Schatten direkt in das SDF-basierte Rendering integriert werden, ohne eine separate Schattenkarte (Shadow Map) oder explizite Geometrie zu benötigen <span class="citation" data-cites="quilez_rmshadows">(<a href="#ref-quilez_rmshadows" role="doc-biblioref">Quilez, o.&nbsp;J.-d</a>)</span>.</p>
 </section>
 <section id="ambient-occlusion" class="level2">
 <h2 class="anchored" data-anchor-id="ambient-occlusion">Ambient Occlusion</h2>
@@ -361,7 +384,7 @@ I_d = \max(0,\mathbf n \cdot \mathbf l)
 <p>Bei SDF-basiertem Rendering lässt sich Ambient Occlusion vergleichsweise einfach berechnen. Ausgehend vom Oberflächenpunkt werden entlang der Oberflächennormalen mehrere Punkte in kleinen Abständen <span class="math inline">\(h_i\)</span> abgetastet. Für jeden dieser Punkte wird die Signed Distance Function ausgewertet und ein Distanzwert <span class="math inline">\(d_i\)</span> bestimmt.</p>
 <p>In einer offenen Umgebung entspricht die von der SDF zurückgegebene Distanz ungefähr dem gewählten Abtastabstand (<span class="math inline">\(d_i \approx h_i\)</span>). Dies deutet darauf hin, dass sich entlang der Normalen keine weitere Geometrie in unmittelbarer Nähe befindet und der Punkt nur gering verdeckt wird. Befinden sich dagegen andere Oberflächen in der Nähe, fallen die gemessenen Distanzwerte kleiner aus als erwartet (<span class="math inline">\(d_i &lt; h_i\)</span>). Dies weist auf eine stärkere Verdeckung hin und reduziert den Ambient-Occlusion-Wert.</p>
 <p>Auf diese Weise lässt sich abschätzen, wie stark die Umgebung eines Punktes das einfallende Umgebungslicht blockiert. Bereiche mit hoher Verdeckung erscheinen dunkler, während offene Bereiche heller dargestellt werden.</p>
-<p>Im Gegensatz zu klassischen Schatten hängt Ambient Occlusion also nicht von einer bestimmten Lichtquelle ab. Stattdessen beschreibt sie die lokale geometrische Umgebung eines Punktes und erzeugt dadurch zusätzliche Tiefen- und Kontaktinformationen.</p>
+<p>Im Gegensatz zu klassischen Schatten hängt Ambient Occlusion also nicht von einer bestimmten Lichtquelle ab. Stattdessen beschreibt sie die lokale geometrische Umgebung eines Punktes und erzeugt dadurch zusätzliche Tiefen- und Kontaktinformationen <span class="citation" data-cites="quilez_ao">(<a href="#ref-quilez_ao" role="doc-biblioref">Quilez, o.&nbsp;J.-a</a>)</span>.</p>
 </section>
 <section id="demo" class="level2">
 <h2 class="anchored" data-anchor-id="demo">Demo</h2>
@@ -370,12 +393,34 @@ I_d = \max(0,\mathbf n \cdot \mathbf l)
 </iframe>
 </section>
 </section>
-<section id="quellenverzeichnis" class="level1">
-<h1>Quellenverzeichnis</h1>
-<p>Sphere Tracing: A Geometric Method for the Antialiased Ray Tracing of Implicit Surfaces, John C. Hart, 1995, https://www.researchgate.net/publication/2792108_Sphere_Tracing_A_Geometric_Method_for_the_Antialiased_Ray_Tracing_of_Implicit_Surfaces</p>
-<p>Distance Functions, Inigo Quilez, https://iquilezles.org/articles/distfunctions/</p>
-<p>Ray Marching, Inigo Quilez, https://iquilezles.org/articles/raymarchingdf/</p>
-<p>Ray Marching and Signed Distance Functions, Jamie Wong, https://jamie-wong.com/2016/07/15/ray-marching-signed-distance-functions/</p>
+<section id="quellenverzeichnis" class="level1 unnumbered">
+<h1 class="unnumbered">Quellenverzeichnis</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-vc_frag" class="csl-entry" role="listitem">
+Friedrich, Markus. 2025a. <em>Visual Computing: Rasterisierung Fragment Verarbeitung</em>.
+</div>
+<div id="ref-vc_geo" class="csl-entry" role="listitem">
+Friedrich, Markus. 2025b. <em>Visual Computing: Syntheseparadigmen Geometriebeschreibung</em>.
+</div>
+<div id="ref-hart1996" class="csl-entry" role="listitem">
+Hart, John C. 1996. <span>„Sphere Tracing: A Geometric Method for the Antialiased Ray Tracing of Implicit Surfaces“</span>. <em>The Visual Computer</em> 12 (10): 527–45. <a href="https://www.researchgate.net/publication/2792108_Sphere_Tracing_A_Geometric_Method_for_the_Antialiased_Ray_Tracing_of_Implicit_Surfaces">https://www.researchgate.net/publication/2792108_Sphere_Tracing_A_Geometric_Method_for_the_Antialiased_Ray_Tracing_of_Implicit_Surfaces</a>.
+</div>
+<div id="ref-quilez_ao" class="csl-entry" role="listitem">
+Quilez, Inigo. o.&nbsp;J.-a. <span>„Ambient Occlusion“</span>. Zugegriffen 20. Juni 2026. <a href="https://iquilezles.org/articles/ao/">https://iquilezles.org/articles/ao/</a>.
+</div>
+<div id="ref-quilez_distfunctions" class="csl-entry" role="listitem">
+Quilez, Inigo. o.&nbsp;J.-b. <span>„Distance Functions“</span>. Zugegriffen 20. Juni 2026. <a href="https://iquilezles.org/articles/distfunctions/">https://iquilezles.org/articles/distfunctions/</a>.
+</div>
+<div id="ref-quilez_raymarch" class="csl-entry" role="listitem">
+Quilez, Inigo. o.&nbsp;J.-c. <span>„Ray Marching Distance Fields“</span>. Zugegriffen 20. Juni 2026. <a href="https://iquilezles.org/articles/raymarchingdf/">https://iquilezles.org/articles/raymarchingdf/</a>.
+</div>
+<div id="ref-quilez_rmshadows" class="csl-entry" role="listitem">
+Quilez, Inigo. o.&nbsp;J.-d. <span>„Soft Shadows in Raymarched Scenes“</span>. Zugegriffen 20. Juni 2026. <a href="https://iquilezles.org/articles/rmshadows/">https://iquilezles.org/articles/rmshadows/</a>.
+</div>
+<div id="ref-wong2016" class="csl-entry" role="listitem">
+Wong, Jamie. 2016. <span>„Ray Marching and Signed Distance Functions“</span>. <a href="https://jamie-wong.com/2016/07/15/ray-marching-signed-distance-functions/">https://jamie-wong.com/2016/07/15/ray-marching-signed-distance-functions/</a>.
+</div>
+</div>
 
 
 </section>

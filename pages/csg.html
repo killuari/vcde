@@ -59,7 +59,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -174,6 +193,10 @@ window.Quarto = {
 <span class="menu-text">CSG</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="../pages/grenzen-artefakte.html"> 
+<span class="menu-text">Grenzen &amp; Artefakte</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../pages/demos.html"> 
 <span class="menu-text">Demos</span></a>
   </li>  
@@ -196,6 +219,7 @@ window.Quarto = {
   <li><a href="#constructive-solid-geometry-mit-sdfs" id="toc-constructive-solid-geometry-mit-sdfs" class="nav-link active" data-scroll-target="#constructive-solid-geometry-mit-sdfs">Constructive Solid Geometry mit SDFs</a></li>
   <li><a href="#glatte-übergänge" id="toc-glatte-übergänge" class="nav-link" data-scroll-target="#glatte-übergänge">Glatte Übergänge</a></li>
   <li><a href="#csg-live-demo" id="toc-csg-live-demo" class="nav-link" data-scroll-target="#csg-live-demo">CSG Live-Demo</a></li>
+  <li><a href="#quellenverzeichnis" id="toc-quellenverzeichnis" class="nav-link" data-scroll-target="#quellenverzeichnis">Quellenverzeichnis</a></li>
   </ul>
 </nav>
     </div>
@@ -230,7 +254,7 @@ window.Quarto = {
 <section id="constructive-solid-geometry-mit-sdfs" class="level2">
 <h2 class="anchored" data-anchor-id="constructive-solid-geometry-mit-sdfs">Constructive Solid Geometry mit SDFs</h2>
 <p>Constructive Solid Geometry beschreibt komplexe Körper als Kombination einfacher Grundformen. Statt ein Objekt direkt als Mesh zu modellieren, setzt man es aus Primitiven wie Kugeln, Boxen, Tori oder Zylindern zusammen. Bei klassischen Meshes bedeutet das oft geometrische Operationen auf Dreiecken. Bei SDFs reicht dagegen häufig eine einfache mathematische Kombination der Distanzwerte.</p>
-<p>Angenommen, <span class="math inline">\(d_1(\mathbf{p})\)</span> ist die Distanz zur ersten Form und <span class="math inline">\(d_2(\mathbf{p})\)</span> die Distanz zur zweiten Form. Dann lassen sich die wichtigsten CSG-Operationen so ausdrücken:</p>
+<p>Angenommen, <span class="math inline">\(d_1(\mathbf{p})\)</span> ist die Distanz zur ersten Form und <span class="math inline">\(d_2(\mathbf{p})\)</span> die Distanz zur zweiten Form. Dann lassen sich die wichtigsten CSG-Operationen so ausdrücken <span class="citation" data-cites="quilez_distfunctions">(<a href="#ref-quilez_distfunctions" role="doc-biblioref">Quilez, o.&nbsp;J.-a</a>)</span>:</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -288,7 +312,7 @@ window.Quarto = {
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">float</span> h <span class="op">=</span> <span class="bu">clamp</span><span class="op">(</span><span class="fl">0.5</span> <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> <span class="op">(</span>d2 <span class="op">-</span> d1<span class="op">)</span> <span class="op">/</span> k<span class="op">,</span> <span class="fl">0.0</span><span class="op">,</span> <span class="fl">1.0</span><span class="op">);</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">return</span> <span class="bu">mix</span><span class="op">(</span>d2<span class="op">,</span> d1<span class="op">,</span> h<span class="op">)</span> <span class="op">-</span> k <span class="op">*</span> h <span class="op">*</span> <span class="op">(</span><span class="fl">1.0</span> <span class="op">-</span> h<span class="op">);</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Der Parameter <code>k</code> kontrolliert die Breite des Übergangsbereichs. Bei <code>k = 0</code> bleibt die CSG-Operation hart. Je größer <code>k</code> wird, desto weicher gehen die Oberflächen ineinander über. Das ist ein Beispiel dafür, dass SDFs nicht nur boolesche Geometrieoperationen erlauben, sondern auch kontinuierliche Formmanipulationen.</p>
+<p>Der Parameter <code>k</code> kontrolliert die Breite des Übergangsbereichs. Bei <code>k = 0</code> bleibt die CSG-Operation hart. Je größer <code>k</code> wird, desto weicher gehen die Oberflächen ineinander über. Das ist ein Beispiel dafür, dass SDFs nicht nur boolesche Geometrieoperationen erlauben, sondern auch kontinuierliche Formmanipulationen <span class="citation" data-cites="quilez_smin">(<a href="#ref-quilez_smin" role="doc-biblioref">Quilez, o.&nbsp;J.-b</a>)</span>.</p>
 </section>
 <section id="csg-live-demo" class="level2">
 <h2 class="anchored" data-anchor-id="csg-live-demo">CSG Live-Demo</h2>
@@ -298,6 +322,17 @@ window.Quarto = {
 </iframe>
 </div>
 
+</section>
+<section id="quellenverzeichnis" class="level1 unnumbered">
+<h1 class="unnumbered">Quellenverzeichnis</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-quilez_distfunctions" class="csl-entry" role="listitem">
+Quilez, Inigo. o.&nbsp;J.-a. <span>„Distance Functions“</span>. Zugegriffen 20. Juni 2026. <a href="https://iquilezles.org/articles/distfunctions/">https://iquilezles.org/articles/distfunctions/</a>.
+</div>
+<div id="ref-quilez_smin" class="csl-entry" role="listitem">
+Quilez, Inigo. o.&nbsp;J.-b. <span>„Smooth Minimum“</span>. Zugegriffen 20. Juni 2026. <a href="https://iquilezles.org/articles/smin/">https://iquilezles.org/articles/smin/</a>.
+</div>
+</div>
 
 
 </section>

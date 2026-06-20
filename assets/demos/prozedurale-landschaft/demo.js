@@ -2,11 +2,11 @@
     const canvas = document.getElementById('canvas');
     const sandbox = new GlslCanvas(canvas);
 
-    var camX = 0.0, camZ = 0.0;
+    var camX = 5.0, camZ = 8.0;
     var keys = {};
 
     const u = {
-        u_cam_pos: [0.0, 0.0],
+        u_cam_pos: [5.0, 8.0],
         u_detail: 1.0,
         u_fog: 0.025,
     };

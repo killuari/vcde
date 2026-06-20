@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Moritz Potthoff">
+<meta name="author" content="Luis Kahles">
 
-<title>Verwandte Methoden – SDF Rendering via Ray Marching</title>
+<title>Grenzen &amp; Artefakte – SDF Rendering via Ray Marching</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -121,7 +121,7 @@ div.csl-indent {
 <span class="menu-text">Theorie</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../pages/verwandte-methoden.html" aria-current="page"> 
+    <a class="nav-link" href="../pages/verwandte-methoden.html"> 
 <span class="menu-text">Verwandte Methoden</span></a>
   </li>  
   <li class="nav-item">
@@ -129,7 +129,7 @@ div.csl-indent {
 <span class="menu-text">CSG</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../pages/grenzen-artefakte.html"> 
+    <a class="nav-link active" href="../pages/grenzen-artefakte.html" aria-current="page"> 
 <span class="menu-text">Grenzen &amp; Artefakte</span></a>
   </li>  
   <li class="nav-item">
@@ -152,8 +152,7 @@ div.csl-indent {
     <h2 id="toc-title">Auf dieser Seite</h2>
    
   <ul class="collapse">
-  <li><a href="#einordnung" id="toc-einordnung" class="nav-link active" data-scroll-target="#einordnung">Einordnung</a></li>
-  <li><a href="#quellenverzeichnis" id="toc-quellenverzeichnis" class="nav-link" data-scroll-target="#quellenverzeichnis">Quellenverzeichnis</a></li>
+  <li><a href="#quellenverzeichnis" id="toc-quellenverzeichnis" class="nav-link active" data-scroll-target="#quellenverzeichnis">Quellenverzeichnis</a></li>
   </ul>
 </nav>
     </div>
@@ -162,7 +161,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Verwandte Methoden</h1>
+<h1 class="title">Grenzen &amp; Artefakte</h1>
 </div>
 
 
@@ -172,7 +171,7 @@ div.csl-indent {
     <div>
     <div class="quarto-title-meta-heading">Autor:in</div>
     <div class="quarto-title-meta-contents">
-             <p>Moritz Potthoff </p>
+             <p>Luis Kahles </p>
           </div>
   </div>
     
@@ -185,72 +184,31 @@ div.csl-indent {
 </header>
 
 
-<p>Dieser Abschnitt fokussiert sich auf die Frage, wie Ray Marching mit SDFs im Vergleich zu bekannteren Rendering-Methoden einzuordnen ist und warum Constructive Solid Geometry (CSG) bei SDFs besonders elegant funktioniert.</p>
-<section id="einordnung" class="level2">
-<h2 class="anchored" data-anchor-id="einordnung">Einordnung</h2>
-<p>In der klassischen Echtzeitgrafik dominiert <strong>Rasterisierung</strong>. Dabei werden 3D-Modelle als Dreiecksnetze beschrieben, auf den Bildschirm projiziert und anschließend Pixel für Pixel eingefärbt. Diese Methode ist sehr schnell und bildet die Grundlage moderner Game-Engines. Ihr Nachteil ist, dass jede Form zuerst als Mesh vorliegen muss. Sehr glatte, prozedurale oder topologisch komplexe Formen können dadurch aufwendig werden, weil die Geometrie explizit modelliert, gespeichert und verwaltet werden muss <span class="citation" data-cites="vc_geo vc_raster">(<a href="#ref-vc_geo" role="doc-biblioref">Friedrich 2025b</a>, <a href="#ref-vc_raster" role="doc-biblioref">2025a</a>)</span>.</p>
-<p><strong>Ray Tracing</strong> verfolgt dagegen Strahlen von der Kamera in die Szene und berechnet Schnittpunkte mit Objekten. Dadurch lassen sich Reflexionen, Schatten und globale Beleuchtung sehr natürlich beschreiben. Klassisches Ray Tracing braucht jedoch explizite Schnittpunkttests, zum Beispiel zwischen einem Strahl und einem Dreieck, einer Kugel oder einer Ebene. Die Szene besteht also weiterhin aus konkreten geometrischen Primitiven oder Meshes <span class="citation" data-cites="whitted1980">(<a href="#ref-whitted1980" role="doc-biblioref">Whitted 1980</a>)</span>.</p>
-<p><strong>Ray Marching</strong> mit SDFs arbeitet anders. Ein Strahl wird nicht direkt mit einem Objekt geschnitten. Stattdessen fragt man an jedem Punkt entlang des Strahls: “Wie weit bin ich mindestens von der nächsten Oberfläche entfernt?” Diese Distanz kommt aus der Signed Distance Function. Der Strahl kann dann genau um diese Distanz weiterlaufen, ohne eine Oberfläche zu überspringen. Dieses Verfahren wird bei echten Distanzfunktionen auch <strong>Sphere Tracing</strong> genannt <span class="citation" data-cites="hart1996 quilez_raymarch">(<a href="#ref-hart1996" role="doc-biblioref">Hart 1996</a>; <a href="#ref-quilez_raymarch" role="doc-biblioref">Quilez, o.&nbsp;J.</a>)</span>.</p>
-<p>Der zentrale Unterschied ist also die Repräsentation der Geometrie:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Methode</th>
-<th>Geometrie</th>
-<th>Grundidee</th>
-<th>Stärke</th>
-<th>Schwäche</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Rasterisierung</td>
-<td>Dreiecksnetze</td>
-<td>Dreiecke auf Bildschirm projizieren</td>
-<td>sehr schnell, etablierter Standard</td>
-<td>komplexe Formen brauchen viele Polygone</td>
-</tr>
-<tr class="even">
-<td>Ray Tracing</td>
-<td>explizite Objekte oder Meshes</td>
-<td>Strahlen schneiden Szene</td>
-<td>realistische Lichtsimulation</td>
-<td>viele Schnittpunkttests, hoher Aufwand</td>
-</tr>
-<tr class="odd">
-<td>Ray Marching mit SDFs</td>
-<td>implizite Distanzfelder</td>
-<td>Strahlen schrittweise anhand von Distanzen bewegen</td>
-<td>prozedurale Formen, CSG, Fraktale</td>
-<td>Performance hängt stark von Szene und Schrittzahl ab</td>
-</tr>
-</tbody>
-</table>
-</section>
+<p>Sphere Tracing basiert auf der Annahme, dass die SDF korrekt ist und jeder Schritt sicher ist <span class="citation" data-cites="hart1996">(<a href="#ref-hart1996" role="doc-biblioref">Hart 1996</a>)</span>. Wenn diese Voraussetzungen verletzt sind - durch ein zu knappes Schrittbudget oder eine zu grob gewaehlte Abbruchschwelle - entstehen typische Artefakte. Die beiden Demos zeigen diese Probleme interaktiv.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Schrittlimit</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Abstandsschwelle</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p>Sphere Tracing muss fuer jeden Pixel iterativ naeherkommen. Ein festes Schrittlimit <code>MAX_STEPS</code> begrenzt den Rechenaufwand, laesst aber weit entfernte oder geometrisch aufwaendige Bereiche (z. B. die Bodenebene bei flachem Auftreffwinkel) ungerendert. -&gt; <a href="../pages/theorie.html#der-ray-marching-algorithmus">Der Ray-Marching-Algorithmus</a></p>
+<div class="demo-wide">
+<iframe src="../assets/demos/schrittlimit/index.html" height="620" scrolling="no" title="Schrittlimit">
+</iframe>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p>Der Ray-Marching-Loop bricht ab, sobald <code>d &lt; epsilon</code>. Dieser Schwellenwert ist notwendig, um Konvergenzprobleme zu vermeiden - bestimmt aber zugleich, wie weit der Strahl noch von der echten Oberflaeche entfernt ist, wenn er stoppt. Zu gross gewaehltes Epsilon laesst Objekte aufgeblaest wirken; nahe beieinander liegende Oberflaechen koennen optisch verschmelzen. -&gt; <a href="../pages/theorie.html#der-ray-marching-algorithmus">Der Ray-Marching-Algorithmus</a></p>
+<div class="demo-wide">
+<iframe src="../assets/demos/abstandsschwelle/index.html" height="620" scrolling="no" title="Abstandsschwelle">
+</iframe>
+</div>
+</div>
+</div>
+</div>
 <section id="quellenverzeichnis" class="level1 unnumbered">
 <h1 class="unnumbered">Quellenverzeichnis</h1>
 <div id="refs" class="references csl-bib-body hanging-indent" role="list">
-<div id="ref-vc_raster" class="csl-entry" role="listitem">
-Friedrich, Markus. 2025a. <em>Visual Computing: Rasterisierung Vertex Verarbeitung</em>.
-</div>
-<div id="ref-vc_geo" class="csl-entry" role="listitem">
-Friedrich, Markus. 2025b. <em>Visual Computing: Syntheseparadigmen Geometriebeschreibung</em>.
-</div>
 <div id="ref-hart1996" class="csl-entry" role="listitem">
 Hart, John C. 1996. <span>„Sphere Tracing: A Geometric Method for the Antialiased Ray Tracing of Implicit Surfaces“</span>. <em>The Visual Computer</em> 12 (10): 527–45. <a href="https://www.researchgate.net/publication/2792108_Sphere_Tracing_A_Geometric_Method_for_the_Antialiased_Ray_Tracing_of_Implicit_Surfaces">https://www.researchgate.net/publication/2792108_Sphere_Tracing_A_Geometric_Method_for_the_Antialiased_Ray_Tracing_of_Implicit_Surfaces</a>.
-</div>
-<div id="ref-quilez_raymarch" class="csl-entry" role="listitem">
-Quilez, Inigo. o.&nbsp;J. <span>„Ray Marching Distance Fields“</span>. Zugegriffen 20. Juni 2026. <a href="https://iquilezles.org/articles/raymarchingdf/">https://iquilezles.org/articles/raymarchingdf/</a>.
-</div>
-<div id="ref-whitted1980" class="csl-entry" role="listitem">
-Whitted, Turner. 1980. <span>„An improved illumination model for shaded display“</span>. <em>Communications of the ACM</em> 23 (6): 343–49.
 </div>
 </div>
 
