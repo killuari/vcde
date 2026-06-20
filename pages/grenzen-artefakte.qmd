@@ -1,0 +1,51 @@
+---
+title: "Grenzen & Artefakte"
+author: "Luis Kahles"
+---
+
+Sphere Tracing basiert auf der Annahme, dass die SDF korrekt ist und jeder Schritt sicher ist.
+Wenn diese Voraussetzungen verletzt sind - durch ein zu knappes Schrittbudget oder eine zu grob
+gewaehlte Abbruchschwelle - entstehen typische Artefakte.
+Die beiden Demos zeigen diese Probleme interaktiv.
+
+::: {.panel-tabset}
+
+## Schrittlimit
+
+Sphere Tracing muss fuer jeden Pixel iterativ naeherkommen. Ein festes Schrittlimit
+`MAX_STEPS` begrenzt den Rechenaufwand, laesst aber weit entfernte oder geometrisch
+aufwaendige Bereiche (z. B. die Bodenebene bei flachem Auftreffwinkel) ungerendert.
+-> [Der Ray-Marching-Algorithmus](theorie.qmd#der-ray-marching-algorithmus)
+
+```{=html}
+<div class="demo-wide">
+<iframe
+  src="../assets/demos/schrittlimit/index.html"
+  height="620"
+  scrolling="no"
+  title="Schrittlimit">
+</iframe>
+</div>
+```
+
+## Abstandsschwelle
+
+Der Ray-Marching-Loop bricht ab, sobald `d < epsilon`. Dieser Schwellenwert ist notwendig,
+um Konvergenzprobleme zu vermeiden - bestimmt aber zugleich, wie weit der Strahl noch
+von der echten Oberflaeche entfernt ist, wenn er stoppt. Zu gross gewaehltes Epsilon laesst
+Objekte aufgeblaest wirken; nahe beieinander liegende Oberflaechen koennen optisch
+verschmelzen.
+-> [Der Ray-Marching-Algorithmus](theorie.qmd#der-ray-marching-algorithmus)
+
+```{=html}
+<div class="demo-wide">
+<iframe
+  src="../assets/demos/abstandsschwelle/index.html"
+  height="620"
+  scrolling="no"
+  title="Abstandsschwelle">
+</iframe>
+</div>
+```
+
+:::
