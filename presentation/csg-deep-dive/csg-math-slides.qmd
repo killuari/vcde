@@ -1,0 +1,201 @@
+---
+title: "Constructive Solid Geometry (CSG) — Mathematischer Deep Dive"
+subtitle: "Folgeseiten · Moritz Potthoff"
+author: "Moritz Potthoff"
+date: today
+lang: de
+format:
+  beamer:
+    theme: Madrid
+    colortheme: whale
+    fontsize: 10pt
+    aspectratio: 169
+    include-in-header:
+      text: |
+        \usepackage{booktabs}
+        \usepackage{listings}
+        \usepackage{xcolor}
+        \definecolor{codebg}{RGB}{13,17,23}
+        \definecolor{codefg}{RGB}{168,216,255}
+        \lstset{
+          backgroundcolor=\color{codebg},
+          basicstyle=\ttfamily\footnotesize\color{codefg},
+          breaklines=true,
+          frame=single,
+          rulecolor=\color{gray},
+          showstringspaces=false
+        }
+        \setbeamertemplate{navigation symbols}{}
+        \setbeamertemplate{footline}[frame number]
+  pdf:
+    documentclass: article
+    geometry: margin=2cm
+    lang: de
+---
+
+# Einführung in CSG
+
+## Was ist Constructive Solid Geometry (CSG)?
+
+- **Grundidee:** Konstruktion komplexer Festkörper aus einfachen geometrischen Primitiven (Kugel, Quader, Zylinder, ...).
+- **Prinzip:** Verknüpfung durch boolesche Operationen (Vereinigung, Schnitt, Differenz).
+- **Speicherformat:** Die Form wird nicht als Polygonnetz (Mesh) gespeichert, sondern als prozeduraler **Ausdrucksbaum** (CSG-Baum).
+
+\vspace{0.4em}
+
+**Vorteile von CSG:**
+- **Unendliche Präzision:** Die Form ist exakt mathematisch definiert (Auflösungsunabhängig).
+- **Garantierte Volumina:** Immer geschlossene ("watertight") Körper, wichtig für CAD und 3D-Druck.
+- **Parametrisierbarkeit:** Jeder Modellierungsschritt ist nicht-destruktiv und nachträglich änderbar.
+
+# Mathematische Grundlagen
+
+## Von Mengenlehre zu R-Funktionen
+
+Körper werden mathematisch als Punktmengen im $\mathbb{R}^3$ betrachtet. 
+Für Operationen auf diesen Mengen brauchen wir die **Mengentheorie**:
+- Vereinigung: $A \cup B$ (alles in A oder B)
+- Schnittmenge: $A \cap B$ (nur in A und B)
+- Differenz: $A \setminus B$ (in A, aber nicht in B)
+
+\vspace{0.4em}
+
+**R-Funktionen (Rvachev-Funktionen):**
+Um von abstrakten Mengen auf berechenbare Funktionen (wie Distanzfelder) zu kommen, nutzt man R-Funktionen. Diese übersetzen boolesche Logik in kontinuierliche reellwertige Funktionen.
+
+Für eine Funktion $f(\mathbf{p})$, bei der $f(\mathbf{p}) < 0$ das Innere des Körpers definiert, liefern $\min$ und $\max$ genau diese Übersetzung.
+
+## Die drei Kernoperationen algebraisch
+
+Für zwei Körper, definiert durch ihre Funktionen $d_1(\mathbf{p})$ und $d_2(\mathbf{p})$:
+
+\begin{align*}
+\text{Union:}        \quad d(\mathbf{p}) &= \min\bigl(d_1(\mathbf{p}), d_2(\mathbf{p})\bigr) \\
+\text{Intersection:}\quad d(\mathbf{p}) &= \max\bigl(d_1(\mathbf{p}), d_2(\mathbf{p})\bigr) \\
+\text{Difference:}   \quad d(\mathbf{p}) &= \max\bigl(d_1(\mathbf{p}), -d_2(\mathbf{p})\bigr)
+\end{align*}
+
+\vspace{0.3em}
+
+**Warum funktioniert das?**
+- **Min / Max:** Ein Punkt ist genau dann im Schnittbereich ($\max$), wenn *beide* Ursprungswerte $<0$ sind. Er ist in der Vereinigung ($\min$), wenn *mindestens einer* $<0$ ist.
+- **Invertierung:** $-d_2$ spiegelt das Innere und Äußere von $B$. Das "Herausschneiden" ($A \setminus B$) wird mathematisch zum Schnitt von $A$ mit dem invertierten $B$: $A \cap \overline{B}$.
+
+## Algebraische Eigenschaften
+
+Da CSG-Operationen auf $\min$ und $\max$ basieren, erben sie deren algebraische Gesetze:
+
+- **Kommutativität:** 
+  $\min(A, B) = \min(B, A)$ 
+  (Die Reihenfolge bei der Vereinigung ist egal)
+- **Assoziativität:** 
+  $\min(A, \min(B, C)) = \min(\min(A, B), C)$ 
+  (Erlaubt die einfache Verkettung vieler Objekte)
+- **Distributivität:** 
+  $\max(A, \min(B, C)) = \min(\max(A, B), \max(A, C))$
+- **De Morgansche Gesetze:** 
+  $-( \min(A, B) ) = \max(-A, -B)$
+  (Das Invertieren einer Vereinigung entspricht dem Schnitt der invertierten Einzelkörper)
+
+# Visuelle Interpretation
+
+## Inside/Outside-Logik im Detail
+
+Ein Punkt liegt **innen**, wenn $d < 0$ (negativ = im Körper).
+
+![](assets/diagrams/04-inside-outside-table.png){width=92%}
+
+\small
+- **Union:** min wählt die *nähere* Fläche $\rightarrow$ innen, wenn *mindestens eine* Form innen ist.
+- **Schnitt:** max verlangt, dass *beide* Distanzen negativ sind (der Punkt muss in beiden Körpern liegen).
+
+## 1D-Scanline: min / max sichtbar machen
+
+![](assets/diagrams/03-1d-scanline.png){width=100%}
+
+\footnotesize
+Horizontale Probe durch zwei Kreise: $d_1$, $d_2$ und das kombinierte Feld. Rot schattiert = $d \le 0$ (innen).
+
+## Distanzfelder vor und nach CSG
+
+![](assets/diagrams/02-sdf-heatmap-panel.png){width=100%}
+
+\footnotesize
+Weiße Kontur = Nullniveau ($d=0$) = Oberfläche. Man sieht, wie $\min$ und $\max$ die skalaren Felder im Raum kombinieren. Die Operation wertet nicht nur Ränder aus, sondern den gesamten Raum.
+
+# Der CSG-Baum
+
+## Hierarchische Konstruktion
+
+![](assets/diagrams/05-csg-tree.png){width=100%}
+
+\footnotesize
+Blätter = Primitive · innere Knoten = Operatoren · Wurzel = Gesamtfunktion `scene(p)` für den aktuellen Punkt $\mathbf{p}$.
+
+## N-äre Operationen und Verkettung
+
+![](assets/diagrams/06-nary-union-chain.png){width=88%}
+
+\vspace{0.3em}
+
+Dank der **Assoziativität** können wir hunderte Primitiven als Liste oder flachen Baum zusammenfassen:
+$\min(d_1, \min(d_2, \min(d_3, \dots)))$
+
+Dies vermeidet bei der Auswertung tiefe Rekursionen und ist hochgradig optimierbar für GPUs.
+
+# Erweiterung: Mathematische Glättung (Smooth CSG)
+
+## Das Problem harter Kanten
+
+Klassisches CSG erzeugt exakte C0-stetige Übergänge (scharfe Kanten) an den Schnittstellen. In vielen Anwendungen (z.B. organisches Design, Aerodynamik) benötigt man glatte Übergänge.
+
+Dank der mathematischen Repräsentation können wir die Operationen $\min$ und $\max$ durch **"Smooth Minimum/Maximum"**-Funktionen ersetzen:
+
+```glsl
+float smoothUnion(float d1, float d2, float k) {
+  float h = clamp(0.5 + 0.5*(d2-d1)/k, 0.0, 1.0);
+  return mix(d2, d1, h) - k*h*(1.0-h);
+}
+```
+
+\vspace{0.2em}
+Hierbei steuert $k$ den Radius der Glättung.
+
+## Smooth Union: Was passiert intern?
+
+![](assets/diagrams/12-smooth-h-map.png){width=96%}
+
+\small
+- Erst wird der Übergangsfaktor $h=\mathrm{clamp}(0.5+0.5(d_2-d_1)/k,0,1)$ berechnet.
+- Dann folgt die Linearkombination mit Korrekturterm: $\mathrm{mix}(d_2,d_1,h)-k\,h(1-h)$.
+- Der Term $-k\,h(1-h)$ sorgt dafür, dass die Funktion eine gültige Distanzfunktion bleibt und sich nicht aufbläht.
+
+## Ableitungs-Sicht (warum „smooth“?)
+
+Im Inneren des Blend-Bands ist die Ableitung der Smooth-Union-Funktion $d_s$:
+\[
+\nabla d_s = \alpha\,\nabla d_1 + (1-\alpha)\,\nabla d_2,\quad \alpha\in[0,1].
+\]
+\vspace{0.3em}
+
+**Ergebnis:** 
+Die Oberflächennormale ($\nabla d$) springt nicht mehr abrupt zwischen $\nabla d_1$ und $\nabla d_2$. Stattdessen wird sie mathematisch kontinuierlich gemischt (C1-Stetigkeit). Das ergibt perfekte "Fillets" ohne komplexe Mesh-Algorithmen.
+
+# Zusammenfassung & Ausblick
+
+## Warum CSG so mächtig ist
+
+| Eigenschaft | Erklärung |
+|---|---|
+| **Echtes Volumen** | Körper sind garantiert massiv, niemals nur eine Hülle. |
+| **Robustheit** | Keine kaputten Topologien, keine verschwindenden Dreiecke wie bei Mesh-Booleans. |
+| **Kompaktheit** | Eine komplexe Szene benötigt nur wenige Bytes Code (der CSG-Baum). |
+| **Analytisch** | Perfekt berechenbare Oberflächennormalen via Gradienten ($\nabla d$). |
+
+\vspace{0.8em}
+CSG ist das fundamentale Rückgrat moderner CAD-Systeme und prozeduraler Generierung!
+
+\vspace{0.8em}
+\centering
+\large Fragen zu CSG?
+

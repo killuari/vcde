@@ -1,0 +1,126 @@
+---
+title: "CSG Mathe-Deep-Dive — Einzelfolien (Entwurf)"
+author: "Moritz Potthoff"
+lang: de
+format:
+  pdf:
+    documentclass: article
+    geometry: margin=1.8cm
+    fontsize: 11pt
+    lang: de
+    include-in-header:
+      text: |
+        \usepackage{graphicx}
+        \usepackage{amsmath}
+        \usepackage{booktabs}
+        \usepackage{float}
+        \usepackage{listings}
+        \usepackage{xcolor}
+        \definecolor{codebg}{RGB}{13,17,23}
+        \definecolor{codefg}{RGB}{168,216,255}
+        \lstset{
+          backgroundcolor=\color{codebg},
+          basicstyle=\ttfamily\small\color{codefg},
+          breaklines=true,
+          frame=single,
+          rulecolor=\color{gray}
+        }
+        \usepackage{fancyhdr}
+        \pagestyle{fancy}
+        \fancyhf{}
+        \fancyfoot[C]{\thepage}
+        \renewcommand{\headrulewidth}{0pt}
+---
+
+# 1. Was ist Constructive Solid Geometry (CSG)?
+
+Constructive Solid Geometry ist ein Verfahren der Volumenmodellierung. Im Gegensatz zu B-Rep (Boundary Representation), wo nur die Hülle (z.B. aus Dreiecken) eines Körpers gespeichert wird, modelliert CSG den Raum mathematisch exakt durch die Verknüpfung geometrischer Grundkörper (Primitiven).
+
+Diese Modellierungsart hat entscheidende Vorteile:
+- **Analytische Exaktheit:** Körper sind beliebig präzise und haben keine Polygon-Auflösung.
+- **Parametrisierung:** Die Konstruktion ist ein nicht-destruktiver mathematischer Ausdruck.
+- **Solide Natur:** Es entstehen garantiert massive Volumenkörper ("watertight") ohne offene Kanten.
+
+\newpage
+
+# 2. Mathematische Grundlagen
+
+In der Mathematik lassen sich Körper als Punktmengen im $\mathbb{R}^3$ auffassen. Die Verknüpfung erfolgt über die Mengenlehre: $A \cup B$ (Vereinigung), $A \cap B$ (Schnittmenge) und $A \setminus B$ (Differenz).
+
+**R-Funktionen nach Rvachev:**
+Um diese boolesche Logik auf algebraische, kontinuierliche Funktionen (Distanzfelder) zu übertragen, nutzt man sogenannte R-Funktionen. Sind Körper durch Funktionen $d_1(\mathbf{p})$ und $d_2(\mathbf{p})$ definiert, bei denen negative Werte das Innere beschreiben ($d < 0$), ergeben sich folgende Zuweisungen:
+
+| Operation | Formel |
+|-----------|--------|
+| Vereinigung | $d = \min(d_1, d_2)$ |
+| Schnittmenge | $d = \max(d_1, d_2)$ |
+| Differenz | $d = \max(d_1, -d_2)$ |
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{assets/diagrams/01-boolean-venn.png}
+\caption{Venn-Diagramme mit zugehörigen SDF-Formeln.}
+\end{figure}
+
+Da die Konstruktion auf `min` und `max` basiert, erbt CSG algebraische Eigenschaften wie **Kommutativität** ($\min(A,B) = \min(B,A)$) und **Assoziativität** ($\min(A,\min(B,C)) = \min(\min(A,B),C)$), was große, flache Auswertungsbäume ermöglicht.
+
+\newpage
+
+# 3. Inside/Outside Logik
+
+Ein Punkt ist **innen** $\Leftrightarrow d < 0$. Die `min`- und `max`-Operationen gewährleisten, dass dieser Bereich logisch korrekt manipuliert wird.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{assets/diagrams/04-inside-outside-table.png}
+\caption{Fallunterscheidung für alle Kombinationen von Vorzeichen.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{assets/diagrams/03-1d-scanline.png}
+\caption{1D-Scanline: $d_1$, $d_2$ und kombiniertes Feld ($d \le 0$ ist rot markiert).}
+\end{figure}
+
+\newpage
+
+# 4. Visuelle Wirkung im Distanzfeld
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{assets/diagrams/02-sdf-heatmap-panel.png}
+\caption{Heatmaps in 2D: Primitive, dann Union / Schnitt / Differenz. Die weiße Linie markiert die Oberfläche ($d=0$).}
+\end{figure}
+
+\newpage
+
+# 5. Der CSG-Baum
+
+Die Repräsentation eines Modells ist ein gerichteter Baum (AST), der in Echtzeit pro Pixel (Ray Marching) ausgewertet werden kann.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{assets/diagrams/05-csg-tree.png}
+\caption{Hierarchischer Aufbau einer CSG-Szene.}
+\end{figure}
+
+\newpage
+
+# 6. Smooth CSG (Glatte Übergänge)
+
+Ein Nachteil des klassischen CSG sind die strengen C0-stetigen Kanten. Über modifizierte R-Funktionen lassen sich jedoch glatte Verbindungen (Fillets) berechnen:
+
+```glsl
+float smoothUnion(float d1, float d2, float k) {
+  float h = clamp(0.5 + 0.5*(d2-d1)/k, 0.0, 1.0);
+  return mix(d2, d1, h) - k*h*(1.0-h);
+}
+```
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{assets/diagrams/07-smooth-union.png}
+\caption{Harte vs. weiche Union entlang einer Scanline.}
+\end{figure}
+
+Hierbei sorgt der Korrekturterm $-k\,h(1-h)$ dafür, dass sich das Volumen nicht künstlich aufbläht. Mathematisch betrachtet mischen sich im Übergangsbereich die Gradienten $\nabla d_1$ und $\nabla d_2$ kontinuierlich, was zu perfekten, stetigen Normalen für die Beleuchtung führt.
