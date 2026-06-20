@@ -65,6 +65,77 @@ Um von abstrakten Mengen auf berechenbare Funktionen (wie Distanzfelder) zu komm
 
 Für eine Funktion $f(\mathbf{p})$, bei der $f(\mathbf{p}) < 0$ das Innere des Körpers definiert, liefern $\min$ und $\max$ genau diese Übersetzung.
 
+## SDF-Funktionen
+
+{\small
+
+\[
+\begin{aligned}
+d_{\text{Kugel}}(\mathbf p)
+  &= \|\mathbf p-\mathbf c\| - r \\[0.45em]
+\mathbf q_{\text{Box}}
+  &= |\mathbf p-\mathbf c|-\mathbf b \\
+d_{\text{Box}}(\mathbf p)
+  &= \|\max(\mathbf q_{\text{Box}},\mathbf 0)\|
+     + \min(\max(q_x,q_y,q_z),0) \\[0.45em]
+\mathbf q_{\text{Zyl}}
+  &= \left(
+       \sqrt{(p_x-c_x)^2+(p_z-c_z)^2},
+       |p_y-c_y|
+     \right) - (r,h) \\
+d_{\text{Zylinder}}(\mathbf p)
+  &= \|\max(\mathbf q_{\text{Zyl}},\mathbf 0)\|
+     + \min(\max(q_x,q_y),0) \\[0.45em]
+\mathbf q_{\text{Torus}}
+  &= \left(
+       \sqrt{(p_x-c_x)^2+(p_z-c_z)^2}-R,
+       p_y-c_y
+     \right) \\
+d_{\text{Torus}}(\mathbf p)
+  &= \|\mathbf q_{\text{Torus}}\| - r
+\end{aligned}
+\]
+
+\[
+\begin{aligned}
+d_{A\cup B}(\mathbf p) &= \min(d_A(\mathbf p),d_B(\mathbf p)) \\
+d_{A\cap B}(\mathbf p) &= \max(d_A(\mathbf p),d_B(\mathbf p)) \\
+d_{A\setminus B}(\mathbf p) &= \max(d_A(\mathbf p),-d_B(\mathbf p))
+\end{aligned}
+\]
+
+}
+
+## Boolesche Funktionen
+
+{\small
+
+\[
+\begin{aligned}
+\mathbf p \in A
+  &\Longleftrightarrow d_A(\mathbf p) < 0 \\[0.45em]
+\mathbf p \in A \cup B
+  &\Longleftrightarrow (d_A(\mathbf p)<0)\lor(d_B(\mathbf p)<0)
+   \Longleftrightarrow \min(d_A,d_B)<0 \\[0.45em]
+\mathbf p \in A \cap B
+  &\Longleftrightarrow (d_A(\mathbf p)<0)\land(d_B(\mathbf p)<0)
+   \Longleftrightarrow \max(d_A,d_B)<0 \\[0.45em]
+\mathbf p \in A \setminus B
+  &\Longleftrightarrow (d_A(\mathbf p)<0)\land\neg(d_B(\mathbf p)<0)
+   \Longleftrightarrow \max(d_A,-d_B)<0
+\end{aligned}
+\]
+
+\[
+\begin{aligned}
+f_{\cup}(d_A,d_B) &= \min(d_A,d_B) \\
+f_{\cap}(d_A,d_B) &= \max(d_A,d_B) \\
+f_{\setminus}(d_A,d_B) &= \max(d_A,-d_B)
+\end{aligned}
+\]
+
+}
+
 ## Die drei Kernoperationen algebraisch
 
 Für zwei Körper, definiert durch ihre Funktionen $d_1(\mathbf{p})$ und $d_2(\mathbf{p})$:
@@ -161,14 +232,17 @@ float smoothUnion(float d1, float d2, float k) {
 \vspace{0.2em}
 Hierbei steuert $k$ den Radius der Glättung.
 
-## Smooth Union: Was passiert intern?
+## Smooth Union: Idee
+
+![](assets/diagrams/16-smooth-union-intuition.png){width=100%}
+
+## Smooth Union: Rechnung
+
+![](assets/diagrams/17-smooth-union-formula-flow.png){width=100%}
+
+## Smooth Union: h im Feld
 
 ![](assets/diagrams/12-smooth-h-map.png){width=96%}
-
-\small
-- Erst wird der Übergangsfaktor $h=\mathrm{clamp}(0.5+0.5(d_2-d_1)/k,0,1)$ berechnet.
-- Dann folgt die Linearkombination mit Korrekturterm: $\mathrm{mix}(d_2,d_1,h)-k\,h(1-h)$.
-- Der Term $-k\,h(1-h)$ sorgt dafür, dass die Funktion eine gültige Distanzfunktion bleibt und sich nicht aufbläht.
 
 ## Ableitungs-Sicht (warum „smooth“?)
 

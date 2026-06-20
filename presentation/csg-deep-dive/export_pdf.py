@@ -180,7 +180,7 @@ def export_beamer_pdf(out: Path):
 
         # smooth union: internals
         fig = plt.figure(figsize=(13.33, 7.5))
-        ax, top = slide(fig, "Smooth Union intern", "Mischgewicht h und korrigierte Kontur")
+        ax, top = slide(fig, "Smooth Union", "h und d_s = 0")
         add_image(fig, DIAG / "12-smooth-h-map.png", bottom=0.03, height=top - 0.05)
         pdf.savefig(fig, facecolor=BG)
         plt.close(fig)

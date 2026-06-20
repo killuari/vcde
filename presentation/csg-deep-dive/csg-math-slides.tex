@@ -283,6 +283,77 @@ SDF-Formeln}\label{venn-diagramme-sdf-formeln}
 
 \section{Die drei Kernoperationen}\label{die-drei-kernoperationen}
 
+\subsection{SDF-Funktionen}\label{sdf-funktionen}
+
+{\small
+
+\[
+\begin{aligned}
+d_{\text{Kugel}}(\mathbf p)
+  &= \|\mathbf p-\mathbf c\| - r \\[0.45em]
+\mathbf q_{\text{Box}}
+  &= |\mathbf p-\mathbf c|-\mathbf b \\
+d_{\text{Box}}(\mathbf p)
+  &= \|\max(\mathbf q_{\text{Box}},\mathbf 0)\|
+     + \min(\max(q_x,q_y,q_z),0) \\[0.45em]
+\mathbf q_{\text{Zyl}}
+  &= \left(
+       \sqrt{(p_x-c_x)^2+(p_z-c_z)^2},
+       |p_y-c_y|
+     \right) - (r,h) \\
+d_{\text{Zylinder}}(\mathbf p)
+  &= \|\max(\mathbf q_{\text{Zyl}},\mathbf 0)\|
+     + \min(\max(q_x,q_y),0) \\[0.45em]
+\mathbf q_{\text{Torus}}
+  &= \left(
+       \sqrt{(p_x-c_x)^2+(p_z-c_z)^2}-R,
+       p_y-c_y
+     \right) \\
+d_{\text{Torus}}(\mathbf p)
+  &= \|\mathbf q_{\text{Torus}}\| - r
+\end{aligned}
+\]
+
+\[
+\begin{aligned}
+d_{A\cup B}(\mathbf p) &= \min(d_A(\mathbf p),d_B(\mathbf p)) \\
+d_{A\cap B}(\mathbf p) &= \max(d_A(\mathbf p),d_B(\mathbf p)) \\
+d_{A\setminus B}(\mathbf p) &= \max(d_A(\mathbf p),-d_B(\mathbf p))
+\end{aligned}
+\]
+
+}
+
+\subsection{Boolesche Funktionen}\label{boolesche-funktionen}
+
+{\small
+
+\[
+\begin{aligned}
+\mathbf p \in A
+  &\Longleftrightarrow d_A(\mathbf p) < 0 \\[0.45em]
+\mathbf p \in A \cup B
+  &\Longleftrightarrow (d_A(\mathbf p)<0)\lor(d_B(\mathbf p)<0)
+   \Longleftrightarrow \min(d_A,d_B)<0 \\[0.45em]
+\mathbf p \in A \cap B
+  &\Longleftrightarrow (d_A(\mathbf p)<0)\land(d_B(\mathbf p)<0)
+   \Longleftrightarrow \max(d_A,d_B)<0 \\[0.45em]
+\mathbf p \in A \setminus B
+  &\Longleftrightarrow (d_A(\mathbf p)<0)\land\neg(d_B(\mathbf p)<0)
+   \Longleftrightarrow \max(d_A,-d_B)<0
+\end{aligned}
+\]
+
+\[
+\begin{aligned}
+f_{\cup}(d_A,d_B) &= \min(d_A,d_B) \\
+f_{\cap}(d_A,d_B) &= \max(d_A,d_B) \\
+f_{\setminus}(d_A,d_B) &= \max(d_A,-d_B)
+\end{aligned}
+\]
+
+}
+
 \subsection{Algebraische Definition}\label{algebraische-definition}
 
 Für zwei SDFs \(d_1(\mathbf{p})\), \(d_2(\mathbf{p})\):
@@ -430,6 +501,14 @@ ersetzen:
 \end{Shaded}
 
 \includegraphics[width=0.72\linewidth,height=\textheight,keepaspectratio]{assets/diagrams/07-smooth-union.png}
+
+\subsection{Smooth Union: Idee}\label{smooth-union-idee}
+
+\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{assets/diagrams/16-smooth-union-intuition.png}
+
+\subsection{Smooth Union: Rechnung}\label{smooth-union-rechnung}
+
+\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{assets/diagrams/17-smooth-union-formula-flow.png}
 
 \subsection{Weitere Anwendungen}\label{weitere-anwendungen}
 
