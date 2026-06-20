@@ -79,7 +79,7 @@ Vollständige WebGL-Renderer, die SDF-Primitive und Beleuchtungseffekte in Echtz
 
 ## Primitiv-Galerie
 
-Sechs klassische SDF-Primitive nach Inigo Quilez - Kugel, Box, Torus, Kapsel, Zylinder und Oktaeder - mit Ray-Marching und Phong-Beleuchtung. → [Primitive Formen und Operationen](theorie.qmd#primitive-formen-und-operationen)
+Sechs klassische SDF-Primitive nach Inigo Quilez - Kugel, Box, Torus, Kapsel, Zylinder und Oktaeder - mit Ray-Marching und Phong-Beleuchtung [@quilez_distfunctions]. → [Primitive Formen und Operationen](theorie.qmd#primitive-formen-und-operationen)
 
 ```{=html}
 <div class="demo-wide">
@@ -94,7 +94,7 @@ Sechs klassische SDF-Primitive nach Inigo Quilez - Kugel, Box, Torus, Kapsel, Zy
 
 ## Beleuchtung & Schatten
 
-Phong-Shading mit hartem Schatten und optionaler Ambient Occlusion. Lichtquelle und Blocker-Objekt sind frei positionierbar; einzelne Beleuchtungskomponenten können ein- und ausgeschaltet werden. → [Shading und Beleuchtung](theorie.qmd#shading-und-beleuchtung)
+Phong-Shading mit hartem Schatten und optionaler Ambient Occlusion. Lichtquelle und Blocker-Objekt sind frei positionierbar; einzelne Beleuchtungskomponenten können ein- und ausgeschaltet werden [@quilez_rmshadows; @quilez_ao]. → [Shading und Beleuchtung](theorie.qmd#shading-und-beleuchtung)
 
 ```{=html}
 <div class="demo-wide">
@@ -109,7 +109,7 @@ Phong-Shading mit hartem Schatten und optionaler Ambient Occlusion. Lichtquelle 
 
 ## Unendliche Repetition
 
-Domain-Repetition mit `mod()`: Ein einzelnes SDF-Objekt wird durch eine Faltung des Koordinatenraums unendlich oft wiederholt - ohne Mehraufwand zur Laufzeit. Die Kamera fliegt automatisch durch das Feld; Farben, Schatten und Ambient Occlusion werden prozedural berechnet.
+Domain-Repetition mit `mod()`: Ein einzelnes SDF-Objekt wird durch eine Faltung des Koordinatenraums unendlich oft wiederholt - ohne Mehraufwand zur Laufzeit [@quilez_distfunctions]. Die Kamera fliegt automatisch durch das Feld; Farben, Schatten und Ambient Occlusion werden prozedural berechnet.
 
 ```{=html}
 <div class="demo-wide">
@@ -124,7 +124,7 @@ Domain-Repetition mit `mod()`: Ein einzelnes SDF-Objekt wird durch eine Faltung 
 
 ## Prozedurale Landschaft
 
-Eine vollständig prozedurale Berglandschaft - kein einziges Polygon. Die Geometrie entsteht aus Fractional Brownian Motion (FBM) als Terrain-SDF. Mit WASD oder den Pfeiltasten durch die Szene navigieren; die Detail-Stufe zeigt, wie mehr FBM-Oktaven feinere Strukturen erzeugen.
+Eine vollständig prozedurale Berglandschaft - kein einziges Polygon. Die Geometrie entsteht aus Fractional Brownian Motion (FBM) als Terrain-SDF [@quilez_fbm]. Mit WASD oder den Pfeiltasten durch die Szene navigieren; die Detail-Stufe zeigt, wie mehr FBM-Oktaven feinere Strukturen erzeugen.
 
 ```{=html}
 <div class="demo-wide">
@@ -186,7 +186,7 @@ Einstellbarer Treffschwellenwert `epsilon` zeigt, wie zu gross gewaehlte Werte O
 
 ## CSG-Demo
 
-Constructive Solid Geometry: Vereinigung, Schnittmenge und Differenz zweier SDF-Primitive - mit einstellbarer Verschmelzung und frei wählbaren Grundkörpern. → [CSG Live-Demo](csg.qmd#csg-live-demo)
+Constructive Solid Geometry: Vereinigung, Schnittmenge und Differenz zweier SDF-Primitive - mit einstellbarer Verschmelzung und frei wählbaren Grundkörpern [@quilez_distfunctions; @quilez_smin]. → [CSG Live-Demo](csg.qmd#csg-live-demo)
 
 ```{=html}
 <div class="demo-wide">
@@ -198,3 +198,8 @@ Constructive Solid Geometry: Vereinigung, Schnittmenge und Differenz zweier SDF-
 </iframe>
 </div>
 ```
+
+# Quellenverzeichnis {.unnumbered}
+
+::: {#refs}
+:::

@@ -181,7 +181,7 @@ Falls der Shadow Ray vor Erreichen der Lichtquelle auf eine Oberfläche trifft, 
 
 Die Schattenberechnung funktioniert damit ähnlich wie beim klassischen Ray Tracing. Der Unterschied liegt darin, dass auch dieser zusätzliche Strahl nicht gegen Dreiecke getestet wird, sondern wieder mithilfe der Signed Distance Function durch die Szene gemarcht wird.
 
-Auf diese Weise können Schatten direkt in das SDF-basierte Rendering integriert werden, ohne eine separate Schattenkarte (Shadow Map) oder explizite Geometrie zu benötigen.
+Auf diese Weise können Schatten direkt in das SDF-basierte Rendering integriert werden, ohne eine separate Schattenkarte (Shadow Map) oder explizite Geometrie zu benötigen [@quilez_rmshadows].
 
 ## Ambient Occlusion
 
@@ -195,7 +195,7 @@ In einer offenen Umgebung entspricht die von der SDF zurückgegebene Distanz ung
 
 Auf diese Weise lässt sich abschätzen, wie stark die Umgebung eines Punktes das einfallende Umgebungslicht blockiert. Bereiche mit hoher Verdeckung erscheinen dunkler, während offene Bereiche heller dargestellt werden.
 
-Im Gegensatz zu klassischen Schatten hängt Ambient Occlusion also nicht von einer bestimmten Lichtquelle ab. Stattdessen beschreibt sie die lokale geometrische Umgebung eines Punktes und erzeugt dadurch zusätzliche Tiefen- und Kontaktinformationen.
+Im Gegensatz zu klassischen Schatten hängt Ambient Occlusion also nicht von einer bestimmten Lichtquelle ab. Stattdessen beschreibt sie die lokale geometrische Umgebung eines Punktes und erzeugt dadurch zusätzliche Tiefen- und Kontaktinformationen [@quilez_ao].
 
 ## Demo
 

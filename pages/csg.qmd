@@ -7,7 +7,7 @@ author: "Moritz Potthoff"
 
 Constructive Solid Geometry beschreibt komplexe Körper als Kombination einfacher Grundformen. Statt ein Objekt direkt als Mesh zu modellieren, setzt man es aus Primitiven wie Kugeln, Boxen, Tori oder Zylindern zusammen. Bei klassischen Meshes bedeutet das oft geometrische Operationen auf Dreiecken. Bei SDFs reicht dagegen häufig eine einfache mathematische Kombination der Distanzwerte.
 
-Angenommen, $d_1(\mathbf{p})$ ist die Distanz zur ersten Form und $d_2(\mathbf{p})$ die Distanz zur zweiten Form. Dann lassen sich die wichtigsten CSG-Operationen so ausdrücken:
+Angenommen, $d_1(\mathbf{p})$ ist die Distanz zur ersten Form und $d_2(\mathbf{p})$ die Distanz zur zweiten Form. Dann lassen sich die wichtigsten CSG-Operationen so ausdrücken [@quilez_distfunctions]:
 
 | Operation | SDF-Formel | Bedeutung |
 |---|---|---|
@@ -53,7 +53,7 @@ float smoothUnion(float d1, float d2, float k) {
 }
 ```
 
-Der Parameter `k` kontrolliert die Breite des Übergangsbereichs. Bei `k = 0` bleibt die CSG-Operation hart. Je größer `k` wird, desto weicher gehen die Oberflächen ineinander über. Das ist ein Beispiel dafür, dass SDFs nicht nur boolesche Geometrieoperationen erlauben, sondern auch kontinuierliche Formmanipulationen.
+Der Parameter `k` kontrolliert die Breite des Übergangsbereichs. Bei `k = 0` bleibt die CSG-Operation hart. Je größer `k` wird, desto weicher gehen die Oberflächen ineinander über. Das ist ein Beispiel dafür, dass SDFs nicht nur boolesche Geometrieoperationen erlauben, sondern auch kontinuierliche Formmanipulationen [@quilez_smin].
 
 ## CSG Live-Demo
 
@@ -70,3 +70,8 @@ Die Demo zeigt eine kleine SDF-Szene aus mehreren Primitiven. Links ist das Erge
 </div>
 
 ```
+
+# Quellenverzeichnis {.unnumbered}
+
+::: {#refs}
+:::

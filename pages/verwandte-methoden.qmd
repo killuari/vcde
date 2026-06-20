@@ -7,11 +7,11 @@ Dieser Abschnitt fokussiert sich auf die Frage, wie Ray Marching mit SDFs im Ver
 
 ## Einordnung
 
-In der klassischen Echtzeitgrafik dominiert **Rasterisierung**. Dabei werden 3D-Modelle als Dreiecksnetze beschrieben, auf den Bildschirm projiziert und anschließend Pixel für Pixel eingefärbt. Diese Methode ist sehr schnell und bildet die Grundlage moderner Game-Engines. Ihr Nachteil ist, dass jede Form zuerst als Mesh vorliegen muss. Sehr glatte, prozedurale oder topologisch komplexe Formen können dadurch aufwendig werden, weil die Geometrie explizit modelliert, gespeichert und verwaltet werden muss.
+In der klassischen Echtzeitgrafik dominiert **Rasterisierung**. Dabei werden 3D-Modelle als Dreiecksnetze beschrieben, auf den Bildschirm projiziert und anschließend Pixel für Pixel eingefärbt. Diese Methode ist sehr schnell und bildet die Grundlage moderner Game-Engines. Ihr Nachteil ist, dass jede Form zuerst als Mesh vorliegen muss. Sehr glatte, prozedurale oder topologisch komplexe Formen können dadurch aufwendig werden, weil die Geometrie explizit modelliert, gespeichert und verwaltet werden muss [@vc_geo; @vc_raster].
 
-**Ray Tracing** verfolgt dagegen Strahlen von der Kamera in die Szene und berechnet Schnittpunkte mit Objekten. Dadurch lassen sich Reflexionen, Schatten und globale Beleuchtung sehr natürlich beschreiben. Klassisches Ray Tracing braucht jedoch explizite Schnittpunkttests, zum Beispiel zwischen einem Strahl und einem Dreieck, einer Kugel oder einer Ebene. Die Szene besteht also weiterhin aus konkreten geometrischen Primitiven oder Meshes.
+**Ray Tracing** verfolgt dagegen Strahlen von der Kamera in die Szene und berechnet Schnittpunkte mit Objekten. Dadurch lassen sich Reflexionen, Schatten und globale Beleuchtung sehr natürlich beschreiben. Klassisches Ray Tracing braucht jedoch explizite Schnittpunkttests, zum Beispiel zwischen einem Strahl und einem Dreieck, einer Kugel oder einer Ebene. Die Szene besteht also weiterhin aus konkreten geometrischen Primitiven oder Meshes [@whitted1980].
 
-**Ray Marching** mit SDFs arbeitet anders. Ein Strahl wird nicht direkt mit einem Objekt geschnitten. Stattdessen fragt man an jedem Punkt entlang des Strahls: "Wie weit bin ich mindestens von der nächsten Oberfläche entfernt?" Diese Distanz kommt aus der Signed Distance Function. Der Strahl kann dann genau um diese Distanz weiterlaufen, ohne eine Oberfläche zu überspringen. Dieses Verfahren wird bei echten Distanzfunktionen auch **Sphere Tracing** genannt.
+**Ray Marching** mit SDFs arbeitet anders. Ein Strahl wird nicht direkt mit einem Objekt geschnitten. Stattdessen fragt man an jedem Punkt entlang des Strahls: "Wie weit bin ich mindestens von der nächsten Oberfläche entfernt?" Diese Distanz kommt aus der Signed Distance Function. Der Strahl kann dann genau um diese Distanz weiterlaufen, ohne eine Oberfläche zu überspringen. Dieses Verfahren wird bei echten Distanzfunktionen auch **Sphere Tracing** genannt [@hart1996; @quilez_raymarch].
 
 Der zentrale Unterschied ist also die Repräsentation der Geometrie:
 
@@ -20,3 +20,8 @@ Der zentrale Unterschied ist also die Repräsentation der Geometrie:
 | Rasterisierung | Dreiecksnetze | Dreiecke auf Bildschirm projizieren | sehr schnell, etablierter Standard | komplexe Formen brauchen viele Polygone |
 | Ray Tracing | explizite Objekte oder Meshes | Strahlen schneiden Szene | realistische Lichtsimulation | viele Schnittpunkttests, hoher Aufwand |
 | Ray Marching mit SDFs | implizite Distanzfelder | Strahlen schrittweise anhand von Distanzen bewegen | prozedurale Formen, CSG, Fraktale | Performance hängt stark von Szene und Schrittzahl ab |
+
+# Quellenverzeichnis {.unnumbered}
+
+::: {#refs}
+:::
