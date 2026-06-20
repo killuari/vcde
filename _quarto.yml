@@ -6,9 +6,11 @@ project:
     - pages/verwandte-methoden.qmd
     - pages/csg.qmd
     - pages/demos.qmd
-    - pages/interaktive-renderings.qmd
+    - pages/grenzen-artefakte.qmd
   resources:
     - assets/
+
+bibliography: references.bib
 
 format:
   html:
@@ -37,6 +39,9 @@ website:
 
       - href: pages/csg.qmd
         text: "CSG"
+
+      - href: pages/grenzen-artefakte.qmd
+        text: "Grenzen & Artefakte"
 
       - href: pages/demos.qmd
         text: "Demos"
