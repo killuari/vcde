@@ -31,7 +31,7 @@ $$
 
 aufgefasst werden, die jedem Punkt im dreidimensionalen Raum einen signierten Abstand zur nächstgelegenen Oberfläche zuordnet.
 
-Da eine SDF nicht nur Informationen über die Oberfläche, sondern über den gesamten Raum enthält, eignet sie sich besonders gut für geometrische Abfragen und Verfahren wie Ray Marching, die direkt auf diesen Distanzinformationen aufbauen.
+Da eine SDF nicht nur Informationen über die Oberfläche, sondern über den gesamten Raum enthält, eignet sie sich besonders gut für geometrische Abfragen und Verfahren wie Ray Marching, die direkt auf diesen Distanzinformationen aufbauen [@vc_geo; @wong2016].
 
 ## Die Kugel als Beispiel
 
@@ -62,7 +62,7 @@ Zu den häufig verwendeten Primitiven gehören unter anderem Kugeln, Ebenen, Qua
 
 Primitive SDFs bilden die Grundlage für die Modellierung komplexerer Szenen. Ähnlich wie bei der klassischen 3D-Modellierung werden zunächst einfache Grundformen definiert, aus denen anschließend komplexe Strukturen aufgebaut werden können.
 
-Die folgende Abbildung zeigt einige typische Primitive sowie ihre jeweiligen Signed Distance Functions.
+Die folgende Abbildung zeigt einige typische Primitive sowie ihre jeweiligen Signed Distance Functions [@quilez_distfunctions].
 
 <iframe class="demo-embed" src="../assets/demos/sdf-heatmap/index.html" height="510"></iframe>
 
@@ -114,7 +114,7 @@ Die folgende Visualisierung verdeutlicht dieses Vorgehen. Die Schrittweite entsp
 
 :::
 
-Das hier beschriebene Verfahren wird häufig als Ray Marching bezeichnet. Genauer handelt es sich aber um eine spezielle Form des Ray Marching, die als Sphere Tracing bekannt ist. Sie wurde 1995 von John C. Hart vorgestellt und nutzt die Distanzinformationen einer Signed Distance Function, um die Schrittweite adaptiv anzupassen.
+Das hier beschriebene Verfahren wird häufig als Ray Marching bezeichnet. Genauer handelt es sich aber um eine spezielle Form des Ray Marching, die als Sphere Tracing bekannt ist. Sie wurde 1996 von John C. Hart vorgestellt und nutzt die Distanzinformationen einer Signed Distance Function, um die Schrittweite adaptiv anzupassen [@hart1996].
 
 ## Abbruchbedingungen
 
@@ -149,7 +149,7 @@ f(x,y,z+\varepsilon)-f(x,y,z-\varepsilon)
 \end{bmatrix}
 $$
 
-Der resultierende Vektor wird anschließend normalisiert, da für die Beleuchtung nur die Richtung der Normalen relevant ist.
+Der resultierende Vektor wird anschließend normalisiert, da für die Beleuchtung nur die Richtung der Normalen relevant ist [@vc_geo; @quilez_raymarch].
 
 ## Phong-Beleuchtungsmodell
 
@@ -169,11 +169,11 @@ $$
 
 Flächen, die direkt zur Lichtquelle zeigen, werden dadurch stärker beleuchtet als Flächen, die in einem flachen Winkel zur Lichtquelle stehen.
 
-Durch die Kombination von Ambient-, Diffuse- und Specular-Komponente entsteht ein deutlich realistischeres Erscheinungsbild der Szene. Die zuvor berechneten Oberflächennormalen spielen dabei eine zentrale Rolle, da sie die Grundlage für sämtliche Beleuchtungsberechnungen bilden.
+Durch die Kombination von Ambient-, Diffuse- und Specular-Komponente entsteht ein deutlich realistischeres Erscheinungsbild der Szene. Die zuvor berechneten Oberflächennormalen spielen dabei eine zentrale Rolle, da sie die Grundlage für sämtliche Beleuchtungsberechnungen bilden [@vc_frag].
 
 ## Schatten
 
-Das Beleuchtungsmodell allein entscheidet nur, wie stark ein Punkt beleuchtet würde, wenn ihn das Licht erreicht. Es prüft jedoch nicht automatisch, ob sich zwischen dem Punkt und der Lichtquelle ein anderes Objekt befindet.
+Das Beleuchtungsmodell allein entscheidet nur, wie stark ein Punkt beleuchtet würde, wenn ihn das Licht erreicht. Es prüft jedoch nicht automatisch, ob sich zwischen dem Punkt und der Lichtquelle ein anderes Objekt befindet. Im Gegensatz zum vereinfachten lokalen Beleuchtungsmodell der Vorlesung [@vc_frag] lassen sich beim SDF-basierten Ray Marching Schatten direkt ohne separate Shadow Maps realisieren.
 
 Für Schatten wird daher ein zusätzlicher Strahl verwendet. Nachdem durch Ray Marching ein Oberflächenpunkt gefunden wurde, wird von diesem Punkt aus ein zweiter Strahl in Richtung der Lichtquelle gesendet. Dieser sogenannte Shadow Ray überprüft, ob auf dem Weg zur Lichtquelle ein anderes Objekt getroffen wird.
 
@@ -203,12 +203,7 @@ Die folgende Demo demonstriert Phong-Beleuchtung mit hartem Schatten und optiona
 
 <iframe class="demo-embed" src="../assets/demos/beleuchtung-schatten/index.html" height="730"></iframe>
 
-# Quellenverzeichnis
+# Quellenverzeichnis {.unnumbered}
 
-Sphere Tracing: A Geometric Method for the Antialiased Ray Tracing of Implicit Surfaces, John C. Hart, 1995, https://www.researchgate.net/publication/2792108_Sphere_Tracing_A_Geometric_Method_for_the_Antialiased_Ray_Tracing_of_Implicit_Surfaces
-
-Distance Functions, Inigo Quilez, https://iquilezles.org/articles/distfunctions/
-
-Ray Marching, Inigo Quilez, https://iquilezles.org/articles/raymarchingdf/
-
-Ray Marching and Signed Distance Functions, Jamie Wong, https://jamie-wong.com/2016/07/15/ray-marching-signed-distance-functions/
+::: {#refs}
+:::

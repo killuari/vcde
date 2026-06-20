@@ -10,6 +10,8 @@ project:
   resources:
     - assets/
 
+bibliography: references.bib
+
 format:
   html:
     css: styles.css
