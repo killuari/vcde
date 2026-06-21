@@ -292,7 +292,7 @@ def render_primitive_gallery():
 
     fig, axes = plt.subplots(2, 4, figsize=(16, 9))
     fig.patch.set_facecolor("#ffffff")
-    fig.suptitle("CSG-Grundprimitive", color="#111827", fontsize=28, weight="bold", y=0.965)
+    fig.suptitle("CSG-Grundkörper: Beispiele", color="#111827", fontsize=28, weight="bold", y=0.965)
 
     for ax, (label, fn, color, angles) in zip(axes.flatten(), primitives):
         img = render_primitive_tile(fn, color, angles)
