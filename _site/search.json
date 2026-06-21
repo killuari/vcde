@@ -243,5 +243,12 @@
     "title": "Interaktive SDF-Rendering Demos",
     "section": "CSG-Demo",
     "text": "CSG-Demo\nConstructive Solid Geometry: Vereinigung, Schnittmenge und Differenz zweier SDF-Primitive - mit einstellbarer Verschmelzung und frei wählbaren Grundkörpern (Quilez, o. J.-b, o. J.-d). → CSG Live-Demo"
+  },
+  {
+    "objectID": "pages/demos.html#csg-live-demo",
+    "href": "pages/demos.html#csg-live-demo",
+    "title": "Interaktive SDF-Rendering Demos",
+    "section": "CSG Live Demo",
+    "text": "CSG Live Demo\nConstructive Solid Geometry: Vereinigung, Schnittmenge und Differenz zweier SDF-Primitive - mit einstellbarer Verschmelzung und frei wählbaren Grundkörpern (Quilez, o. J.-b, o. J.-d)."
   }
 ]

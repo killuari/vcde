@@ -14,19 +14,19 @@ const functionCombineEl = document.getElementById("function-combine");
 const modeText = [
   {
     formula: "min(d, dNext)",
-    description: "Union: Die jeweils kleinere Distanz gewinnt.",
+    description: "Vereinigung: Die jeweils kleinere Distanz gewinnt.",
     hardFunction: "d = min(d, dNext);",
     smoothFunction: "d = smoothUnion(d, dNext, k);"
   },
   {
     formula: "max(d, dNext)",
-    description: "Intersection: Nur der gemeinsame Innenbereich bleibt sichtbar.",
+    description: "Schnittmenge: Nur der gemeinsame Innenbereich bleibt sichtbar.",
     hardFunction: "d = max(d, dNext);",
     smoothFunction: "d = smoothIntersection(d, dNext, k);"
   },
   {
     formula: "max(d, -dNext)",
-    description: "Difference: Objekt 1 bleibt die Basis, alle weiteren Objekte werden abgezogen.",
+    description: "Differenz: Objekt 1 bleibt die Basis, alle weiteren Objekte werden abgezogen.",
     hardFunction: "d = max(d, -dNext);",
     smoothFunction: "d = smoothDifference(d, dNext, k);"
   }

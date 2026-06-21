@@ -184,9 +184,9 @@ Einstellbarer Treffschwellenwert `epsilon` zeigt, wie zu gross gewaehlte Werte O
 
 :::
 
-## CSG-Demo
+## CSG Live Demo
 
-Constructive Solid Geometry: Vereinigung, Schnittmenge und Differenz zweier SDF-Primitive - mit einstellbarer Verschmelzung und frei wählbaren Grundkörpern [@quilez_distfunctions; @quilez_smin]. → [CSG Live-Demo](csg.qmd#csg-live-demo)
+Constructive Solid Geometry: Vereinigung, Schnittmenge und Differenz zweier SDF-Primitive - mit einstellbarer Verschmelzung und frei wählbaren Grundkörpern [@quilez_distfunctions; @quilez_smin].
 
 ```{=html}
 <div class="demo-wide">
@@ -194,7 +194,7 @@ Constructive Solid Geometry: Vereinigung, Schnittmenge und Differenz zweier SDF-
   src="../assets/demos/csg-live/index.html"
   height="980"
   scrolling="no"
-  title="CSG-Demo">
+  title="CSG Live Demo">
 </iframe>
 </div>
 ```

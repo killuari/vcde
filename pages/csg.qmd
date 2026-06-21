@@ -55,7 +55,7 @@ float smoothUnion(float d1, float d2, float k) {
 
 Der Parameter `k` kontrolliert die Breite des Übergangsbereichs. Bei `k = 0` bleibt die CSG-Operation hart. Je größer `k` wird, desto weicher gehen die Oberflächen ineinander über. Das ist ein Beispiel dafür, dass SDFs nicht nur boolesche Geometrieoperationen erlauben, sondern auch kontinuierliche Formmanipulationen [@quilez_smin].
 
-## CSG Live-Demo
+## CSG Live Demo
 
 Die Demo zeigt eine kleine SDF-Szene aus mehreren Primitiven. Links ist das Ergebnis des Ray-Marching-Shaders zu sehen, rechts die editierbare Beschreibung der Szene. Die Objektliste wählt die primitiven SDFs aus, und die Kombinationsfunktion zeigt, wie daraus die Szene gebaut wird. Zwischen `Union`, `Intersection` und `Difference` kann gewechselt werden, sodass die Wirkung der CSG-Operationen direkt sichtbar wird.
 
@@ -65,7 +65,7 @@ Die Demo zeigt eine kleine SDF-Szene aus mehreren Primitiven. Links ist das Erge
   src="../assets/demos/csg-live/index.html"
   height="930"
   scrolling="no"
-  title="Interaktive SDF-CSG-Demo">
+  title="CSG Live Demo">
 </iframe>
 </div>
 

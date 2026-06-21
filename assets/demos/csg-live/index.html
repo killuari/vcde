@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SDF-CSG Demo</title>
+  <title>CSG Live Demo</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,8 +11,8 @@
     <section class="output-panel" aria-label="Render-Ausgabe">
       <header class="panel-header">
         <div>
-          <h1>SDF-CSG</h1>
-          <p id="mode-description">Union: Die jeweils kleinere Distanz gewinnt.</p>
+          <h1>CSG Live Demo</h1>
+          <p id="mode-description">Vereinigung: Die jeweils kleinere Distanz gewinnt.</p>
         </div>
         <div class="formula" id="formula">min(d1, d2)</div>
       </header>
@@ -25,9 +25,9 @@
 
     <aside class="edit-panel" aria-label="CSG-Steuerung">
       <div class="button-row operations" role="group" aria-label="CSG-Operation">
-        <button type="button" class="active" data-mode="0">Union</button>
-        <button type="button" data-mode="1">Intersection</button>
-        <button type="button" data-mode="2">Difference</button>
+        <button type="button" class="active" data-mode="0">Vereinigung</button>
+        <button type="button" data-mode="1">Schnittmenge</button>
+        <button type="button" data-mode="2">Differenz</button>
       </div>
 
       <div class="control-group">
