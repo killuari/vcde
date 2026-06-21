@@ -31,8 +31,8 @@
     "objectID": "pages/csg.html#csg-live-demo",
     "href": "pages/csg.html#csg-live-demo",
     "title": "Constructive Solid Geometry",
-    "section": "CSG Live-Demo",
-    "text": "CSG Live-Demo\nDie Demo zeigt eine kleine SDF-Szene aus mehreren Primitiven. Links ist das Ergebnis des Ray-Marching-Shaders zu sehen, rechts die editierbare Beschreibung der Szene. Die Objektliste wählt die primitiven SDFs aus, und die Kombinationsfunktion zeigt, wie daraus die Szene gebaut wird. Zwischen Union, Intersection und Difference kann gewechselt werden, sodass die Wirkung der CSG-Operationen direkt sichtbar wird."
+    "section": "CSG Live Demo",
+    "text": "CSG Live Demo\nDie Demo zeigt eine kleine SDF-Szene aus mehreren Primitiven. Links ist das Ergebnis des Ray-Marching-Shaders zu sehen, rechts die editierbare Beschreibung der Szene. Die Objektliste wählt die primitiven SDFs aus, und die Kombinationsfunktion zeigt, wie daraus die Szene gebaut wird. Zwischen Union, Intersection und Difference kann gewechselt werden, sodass die Wirkung der CSG-Operationen direkt sichtbar wird."
   },
   {
     "objectID": "pages/theorie.html",
@@ -238,10 +238,10 @@
     "text": "GLSL-Renderings\nVollständige WebGL-Renderer, die SDF-Primitive und Beleuchtungseffekte in Echtzeit im Browser berechnen.\n\nPrimitiv-GalerieBeleuchtung & SchattenUnendliche RepetitionProzedurale LandschaftMenger-SchwammSchrittlimitAbstandsschwelle\n\n\nSechs klassische SDF-Primitive nach Inigo Quilez - Kugel, Box, Torus, Kapsel, Zylinder und Oktaeder - mit Ray-Marching und Phong-Beleuchtung (Quilez, o. J.-b). → Primitive Formen und Operationen\n\n\n\n\n\n\nPhong-Shading mit hartem Schatten und optionaler Ambient Occlusion. Lichtquelle und Blocker-Objekt sind frei positionierbar; einzelne Beleuchtungskomponenten können ein- und ausgeschaltet werden (Quilez, o. J.-e, o. J.-a). → Shading und Beleuchtung\n\n\n\n\n\n\nDomain-Repetition mit mod(): Ein einzelnes SDF-Objekt wird durch eine Faltung des Koordinatenraums unendlich oft wiederholt - ohne Mehraufwand zur Laufzeit (Quilez, o. J.-b). Die Kamera fliegt automatisch durch das Feld; Farben, Schatten und Ambient Occlusion werden prozedural berechnet.\n\n\n\n\n\n\nEine vollständig prozedurale Berglandschaft - kein einziges Polygon. Die Geometrie entsteht aus Fractional Brownian Motion (FBM) als Terrain-SDF (Quilez, o. J.-c). Mit WASD oder den Pfeiltasten durch die Szene navigieren; die Detail-Stufe zeigt, wie mehr FBM-Oktaven feinere Strukturen erzeugen.\n\n\n\n\n\n\nIteriertes CSG: Ein Würfel wird durch dreifaches Subtrahieren von Kreuzformen zum Menger-Schwamm - einem klassischen 3D-Fraktal. Jede Iterationsstufe verfeinert die Struktur um Faktor 3; die Schnittansicht zeigt das fraktale Innenleben. → Fraktale und mathematische Strukturen\n\n\n\n\n\n\nEinstellbares MAX_STEPS-Limit macht sichtbar, wie weit entfernte Geometrie und flache Auftreffwinkel auf der Bodenebene mehr Marching-Iterationen benoetigen - und was passiert, wenn das Budget erschoepft ist. → Grenzen & Artefakte\n\n\n\n\n\n\nEinstellbarer Treffschwellenwert epsilon zeigt, wie zu gross gewaehlte Werte Oberflächen aufgeblaest erscheinen lassen und eng beieinander liegende Formen optisch verschmelzen. → Grenzen & Artefakte"
   },
   {
-    "objectID": "pages/demos.html#csg-demo",
-    "href": "pages/demos.html#csg-demo",
+    "objectID": "pages/demos.html#csg-live-demo",
+    "href": "pages/demos.html#csg-live-demo",
     "title": "Interaktive SDF-Rendering Demos",
-    "section": "CSG-Demo",
-    "text": "CSG-Demo\nConstructive Solid Geometry: Vereinigung, Schnittmenge und Differenz zweier SDF-Primitive - mit einstellbarer Verschmelzung und frei wählbaren Grundkörpern (Quilez, o. J.-b, o. J.-d). → CSG Live-Demo"
+    "section": "CSG Live Demo",
+    "text": "CSG Live Demo\nConstructive Solid Geometry: Vereinigung, Schnittmenge und Differenz zweier SDF-Primitive - mit einstellbarer Verschmelzung und frei wählbaren Grundkörpern (Quilez, o. J.-b, o. J.-d)."
   }
 ]
