@@ -192,7 +192,7 @@ Constructive Solid Geometry: Vereinigung, Schnittmenge und Differenz zweier SDF-
 <div class="demo-wide">
 <iframe
   src="../assets/demos/csg-live/index.html"
-  height="650"
+  height="980"
   scrolling="no"
   title="CSG-Demo">
 </iframe>

@@ -542,6 +542,10 @@ function updateFunctionOutput() {
     primitiveFunctionsEl.appendChild(card);
   });
 
+  const pointLines = activeShapes
+    .map((_, index) => `  vec3 p${index + 1} = objectPoint(${index}, p);`)
+    .join("\n");
+
   const distanceLines = activeShapes
     .map((shape, index) => {
       const pointName = `p${index + 1}`;
@@ -559,11 +563,7 @@ function updateFunctionOutput() {
   functionCombineEl.textContent = `float scene(vec3 p) {
   float k = ${blend.toFixed(2)};
   float dNext;
-  vec3 p1 = objectPoint(0, p);
-  vec3 p2 = objectPoint(1, p);
-  vec3 p3 = objectPoint(2, p);
-  vec3 p4 = objectPoint(3, p);
-  vec3 p5 = objectPoint(4, p);
+${pointLines}
 ${distanceLines}
   float d = d1;
 ${combineLines || "  // Nur ein Objekt: keine CSG-Kombination."}
