@@ -228,7 +228,7 @@ select {
 #primitive-functions {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 4px;
+  gap: 6px;
   align-items: start;
 }
 
@@ -249,7 +249,7 @@ select {
 .function-card pre {
   margin: 0;
   padding: 5px 6px;
-  overflow: hidden;
+  overflow: auto;
   border: 1px solid #d7dce3;
   border-radius: 4px;
   color: #111827;
@@ -265,7 +265,7 @@ select {
 }
 
 #function-combine {
-  min-height: 116px;
+  min-height: 225px;
   font-size: 11px;
   line-height: 1.2;
 }
