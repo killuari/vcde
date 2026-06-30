@@ -3,23 +3,62 @@ title: "Verwandte Methoden"
 author: "Moritz Potthoff"
 ---
 
-Dieser Abschnitt fokussiert sich auf die Frage, wie Ray Marching mit SDFs im Vergleich zu bekannteren Rendering-Methoden einzuordnen ist und warum Constructive Solid Geometry (CSG) bei SDFs besonders elegant funktioniert.
+In diesem Kapitel wird beschrieben, wie sich Ray Marching mit SDFs von klassischen Rendering-Methoden unterscheidet. Außerdem wird erklärt, warum geometrische Verknüpfungen (CSG) mit SDFs einfacher und stabiler umzusetzen sind als mit klassischen 3D-Modellen.
 
-## Einordnung
+## Vergleich mit Rasterisierung und Ray Tracing
 
-In der klassischen Echtzeitgrafik dominiert **Rasterisierung**. Dabei werden 3D-Modelle als Dreiecksnetze beschrieben, auf den Bildschirm projiziert und anschließend Pixel für Pixel eingefärbt. Diese Methode ist sehr schnell und bildet die Grundlage moderner Game-Engines. Ihr Nachteil ist, dass jede Form zuerst als Mesh vorliegen muss. Sehr glatte, prozedurale oder topologisch komplexe Formen können dadurch aufwendig werden, weil die Geometrie explizit modelliert, gespeichert und verwaltet werden muss [@vc_geo; @vc_raster].
+### Rasterisierung
+Die meisten Spiele und Echtzeitanwendungen nutzen Rasterisierung. Dreidimensionale Objekte werden dabei als Netz aus Dreiecken (Mesh) beschrieben. Diese Dreiecke werden auf den zweidimensionalen Bildschirm projiziert und eingefärbt. Grafikkarten sind genau für diese Aufgabe optimiert, weshalb das Verfahren extrem schnell ist. Der Nachteil ist jedoch, dass jede Form vorher als festes Netz existieren muss. Komplexe oder sehr glatte Oberflächen benötigen enorm viele Dreiecke, was viel Speicherplatz kostet [@vc_geo; @vc_raster].
 
-**Ray Tracing** verfolgt dagegen Strahlen von der Kamera in die Szene und berechnet Schnittpunkte mit Objekten. Dadurch lassen sich Reflexionen, Schatten und globale Beleuchtung sehr natürlich beschreiben. Klassisches Ray Tracing braucht jedoch explizite Schnittpunkttests, zum Beispiel zwischen einem Strahl und einem Dreieck, einer Kugel oder einer Ebene. Die Szene besteht also weiterhin aus konkreten geometrischen Primitiven oder Meshes [@whitted1980].
+### Ray Tracing
+Beim klassischen Ray Tracing werden Lichtstrahlen von der Kamera in die Szene geschossen. Das Programm berechnet exakte Schnittpunkte zwischen diesen Strahlen und den Objekten (z. B. Dreiecken oder Kugeln). Dadurch lassen sich Spiegelungen, Schatten und Lichtbrechungen sehr realistisch darstellen. Allerdings erfordert dies viele mathematische Berechnungen für die Schnittpunkttests, was vor allem bei komplexen Szenen rechenintensiv ist [@whitted1980].
 
-**Ray Marching** mit SDFs arbeitet anders. Ein Strahl wird nicht direkt mit einem Objekt geschnitten. Stattdessen fragt man an jedem Punkt entlang des Strahls: "Wie weit bin ich mindestens von der nächsten Oberfläche entfernt?" Diese Distanz kommt aus der Signed Distance Function. Der Strahl kann dann genau um diese Distanz weiterlaufen, ohne eine Oberfläche zu überspringen. Dieses Verfahren wird bei echten Distanzfunktionen auch **Sphere Tracing** genannt [@hart1996; @quilez_raymarch].
+### Ray Marching
+Ray Marching (speziell Sphere Tracing) mit SDFs nutzt einen anderen Ansatz. Hier werden keine exakten Schnittpunkte berechnet. Stattdessen wandert der Strahl in Schritten durch die Szene. An jedem Punkt liefert die Signed Distance Function (SDF) den Abstand zum nächsten Objekt. Der Strahl kann sich sicher um genau diese Distanz weiterbewegen, ohne ein Objekt zu überspringen. Das Rendering ist dadurch sehr flexibel und eignet sich besonders gut für fraktale oder mathematisch definierte Formen [@hart1996; @quilez_raymarch].
 
-Der zentrale Unterschied ist also die Repräsentation der Geometrie:
+Der zentrale Unterschied der Geometrierepräsentationen ist in folgender Tabelle zusammengefasst:
 
-| Methode | Geometrie | Grundidee | Stärke | Schwäche |
+| Methode | Geometriebeschreibung | Prinzip | Stärken | Schwächen |
 |---|---|---|---|---|
-| Rasterisierung | Dreiecksnetze | Dreiecke auf Bildschirm projizieren | sehr schnell, etablierter Standard | komplexe Formen brauchen viele Polygone |
-| Ray Tracing | explizite Objekte oder Meshes | Strahlen schneiden Szene | realistische Lichtsimulation | viele Schnittpunkttests, hoher Aufwand |
-| Ray Marching mit SDFs | implizite Distanzfelder | Strahlen schrittweise anhand von Distanzen bewegen | prozedurale Formen, CSG, Fraktale | Performance hängt stark von Szene und Schrittzahl ab |
+| **Rasterisierung** | Dreiecksnetze (Meshes) | Projektion von Dreiecken auf den Bildschirm | Sehr schnell, Hardware-Standard | Hoher Speicherbedarf bei feinen Details |
+| **Ray Tracing** | Explizite Geometrie (z. B. Dreiecke, Kugeln) | Berechnung von Strahl-Objekt-Schnittpunkten | Perfekt für realistische Beleuchtung | Hoher Rechenaufwand bei komplexen Szenen |
+| **Ray Marching** | Implizite Distanzfelder (SDFs) | Schrittweise Annäherung entlang des Strahls | Prozedurale Formen, CSG, Fraktale | Performance sinkt bei vielen Schritten |
+
+## CSG: SDFs im Vergleich zu klassischem CAD (B-Rep)
+
+CAD-Programme (wie FreeCAD oder SolidWorks) nutzen ebenfalls CSG als Modellierungsprinzip. Der Anwender fügt Formen zusammen oder zieht sie voneinander ab. Der Unterschied liegt jedoch darin, wie diese Operationen im Hintergrund berechnet und gespeichert werden:
+
+*   **CSG über Boundary Representations (B-Rep):** CAD-Programme beschreiben Körper über ihre Grenzflächen (B-Rep). Wenn der Anwender dort eine CSG-Operation durchführt (z. B. einen Zylinder von einem Block abzieht), muss der CAD-Kernel (wie OpenCASCADE bei FreeCAD) die exakten Schnittkurven der Oberflächen berechnen. Bei komplexen Schnitten oder minimalen Ausrichtungsfehlern führen Rundungsfehler (Floating-Point-Fehler) oft dazu, dass diese Berechnungen fehlschlagen. Die Folge sind fehlerhafte Modelle mit offenen Kanten oder Löchern.
+*   **CSG über SDFs (Implizite Modellierung):** Bei SDFs gibt es keine Grenzflächen, die geometrisch geschnitten werden müssen. Die CSG-Operationen werden punktweise über einfache mathematische Abfragen berechnet (z. B. `max(d1, -d2)` für die Differenz). Da keine Kanten oder Flächen explizit berechnet werden müssen, ist dieses Verfahren absolut robust. Es können niemals Löcher oder topologische Fehler entstehen.
+*   **Mathematisches Fundament:** Diese einfache Verknüpfung von Abstandsfeldern geht auf die mathematische Theorie der **R-Funktionen** zurück [@shapiro2001]. Sie beweist, dass logische Operationen (AND, OR, NOT) fehlerfrei auf kontinuierliche Funktionen übertragen werden können.
+
+## Anwendung in Computerspielen und Physik
+
+Die Eigenschaften von SDF-CSG werden auch in modernen Videospielen genutzt:
+
+*   **Zerstörbare Spielwelten:** In normalen Spielen ist es sehr aufwendig, Löcher in Wände zu sprengen, da das 3D-Modell im Spiel live zerschnitten werden muss. Bei SDF-basierten Spielen (wie *Claybook* oder *Dreams*) zieht man bei einer Explosion einfach eine Kugel-SDF von der Landschafts-SDF ab. Die Grafik passt sich sofort an, ohne dass neue 3D-Modelle berechnet werden müssen.
+*   **Einfache Kollisionsabfrage:** Für Physiksimulationen muss man normalerweise aufwendig prüfen, ob sich zwei Dreiecksnetze berühren. Bei einer SDF liefert die Funktion $f(\mathbf{p})$ diese Information sofort:
+    *   **Eindringtiefe:** Ist $f(\mathbf{p}) < 0$, befindet sich ein Punkt im Inneren des Objekts. Der Wert selbst zeigt, wie tief er eingedrungen ist.
+    *   **Stoßrichtung:** Der Gradient $\nabla f(\mathbf{p})$ (die Oberflächennormale) zeigt exakt die Richtung an, in die man das Objekt zurückstoßen muss.
+    
+    Das vereinfacht Kollisionen und physikalische Reaktionen enorm, besonders bei verformbaren Objekten [@valila2018gdc].
+
+## Raumdeformationen als erweiterte Modellierung
+
+Bei klassischen Polygonnetzen oder in CAD-Programmen ist das Verbiegen oder Verdrehen von Objekten geometrisch sehr aufwendig. Bei SDFs gibt es hierzu eine elegante Alternative: Statt das Objekt selbst zu verändern, wird der Raum verformt, in dem das Objekt liegt. Dies nennt man **Domain Deformation**.
+
+*   **Wie es funktioniert:** Bevor der Punkt $\mathbf{p}$ an die Distanzfunktion des Primitivs übergeben wird, wendet man eine mathematische Transformation auf seine Koordinaten an.
+*   **Beispiele:**
+    *   *Verdrehen (Twisting):* Man rotiert die X- und Z-Koordinaten eines Punktes in Abhängigkeit von seiner Höhe (Y-Koordinate). Dadurch wird ein einfacher, gerader Quader im Handumdrehen zu einer spiralförmigen Helix verdreht.
+    *   *Verbiegen (Bending):* Die Koordinaten werden entlang einer Kurve verschoben. So lässt sich beispielsweise ein gerader Zylinder entlang einer Kreisbahn krümmen.
+*   **Unterschied zur klassischen Modellierung:** Während in CAD-Programmen jede Verformung aufwendig auf der Geometrie berechnet werden muss, ist bei SDFs der Übergang zwischen klassischen CSG-Operationen und Raumverformungen fließend. Beides wird durch einfache mathematische Formeln beschrieben, die sich direkt miteinander kombinieren lassen.
+
+## Additive Fertigung und 3D-Druck
+
+Ein sehr praxisnahes Anwendungsgebiet für implizite CSG-Modellierung ist der moderne 3D-Druck (additive Fertigung):
+
+*   **Das Problem mit Polygonnetzen (STL):** Um Bauteile leicht und gleichzeitig stabil zu machen, füllt man sie im Inneren oft mit komplexen Gitterstrukturen (z. B. Wabenmuster oder Gyroide). Würde man diese extrem feinen Gitter als klassisches Dreiecksnetz abspeichern, wären die Dateien riesig (oft mehrere Gigabytes). Das bringt gängige Slicing-Software an ihre Grenzen.
+*   **Die SDF-Lösung:** Moderne Konstruktionsprogramme (wie *nTopology*) speichern solche Gitterstrukturen nicht als Dreiecke ab, sondern beschreiben sie direkt als mathematische SDF-Formeln. Die Slicing-Software des Druckers kann diese Formel für jeden Punkt auf dem Druckraster (Voxel) direkt auswerten. Dadurch entfällt der Zwischenschritt über ein fehleranfälliges Dreiecksnetz komplett, was Speicherplatz spart und Berechnungsfehler beim Drucken verhindert.
 
 # Quellenverzeichnis {.unnumbered}
 
