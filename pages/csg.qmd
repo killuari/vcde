@@ -23,7 +23,7 @@ Die Intuition dahinter:
 
 <iframe class="demo-embed" src="../assets/demos/embedded/csg-demo.html" height="650"></iframe>
 
-Für mehr als zwei Objekte wird dieselbe Operation wiederholt. Im Demo beginnt die Szene mit dem ersten Objekt und kombiniert dann nacheinander die weiteren aktiven Objekte:
+Für mehr als zwei Objekte wird dieselbe Operation wiederholt. In der Demo beginnt die Szene mit dem ersten Objekt und kombiniert dann nacheinander die weiteren aktiven Objekte:
 
 ```glsl
 float d = d1;
