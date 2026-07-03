@@ -35,7 +35,7 @@ Signed Distance Functions für sechs 2D-Primitive. Innenbereich (formspezifische
 <div class="demo-wide">
 <iframe
   src="../assets/demos/sdf-heatmap/index.html"
-  height="500"
+  height="620"
   scrolling="no"
   title="SDF-Distanzfeld">
 </iframe>
@@ -157,7 +157,7 @@ Iteriertes CSG: Ein Würfel wird durch dreifaches Subtrahieren von Kreuzformen z
 
 ## Schrittlimit
 
-Einstellbares `MAX_STEPS`-Limit macht sichtbar, wie weit entfernte Geometrie und flache Auftreffwinkel auf der Bodenebene mehr Marching-Iterationen benoetigen - und was passiert, wenn das Budget erschoepft ist. → [Grenzen & Artefakte](grenzen-artefakte.qmd#schrittlimit)
+Einstellbares `MAX_STEPS`-Limit macht sichtbar, wie weit entfernte Geometrie und flache Auftreffwinkel auf der Bodenebene mehr Marching-Iterationen benötigen - und was passiert, wenn das Budget erschöpft ist. → [Grenzen & Artefakte](grenzen-artefakte.qmd#schrittlimit)
 
 ```{=html}
 <div class="demo-wide">
@@ -172,7 +172,7 @@ Einstellbares `MAX_STEPS`-Limit macht sichtbar, wie weit entfernte Geometrie und
 
 ## Abstandsschwelle
 
-Einstellbarer Treffschwellenwert `epsilon` zeigt, wie zu gross gewaehlte Werte Oberflächen aufgeblaest erscheinen lassen und eng beieinander liegende Formen optisch verschmelzen. → [Grenzen & Artefakte](grenzen-artefakte.qmd#abstandsschwelle)
+Einstellbarer Treffschwellenwert `epsilon` zeigt, wie zu groß gewählte Werte Oberflächen aufgebläht erscheinen lassen und eng beieinander liegende Formen optisch verschmelzen. → [Grenzen & Artefakte](grenzen-artefakte.qmd#abstandsschwelle)
 
 ```{=html}
 <div class="demo-wide">

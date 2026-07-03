@@ -11,7 +11,7 @@ author:
 
 Sphere Tracing basiert auf der Annahme, dass die SDF korrekt ist und jeder Schritt sicher ist [@hart1996].
 Wenn diese Voraussetzungen verletzt sind - durch ein zu knappes Schrittbudget oder eine zu grob
-gewaehlte Abbruchschwelle - entstehen typische Artefakte.
+gewählte Abbruchschwelle - entstehen typische Artefakte.
 Die beiden Demos zeigen diese Probleme interaktiv.
 :::
 
@@ -19,9 +19,9 @@ Die beiden Demos zeigen diese Probleme interaktiv.
 
 ## Schrittlimit
 
-Sphere Tracing muss fuer jeden Pixel iterativ naeherkommen. Ein festes Schrittlimit
-`MAX_STEPS` begrenzt den Rechenaufwand, laesst aber weit entfernte oder geometrisch
-aufwaendige Bereiche (z. B. die Bodenebene bei flachem Auftreffwinkel) ungerendert.
+Sphere Tracing muss für jeden Pixel iterativ näherkommen. Ein festes Schrittlimit
+`MAX_STEPS` begrenzt den Rechenaufwand, lässt aber weit entfernte oder geometrisch
+aufwändige Bereiche (z. B. die Bodenebene bei flachem Auftreffwinkel) ungerendert.
 -> [Der Ray-Marching-Algorithmus](theorie.qmd#der-ray-marching-algorithmus)
 
 ```{=html}
@@ -39,8 +39,8 @@ aufwaendige Bereiche (z. B. die Bodenebene bei flachem Auftreffwinkel) ungerende
 
 Der Ray-Marching-Loop bricht ab, sobald `d < epsilon`. Dieser Schwellenwert ist notwendig,
 um Konvergenzprobleme zu vermeiden - bestimmt aber zugleich, wie weit der Strahl noch
-von der echten Oberflaeche entfernt ist, wenn er stoppt. Zu gross gewaehltes Epsilon laesst
-Objekte aufgeblaest wirken; nahe beieinander liegende Oberflaechen koennen optisch
+von der echten Oberfläche entfernt ist, wenn er stoppt. Zu groß gewähltes Epsilon lässt
+Objekte aufgebläht wirken; nahe beieinander liegende Oberflächen können optisch
 verschmelzen.
 -> [Der Ray-Marching-Algorithmus](theorie.qmd#der-ray-marching-algorithmus)
 
