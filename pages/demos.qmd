@@ -19,7 +19,8 @@ Signed Distance Function einer Kugel: Der Slider verschiebt den Abfragepunkt, da
 ```{=html}
 <div class="demo-wide">
 <iframe
-  src="../assets/demos/embedded/sphere-sdf-demo.html"
+  loading="lazy"
+  data-src="../assets/demos/embedded/sphere-sdf-demo.html"
   height="460"
   scrolling="no"
   title="Kugel SDF Demo">
@@ -34,7 +35,8 @@ Signed Distance Functions für sechs 2D-Primitive. Innenbereich (formspezifische
 ```{=html}
 <div class="demo-wide">
 <iframe
-  src="../assets/demos/sdf-heatmap/index.html"
+  loading="lazy"
+  data-src="../assets/demos/sdf-heatmap/index.html"
   height="620"
   scrolling="no"
   title="SDF-Distanzfeld">
@@ -49,7 +51,8 @@ Schrittweise Visualisierung des Sphere-Tracing-Algorithmus. Die gestrichelten Kr
 ```{=html}
 <div class="demo-wide">
 <iframe
-  src="../assets/demos/ray-marching-visualisierer/index.html"
+  loading="lazy"
+  data-src="../assets/demos/ray-marching-visualisierer/index.html"
   height="500"
   scrolling="no"
   title="Ray-Marching Schritte">
@@ -64,7 +67,8 @@ Parametrische Steuerung von Schrittweite und Szene. → [Der Ray-Marching-Algori
 ```{=html}
 <div class="demo-wide">
 <iframe
-  src="../assets/demos/embedded/raymarch-demo.html"
+  loading="lazy"
+  data-src="../assets/demos/embedded/raymarch-demo.html"
   height="440"
   scrolling="no"
   title="Ray-Marching Parametrisch">
@@ -87,7 +91,8 @@ Sechs klassische SDF-Primitive nach Inigo Quilez - Kugel, Box, Torus, Kapsel, Zy
 ```{=html}
 <div class="demo-wide">
 <iframe
-  src="../assets/demos/primitiv-galerie/index.html"
+  loading="lazy"
+  data-src="../assets/demos/primitiv-galerie/index.html"
   height="560"
   scrolling="no"
   title="Primitiv-Galerie">
@@ -102,7 +107,8 @@ Phong-Shading mit hartem Schatten und optionaler Ambient Occlusion. Lichtquelle 
 ```{=html}
 <div class="demo-wide">
 <iframe
-  src="../assets/demos/beleuchtung-schatten/index.html"
+  loading="lazy"
+  data-src="../assets/demos/beleuchtung-schatten/index.html"
   height="660"
   scrolling="no"
   title="Beleuchtung und Schatten">
@@ -117,7 +123,8 @@ Domain-Repetition mit `mod()`: Ein einzelnes SDF-Objekt wird durch eine Faltung 
 ```{=html}
 <div class="demo-wide">
 <iframe
-  src="../assets/demos/unendliche-repetition/index.html"
+  loading="lazy"
+  data-src="../assets/demos/unendliche-repetition/index.html"
   height="470"
   scrolling="no"
   title="Unendliche Repetition">
@@ -132,7 +139,8 @@ Eine vollständig prozedurale Berglandschaft - kein einziges Polygon. Die Geomet
 ```{=html}
 <div class="demo-wide">
 <iframe
-  src="../assets/demos/prozedurale-landschaft/index.html"
+  loading="lazy"
+  data-src="../assets/demos/prozedurale-landschaft/index.html"
   height="500"
   scrolling="yes"
   title="Prozedurale Landschaft">
@@ -147,7 +155,8 @@ Iteriertes CSG: Ein Würfel wird durch dreifaches Subtrahieren von Kreuzformen z
 ```{=html}
 <div class="demo-wide">
 <iframe
-  src="../assets/demos/menger-schwamm/index.html"
+  loading="lazy"
+  data-src="../assets/demos/menger-schwamm/index.html"
   height="470"
   scrolling="no"
   title="Menger-Schwamm">
@@ -162,7 +171,8 @@ Einstellbares `MAX_STEPS`-Limit macht sichtbar, wie weit entfernte Geometrie und
 ```{=html}
 <div class="demo-wide">
 <iframe
-  src="../assets/demos/schrittlimit/index.html"
+  loading="lazy"
+  data-src="../assets/demos/schrittlimit/index.html"
   height="580"
   scrolling="no"
   title="Schrittlimit">
@@ -177,7 +187,8 @@ Einstellbarer Treffschwellenwert `epsilon` zeigt, wie zu groß gewählte Werte O
 ```{=html}
 <div class="demo-wide">
 <iframe
-  src="../assets/demos/abstandsschwelle/index.html"
+  loading="lazy"
+  data-src="../assets/demos/abstandsschwelle/index.html"
   height="600"
   scrolling="no"
   title="Abstandsschwelle">
@@ -194,7 +205,8 @@ Constructive Solid Geometry: Vereinigung, Schnittmenge und Differenz zweier SDF-
 ```{=html}
 <div class="demo-wide">
 <iframe
-  src="../assets/demos/csg-live/index.html"
+  loading="lazy"
+  data-src="../assets/demos/csg-live/index.html"
   height="880"
   scrolling="no"
   title="CSG Live Demo">
@@ -206,3 +218,33 @@ Constructive Solid Geometry: Vereinigung, Schnittmenge und Differenz zweier SDF-
 
 ::: {#refs}
 :::
+
+```{=html}
+<script>
+// Demos erst laden, wenn sie sichtbar werden (aktiver Reiter oder in den
+// Viewport gescrollt). Verhindert, dass alle WebGL-Kontexte gleichzeitig
+// starten und die Seite ausbremsen.
+(function () {
+  function loadFrame(f) {
+    if (f.dataset.src) {
+      f.src = f.dataset.src;
+      delete f.dataset.src;
+    }
+  }
+  var frames = document.querySelectorAll('iframe[data-src]');
+  if (!('IntersectionObserver' in window)) {
+    frames.forEach(loadFrame); // Fallback: alle laden
+    return;
+  }
+  var io = new IntersectionObserver(function (entries, obs) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        loadFrame(e.target);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { rootMargin: '300px' });
+  frames.forEach(function (f) { io.observe(f); });
+})();
+</script>
+```
