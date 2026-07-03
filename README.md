@@ -25,7 +25,7 @@ Die Website besteht aus sechs Kapiteln (Navigationsleiste oben):
 
 - **[Quarto](https://quarto.org)** - erzeugt die statische Website aus den `.qmd`-Dateien
 - **WebGL2 + GLSL** - die interaktiven Demos (`index.html` + `demo.js` + `shader.frag` je Demo), ohne externe 3D-Bibliotheken
-- **SCSS** - dark-first Theme (akademisches Dunkelblau) mit Umschalter auf ein helles Theme
+- **SCSS** - dark Theme
 - **Python + [uv](https://docs.astral.sh/uv/)** - optional, nur für eine Jupyter-Umgebung; für das reine Rendern der aktuellen Seiten wird Python **nicht** benötigt
 
 ## Voraussetzungen
