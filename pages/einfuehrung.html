@@ -244,7 +244,7 @@ div.csl-indent {
 <h2 class="anchored" data-anchor-id="prozedurale-modellierung">Prozedurale Modellierung</h2>
 <p>Ein häufiges Einsatzgebiet von Signed Distance Functions ist die prozedurale Erzeugung von Geometrie. Anstatt Objekte manuell zu modellieren und als Polygonnetz zu speichern, werden Formen durch mathematische Funktionen beschrieben und zur Laufzeit generiert. Dadurch lassen sich komplexe Szenen und Modelle mit vergleichsweise wenig Speicheraufwand erzeugen. Typische Beispiele sind Landschaften, Höhlensysteme oder abstrakte, algorithmisch erzeugte Welten und Sci-Fi-Strukturen. Änderungen an Parametern führen unmittelbar zu neuen Geometrien, ohne dass Modelle neu erstellt werden müssen.</p>
 <div class="demo-wide">
-<iframe src="../assets/demos/prozedurale-landschaft/index.html" height="500" scrolling="yes" title="Prozedurale Landschaft">
+<iframe loading="lazy" src="../assets/demos/prozedurale-landschaft/index.html" height="500" scrolling="yes" title="Prozedurale Landschaft">
 </iframe>
 </div>
 </section>
@@ -252,7 +252,7 @@ div.csl-indent {
 <h2 class="anchored" data-anchor-id="unendliche-wiederholung-von-objekten">Unendliche Wiederholung von Objekten</h2>
 <p>Ein besonders eindrucksvolles Beispiel prozeduraler Geometrie ist die Domain-Repetition mit <code>mod()</code>: Ein einzelnes SDF-Objekt wird durch eine Faltung des Koordinatenraums unendlich oft wiederholt, ohne Mehraufwand zur Laufzeit <span class="citation" data-cites="quilez_distfunctions">(<a href="#ref-quilez_distfunctions" role="doc-biblioref">Quilez, o.&nbsp;J.</a>)</span>. In der folgenden Demo fliegt die Kamera automatisch durch das Feld; Farben, Schatten und Ambient Occlusion werden prozedural berechnet.</p>
 <div class="demo-wide">
-<iframe src="../assets/demos/unendliche-repetition/index.html" height="470" scrolling="no" title="Unendliche Repetition">
+<iframe loading="lazy" src="../assets/demos/unendliche-repetition/index.html" height="470" scrolling="no" title="Unendliche Repetition">
 </iframe>
 </div>
 </section>
@@ -277,7 +277,7 @@ Abbildung&nbsp;1: Constructive Solid Geometry mit SDFs
 <h2 class="anchored" data-anchor-id="fraktale-und-mathematische-strukturen">Fraktale und mathematische Strukturen</h2>
 <p>Ein weiterer Anwendungsbereich ist die Darstellung mathematisch definierter Objekte und Fraktale. Bekannte Beispiele sind die Mandelbulb oder die Mandelbox. Solche Strukturen weisen häufig eine sehr hohe geometrische Komplexität und feine Details auf, die mit klassischen Polygonnetzen nur schwer darstellbar wären. Durch die mathematische Beschreibung der Geometrie eignen sich SDF-basierte Verfahren besonders gut für die Visualisierung solcher Formen.</p>
 <div class="demo-wide">
-<iframe src="../assets/demos/menger-schwamm/index.html" height="470" scrolling="no" title="Menger-Schwamm">
+<iframe loading="lazy" src="../assets/demos/menger-schwamm/index.html" height="470" scrolling="no" title="Menger-Schwamm">
 </iframe>
 </div>
 </section>
@@ -286,7 +286,7 @@ Abbildung&nbsp;1: Constructive Solid Geometry mit SDFs
 <p>Große Bekanntheit erlangten Signed Distance Functions durch die Demo-Szene und moderne Shader-Programmierung. Da sich komplexe Geometrie direkt im Shader beschreiben lässt, können beeindruckende Szenen mit vergleichsweise wenig Programmcode erzeugt werden. Besonders bei sogenannten 4k- oder 64k-Intros, bei denen die gesamte Anwendung nur wenige Kilobyte groß sein darf, bieten SDFs erhebliche Vorteile gegenüber gespeicherter Polygongeometrie. Darüber hinaus kommen SDFs häufig in Shader-Plattformen wie ShaderToy zum Einsatz, um prozedurale Szenen vollständig auf der GPU zu erzeugen.</p>
 <p>Das folgende Video zeigt eine Demo aus der 4K-Kategorie der Demoszene. Dieses Werk des Künstlers „reptile“ basiert auf einer lediglich 4 kB großen kompilierten ausführbaren Datei. Um trotz der extremen Größenbeschränkung komplexe 3D-Szenen zu erzeugen, werden keine vorgefertigten Modelle oder Texturen gespeichert. Stattdessen werden Geometrien mithilfe mathematischer Funktionen - unter anderem Signed Distance Functions - prozedural zur Laufzeit erzeugt und per Ray Marching gerendert.</p>
 <div style="position: relative; padding-bottom: 56.25%; height: 0;">
-<p><iframe src="https://www.youtube.com/embed/roZ-Cgxe9bU" style="position:absolute; top:0; left:0; width:100%; height:100%;" frameborder="0" allowfullscreen=""> </iframe></p>
+<p><iframe loading="lazy" src="https://www.youtube.com/embed/roZ-Cgxe9bU" style="position:absolute; top:0; left:0; width:100%; height:100%;" frameborder="0" allowfullscreen=""> </iframe></p>
 </div>
 
 <div class="no-row-height column-margin column-container"><div class="">
