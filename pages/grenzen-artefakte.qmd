@@ -3,10 +3,14 @@ title: "Grenzen & Artefakte"
 author: "Luis Kahles"
 ---
 
+::: {.callout-important}
+## Wann Sphere Tracing versagt
+
 Sphere Tracing basiert auf der Annahme, dass die SDF korrekt ist und jeder Schritt sicher ist [@hart1996].
 Wenn diese Voraussetzungen verletzt sind - durch ein zu knappes Schrittbudget oder eine zu grob
 gewaehlte Abbruchschwelle - entstehen typische Artefakte.
 Die beiden Demos zeigen diese Probleme interaktiv.
+:::
 
 ::: {.panel-tabset}
 

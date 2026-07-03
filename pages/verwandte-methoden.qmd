@@ -7,14 +7,33 @@ In diesem Kapitel wird beschrieben, wie sich Ray Marching mit SDFs von klassisch
 
 ## Vergleich mit Rasterisierung und Ray Tracing
 
-### Rasterisierung
+::: {.grid}
+
+::: {.g-col-12 .g-col-lg-4}
+::: {.feature-card}
+**Rasterisierung**
+
 Die meisten Spiele und Echtzeitanwendungen nutzen Rasterisierung. Dreidimensionale Objekte werden dabei als Netz aus Dreiecken (Mesh) beschrieben. Diese Dreiecke werden auf den zweidimensionalen Bildschirm projiziert und eingefärbt. Grafikkarten sind genau für diese Aufgabe optimiert, weshalb das Verfahren extrem schnell ist. Der Nachteil ist jedoch, dass jede Form vorher als festes Netz existieren muss. Komplexe oder sehr glatte Oberflächen benötigen enorm viele Dreiecke, was viel Speicherplatz kostet [@vc_geo; @vc_raster].
+:::
+:::
 
-### Ray Tracing
+::: {.g-col-12 .g-col-lg-4}
+::: {.feature-card}
+**Ray Tracing**
+
 Beim klassischen Ray Tracing werden Lichtstrahlen von der Kamera in die Szene geschossen. Das Programm berechnet exakte Schnittpunkte zwischen diesen Strahlen und den Objekten (z. B. Dreiecken oder Kugeln). Dadurch lassen sich Spiegelungen, Schatten und Lichtbrechungen sehr realistisch darstellen. Allerdings erfordert dies viele mathematische Berechnungen für die Schnittpunkttests, was vor allem bei komplexen Szenen rechenintensiv ist [@whitted1980].
+:::
+:::
 
-### Ray Marching
+::: {.g-col-12 .g-col-lg-4}
+::: {.feature-card}
+**Ray Marching**
+
 Ray Marching (speziell Sphere Tracing) mit SDFs nutzt einen anderen Ansatz. Hier werden keine exakten Schnittpunkte berechnet. Stattdessen wandert der Strahl in Schritten durch die Szene. An jedem Punkt liefert die Signed Distance Function (SDF) den Abstand zum nächsten Objekt. Der Strahl kann sich sicher um genau diese Distanz weiterbewegen, ohne ein Objekt zu überspringen. Das Rendering ist dadurch sehr flexibel und eignet sich besonders gut für fraktale oder mathematisch definierte Formen [@hart1996; @quilez_raymarch].
+:::
+:::
+
+:::
 
 Der zentrale Unterschied der Geometrierepräsentationen ist in folgender Tabelle zusammengefasst:
 
@@ -28,9 +47,23 @@ Der zentrale Unterschied der Geometrierepräsentationen ist in folgender Tabelle
 
 CAD-Programme (wie FreeCAD oder SolidWorks) nutzen ebenfalls CSG als Modellierungsprinzip. Der Anwender fügt Formen zusammen oder zieht sie voneinander ab. Der Unterschied liegt jedoch darin, wie diese Operationen im Hintergrund berechnet und gespeichert werden:
 
-*   **CSG über Boundary Representations (B-Rep):** CAD-Programme beschreiben Körper über ihre Grenzflächen (B-Rep). Wenn der Anwender dort eine CSG-Operation durchführt (z. B. einen Zylinder von einem Block abzieht), muss der CAD-Kernel (wie OpenCASCADE bei FreeCAD) die exakten Schnittkurven der Oberflächen berechnen. Bei komplexen Schnitten oder minimalen Ausrichtungsfehlern führen Rundungsfehler (Floating-Point-Fehler) oft dazu, dass diese Berechnungen fehlschlagen. Die Folge sind fehlerhafte Modelle mit offenen Kanten oder Löchern.
-*   **CSG über SDFs (Implizite Modellierung):** Bei SDFs gibt es keine Grenzflächen, die geometrisch geschnitten werden müssen. Die CSG-Operationen werden punktweise über einfache mathematische Abfragen berechnet (z. B. `max(d1, -d2)` für die Differenz). Da keine Kanten oder Flächen explizit berechnet werden müssen, ist dieses Verfahren absolut robust. Es können niemals Löcher oder topologische Fehler entstehen.
-*   **Mathematisches Fundament:** Diese einfache Verknüpfung von Abstandsfeldern geht auf die mathematische Theorie der **R-Funktionen** zurück [@shapiro2001]. Sie beweist, dass logische Operationen (AND, OR, NOT) fehlerfrei auf kontinuierliche Funktionen übertragen werden können.
+::: {.callout-warning}
+## CSG über Boundary Representations (B-Rep)
+
+CAD-Programme beschreiben Körper über ihre Grenzflächen (B-Rep). Wenn der Anwender dort eine CSG-Operation durchführt (z. B. einen Zylinder von einem Block abzieht), muss der CAD-Kernel (wie OpenCASCADE bei FreeCAD) die exakten Schnittkurven der Oberflächen berechnen. Bei komplexen Schnitten oder minimalen Ausrichtungsfehlern führen Rundungsfehler (Floating-Point-Fehler) oft dazu, dass diese Berechnungen fehlschlagen. Die Folge sind fehlerhafte Modelle mit offenen Kanten oder Löchern.
+:::
+
+::: {.callout-tip}
+## CSG über SDFs (Implizite Modellierung)
+
+Bei SDFs gibt es keine Grenzflächen, die geometrisch geschnitten werden müssen. Die CSG-Operationen werden punktweise über einfache mathematische Abfragen berechnet (z. B. `max(d1, -d2)` für die Differenz). Da keine Kanten oder Flächen explizit berechnet werden müssen, ist dieses Verfahren absolut robust. Es können niemals Löcher oder topologische Fehler entstehen.
+:::
+
+::: {.callout-note}
+## Mathematisches Fundament
+
+Diese einfache Verknüpfung von Abstandsfeldern geht auf die mathematische Theorie der **R-Funktionen** zurück [@shapiro2001]. Sie beweist, dass logische Operationen (AND, OR, NOT) fehlerfrei auf kontinuierliche Funktionen übertragen werden können.
+:::
 
 ## Anwendung in Computerspielen und Physik
 

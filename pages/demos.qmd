@@ -109,7 +109,7 @@ Phong-Shading mit hartem Schatten und optionaler Ambient Occlusion. Lichtquelle 
 
 ## Unendliche Repetition
 
-Domain-Repetition mit `mod()`: Ein einzelnes SDF-Objekt wird durch eine Faltung des Koordinatenraums unendlich oft wiederholt - ohne Mehraufwand zur Laufzeit [@quilez_distfunctions]. Die Kamera fliegt automatisch durch das Feld; Farben, Schatten und Ambient Occlusion werden prozedural berechnet.
+Domain-Repetition mit `mod()`: Ein einzelnes SDF-Objekt wird durch eine Faltung des Koordinatenraums unendlich oft wiederholt - ohne Mehraufwand zur Laufzeit [@quilez_distfunctions]. Die Kamera fliegt automatisch durch das Feld; Farben, Schatten und Ambient Occlusion werden prozedural berechnet. → [Unendliche Wiederholung von Objekten](einfuehrung.qmd#unendliche-wiederholung-von-objekten)
 
 ```{=html}
 <div class="demo-wide">

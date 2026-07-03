@@ -1,3 +1,6 @@
+/* Theme-unabhaengige Layout-Regeln.
+   Farben und Themenspezifisches liegen in theme-dark.scss / theme-light.scss. */
+
 :root {
   --quarto-body-content-width: 1500px;
   --quarto-body-width: 1760px;
@@ -7,61 +10,38 @@ body {
   overflow-x: hidden;
 }
 
-/* Header navigation */
-.navbar {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
-}
-
+/* Navbar: Abstaende und Struktur (Farben kommen aus dem Theme) */
 .navbar .navbar-container {
   gap: 1rem;
 }
-
 .navbar .navbar-brand-container {
   margin-right: 1.25rem;
   padding-right: 1.25rem;
-  border-right: 1px solid rgba(255, 255, 255, 0.22);
 }
-
 .navbar .navbar-brand {
   padding: 0.25rem 0;
 }
-
 .navbar .navbar-title {
   font-weight: 700;
   letter-spacing: 0.01em;
   white-space: nowrap;
 }
-
 .navbar .navbar-nav {
   gap: 0.25rem;
 }
-
 .navbar .nav-link {
   margin: 0 0.05rem;
   padding: 0.35rem 0.7rem;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
-.navbar .nav-link:hover,
-.navbar .nav-link:focus {
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.navbar .nav-link.active {
-  background: rgba(255, 255, 255, 0.18);
-  font-weight: 650;
-}
-
-/* Embedded demos and iframes */
+/* Eingebettete Demos und iframes: nur Layout (Rahmen im Theme) */
 .demo-embed,
 .demo-wide iframe {
   display: block;
   width: 100%;
-  border: 1px solid #d7dce3;
-  border-radius: 4px;
+  border-radius: 8px;
 }
-
 .demo-wide {
   margin: 1.5rem 0;
 }

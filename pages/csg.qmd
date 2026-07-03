@@ -15,11 +15,13 @@ Angenommen, $d_1(\mathbf{p})$ ist die Distanz zur ersten Form und $d_2(\mathbf{p
 | Intersection | $d(\mathbf{p}) = \max(d_1(\mathbf{p}), d_2(\mathbf{p}))$ | nur der gemeinsame Bereich |
 | Difference | $d(\mathbf{p}) = \max(d_1(\mathbf{p}), -d_2(\mathbf{p}))$ | erstes Objekt ohne zweites Objekt |
 
-Die Intuition dahinter:
+::: {.callout-note}
+## Die Intuition dahinter
 
 * Bei der **Union** interessiert die näher gelegene Oberfläche. Deshalb nimmt man das Minimum.
 * Bei der **Intersection** muss ein Punkt in beiden Körpern liegen. Ein Punkt ist erst dann innen, wenn beide Distanzen negativ sind. Deshalb bestimmt die größere Distanz die Grenze.
 * Bei der **Difference** wird das zweite Objekt aus dem ersten herausgeschnitten. Durch $-d_2$ wird innen und außen der zweiten Form vertauscht.
+:::
 
 <iframe class="demo-embed" src="../assets/demos/embedded/csg-demo.html" height="650"></iframe>
 

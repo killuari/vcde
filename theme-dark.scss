@@ -1,0 +1,96 @@
+/*-- scss:defaults --*/
+
+// =============================================================
+//  Dark-first Theme: akademisches Dunkelblau (Slate + Sky)
+//  Basis: Bootswatch "darkly", hier auf eine ruhige Blau-Palette
+//  abgestimmt. Standard-Erscheinungsbild der Website.
+// =============================================================
+
+// Grundfarben
+$body-bg:                #0f172a;   // slate-900
+$body-color:             #e2e8f0;   // slate-200
+$headings-color:         #f1f5f9;   // slate-100
+
+// Akzente
+$primary:                #38bdf8;   // sky-400
+$secondary:              #94a3b8;   // slate-400
+$link-color:             #56c5f2;
+$link-hover-color:       #93d8f8;
+
+// Flaechen und Linien
+$border-color:           #334155;   // slate-700
+$card-bg:                #182338;
+$card-border-color:      #2b3a55;
+$card-cap-bg:            #1f2c46;
+$table-border-color:     #2b3a55;
+
+// Code
+$code-color:             #a5d6ff;
+$code-bg:                #172033;
+$code-block-bg:          #111a2e;
+
+// Typografie und Radien
+$font-size-root:         17px;
+$line-height-base:       1.7;
+$headings-font-weight:   650;
+$border-radius:          0.5rem;
+
+/*-- scss:rules --*/
+
+// ---- Navbar: dunkler als der Body, feine Trennlinie ----
+.navbar {
+  background-color: #0b1120 !important;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
+}
+.navbar .navbar-brand-container {
+  border-right: 1px solid rgba(148, 163, 184, 0.22);
+}
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+  background: rgba(148, 163, 184, 0.14);
+}
+.navbar .nav-link.active {
+  background: rgba(56, 189, 248, 0.16);
+  color: #7dd3fc !important;
+  font-weight: 650;
+}
+
+// ---- Ueberschriften mit dezentem Akzent ----
+h1, h2 { letter-spacing: -0.01em; }
+h2 {
+  border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+  padding-bottom: 0.3rem;
+}
+
+// ---- Demo-iframes: Rahmen und Schatten passend zum Theme ----
+.demo-embed,
+.demo-wide iframe {
+  border: 1px solid #2b3a55;
+  background: #0b1120;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+}
+
+// ---- Feature-Karten (fuer Anwendungs- und Beispiel-Raster) ----
+.feature-card {
+  background: linear-gradient(180deg, #182338 0%, #131c30 100%);
+  border: 1px solid #2b3a55;
+  border-radius: 0.6rem;
+  padding: 1.1rem 1.25rem;
+  height: 100%;
+}
+.feature-card > :first-child { margin-top: 0; }
+.feature-card > :last-child { margin-bottom: 0; }
+.feature-card h4,
+.feature-card h5,
+.feature-card strong:first-child { color: #7dd3fc; }
+
+// ---- Tabellen: Kopfzeile hervorheben ----
+.table > thead { background: #1f2c46; }
+
+// ---- Callouts: abgerundet, dunkle Textflaeche ----
+.callout { border-radius: 0.5rem; }
+.callout.callout-style-default > .callout-body { background: #141d30; }
+
+// ---- Randnotizen dezent ----
+.column-margin { color: #9fb0c9; }

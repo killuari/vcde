@@ -11,13 +11,15 @@ Eine Signed Distance Function (SDF) beschreibt die Geometrie eines Objekts über
 
 Der Begriff signed bedeutet, dass dieser Abstand mit einem Vorzeichen versehen wird. Dadurch lässt sich nicht nur bestimmen, wie weit ein Punkt von einem Objekt entfernt ist, sondern auch, ob er sich innerhalb oder außerhalb des Objekts befindet.
 
+::: {.callout-note}
+## Vorzeichenkonvention
+
 Für einen beliebigen Punkt $p$ gilt:
 
-$f(p) < 0$: Der Punkt befindet sich innerhalb des Objekts.
-
-$f(p) = 0$: Der Punkt liegt auf der Oberfläche.
-
-$f(p) > 0$: Der Punkt befindet sich außerhalb des Objekts.
+- $f(p) < 0$: Der Punkt befindet sich innerhalb des Objekts.
+- $f(p) = 0$: Der Punkt liegt auf der Oberfläche.
+- $f(p) > 0$: Der Punkt befindet sich außerhalb des Objekts.
+:::
 
 Die Oberfläche eines Objekts entspricht somit genau der Menge aller Punkte, für die die Funktion den Wert Null annimmt.
 
@@ -84,7 +86,11 @@ Der entscheidende Vorteil einer Signed Distance Function besteht darin, dass sie
 
 Betrachtet man einen beliebigen Punkt entlang eines Strahls, so kann die Signed Distance Function direkt ausgewertet werden. Das Ergebnis gibt an, wie weit die nächste Oberfläche entfernt ist.
 
+::: {.callout-tip}
+## Adaptive Schrittweite
+
 Diese Information kann genutzt werden, um sich entlang des Strahls schrittweise auf die Oberfläche zuzubewegen. Anstatt feste Schrittweiten zu verwenden, wird die aktuell berechnete Distanz als neue Schrittweite gewählt. Dadurch kann sich der Strahl in leeren Bereichen der Szene schnell fortbewegen, während die Schritte in der Nähe einer Oberfläche automatisch kleiner werden.
+:::
 
 ## Der Ray-Marching-Algorithmus
 
