@@ -57,7 +57,7 @@ $$
 f(\mathbf{p}) = \|\mathbf{p} - \mathbf{c}\| - r
 $$
 
-<iframe class="demo-embed" src="../assets/demos/embedded/sphere-sdf-demo.html" height="460"></iframe>
+<iframe loading="lazy" class="demo-embed" src="../assets/demos/embedded/sphere-sdf-demo.html" height="460"></iframe>
 
 ## Primitive Formen und Operationen
 
@@ -69,11 +69,11 @@ Primitive SDFs bilden die Grundlage für die Modellierung komplexerer Szenen. Ä
 
 Die folgende Abbildung zeigt einige typische Primitive sowie ihre jeweiligen Signed Distance Functions [@quilez_distfunctions].
 
-<iframe class="demo-embed" src="../assets/demos/sdf-heatmap/index.html" height="620"></iframe>
+<iframe loading="lazy" class="demo-embed" src="../assets/demos/sdf-heatmap/index.html" height="620"></iframe>
 
 Die folgende 3D-Demo rendert dieselben Primitive per Ray Marching direkt im Browser. Form und Parameter lassen sich interaktiv anpassen.
 
-<iframe class="demo-embed" src="../assets/demos/primitiv-galerie/index.html" height="560"></iframe>
+<iframe loading="lazy" class="demo-embed" src="../assets/demos/primitiv-galerie/index.html" height="560"></iframe>
 
 # Ray Marching
 
@@ -115,11 +115,11 @@ Die folgende Visualisierung verdeutlicht dieses Vorgehen. Die Schrittweite entsp
 
 ## Animierte Schritte
 
-<iframe class="demo-embed" src="../assets/demos/ray-marching-visualisierer/index.html" height="500"></iframe>
+<iframe loading="lazy" class="demo-embed" src="../assets/demos/ray-marching-visualisierer/index.html" height="500"></iframe>
 
 ## Parametrische Steuerung
 
-<iframe class="demo-embed" src="../assets/demos/embedded/raymarch-demo.html" height="440"></iframe>
+<iframe loading="lazy" class="demo-embed" src="../assets/demos/embedded/raymarch-demo.html" height="440"></iframe>
 
 :::
 
@@ -210,7 +210,7 @@ Im Gegensatz zu klassischen Schatten hängt Ambient Occlusion also nicht von ein
 
 Die folgende Demo demonstriert Phong-Beleuchtung mit hartem Schatten und optionaler Ambient Occlusion. Einzelne Beleuchtungskomponenten lassen sich ein- und ausschalten; Lichtquelle und Blocker-Objekt sind frei positionierbar.
 
-<iframe class="demo-embed" src="../assets/demos/beleuchtung-schatten/index.html" height="660"></iframe>
+<iframe loading="lazy" class="demo-embed" src="../assets/demos/beleuchtung-schatten/index.html" height="660"></iframe>
 
 # Quellenverzeichnis {.unnumbered}
 

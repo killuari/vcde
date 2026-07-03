@@ -27,6 +27,7 @@ aufwändige Bereiche (z. B. die Bodenebene bei flachem Auftreffwinkel) ungerende
 ```{=html}
 <div class="demo-wide">
 <iframe
+  loading="lazy"
   src="../assets/demos/schrittlimit/index.html"
   height="580"
   scrolling="no"
@@ -47,6 +48,7 @@ verschmelzen.
 ```{=html}
 <div class="demo-wide">
 <iframe
+  loading="lazy"
   src="../assets/demos/abstandsschwelle/index.html"
   height="600"
   scrolling="no"
