@@ -164,7 +164,7 @@ div.csl-indent {
   <li><a href="#constructive-solid-geometry" id="toc-constructive-solid-geometry" class="nav-link" data-scroll-target="#constructive-solid-geometry">Constructive Solid Geometry</a></li>
   <li><a href="#fraktale-und-mathematische-strukturen" id="toc-fraktale-und-mathematische-strukturen" class="nav-link" data-scroll-target="#fraktale-und-mathematische-strukturen">Fraktale und mathematische Strukturen</a></li>
   <li><a href="#echtzeit-rendering-und-demo-szene" id="toc-echtzeit-rendering-und-demo-szene" class="nav-link" data-scroll-target="#echtzeit-rendering-und-demo-szene">Echtzeit-Rendering und Demo-Szene</a></li>
-  <li><a href="#forschung-und-moderne-anwendungen" id="toc-forschung-und-moderne-anwendungen" class="nav-link" data-scroll-target="#forschung-und-moderne-anwendungen">Forschung und moderne Anwendungen</a></li>
+  <li><a href="#weitere-beispiele-für-moderne-anwendungen-von-sdfs-in-industrie-und-forschung" id="toc-weitere-beispiele-für-moderne-anwendungen-von-sdfs-in-industrie-und-forschung" class="nav-link" data-scroll-target="#weitere-beispiele-für-moderne-anwendungen-von-sdfs-in-industrie-und-forschung">Weitere Beispiele für moderne Anwendungen von SDFs in Industrie und Forschung</a></li>
   <li><a href="#einordnung" id="toc-einordnung" class="nav-link" data-scroll-target="#einordnung">Einordnung</a></li>
   </ul></li>
   <li><a href="#historischer-überblick" id="toc-historischer-überblick" class="nav-link" data-scroll-target="#historischer-überblick">Historischer Überblick</a></li>
@@ -225,7 +225,7 @@ div.csl-indent {
 <h1>Typische Anwendungsgebiete</h1>
 <section id="prozedurale-modellierung" class="level2">
 <h2 class="anchored" data-anchor-id="prozedurale-modellierung">Prozedurale Modellierung</h2>
-<p>Ein häufiges Einsatzgebiet von Signed Distance Functions ist die prozedurale Erzeugung von Geometrie. Anstatt Objekte manuell zu modellieren und als Polygonnetz zu speichern, werden Formen durch mathematische Funktionen beschrieben und zur Laufzeit generiert. Dadurch lassen sich komplexe Szenen und Modelle mit vergleichsweise wenig Speicheraufwand erzeugen. Typische Beispiele sind Landschaften, Höhlensysteme oder abstrakte, algorithmisch erzeugte Welten und Sci-Fi-Strukturen.</p>
+<p>Ein häufiges Einsatzgebiet von Signed Distance Functions ist die prozedurale Erzeugung von Geometrie. Anstatt Objekte manuell zu modellieren und als Polygonnetz zu speichern, werden Formen durch mathematische Funktionen beschrieben und zur Laufzeit generiert. Dadurch lassen sich komplexe Szenen und Modelle mit vergleichsweise wenig Speicheraufwand erzeugen. Typische Beispiele sind Landschaften, Höhlensysteme oder abstrakte, algorithmisch erzeugte Welten und Sci-Fi-Strukturen. Änderungen an Parametern führen unmittelbar zu neuen Geometrien, ohne dass Modelle neu erstellt werden müssen.</p>
 <div class="demo-wide">
 <iframe src="../assets/demos/prozedurale-landschaft/index.html" height="610" scrolling="yes" title="Prozedurale Landschaft">
 </iframe>
@@ -233,8 +233,18 @@ div.csl-indent {
 </section>
 <section id="constructive-solid-geometry" class="level2">
 <h2 class="anchored" data-anchor-id="constructive-solid-geometry">Constructive Solid Geometry</h2>
-<p>Signed Distance Functions eignen sich besonders gut für Constructive Solid Geometry (CSG). Dabei werden komplexe Objekte aus einfachen Grundkörpern wie Kugeln, Würfeln oder Zylindern zusammengesetzt. Operationen wie Vereinigung, Schnittmenge oder Differenz können direkt auf den zugrunde liegenden Distanzfunktionen formuliert werden. Dies ermöglicht eine flexible und oft sehr elegante Modellierung komplexer Geometrien.</p>
-<p>[Beispielbild.png]</p>
+<p>Signed Distance Functions eignen sich besonders gut für Constructive Solid Geometry (CSG). Dabei werden komplexe Objekte aus einfachen Grundkörpern wie Kugeln, Würfeln oder Zylindern zusammengesetzt. Operationen wie Vereinigung, Schnittmenge oder Differenz können direkt auf den zugrunde liegenden Distanzfunktionen formuliert werden. Dies ermöglicht eine flexible und oft sehr elegante Modellierung komplexer Geometrien. Dies ermöglicht eine flexible und elegante Modellierung komplexer Geometrien, ohne dass Polygonnetze aufwendig miteinander verschmolzen oder neu trianguliert werden müssen.</p>
+<div id="fig-csg" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-csg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/csg-example.png" class="img-fluid figure-img" style="width:30.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-csg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;1: Constructive Solid Geometry mit SDFs
+</figcaption>
+</figure>
+</div>
+<p>Quelle: https://en.wikipedia.org/wiki/Constructive_solid_geometry</p>
 </section>
 <section id="fraktale-und-mathematische-strukturen" class="level2">
 <h2 class="anchored" data-anchor-id="fraktale-und-mathematische-strukturen">Fraktale und mathematische Strukturen</h2>
@@ -246,13 +256,32 @@ div.csl-indent {
 </section>
 <section id="echtzeit-rendering-und-demo-szene" class="level2">
 <h2 class="anchored" data-anchor-id="echtzeit-rendering-und-demo-szene">Echtzeit-Rendering und Demo-Szene</h2>
-<p>Große Bekanntheit erlangten Signed Distance Functions durch die Demo-Szene und moderne Shader-Programmierung. Da sich komplexe Geometrie direkt im Shader beschreiben lässt, können beeindruckende Szenen mit vergleichsweise wenig Programmcode erzeugt werden. Besonders bei sogenannten 4k- oder 64k-Intros, bei denen die gesamte Anwendung nur wenige Kilobyte groß sein darf, bieten SDFs erhebliche Vorteile gegenüber gespeicherter Polygongeometrie.</p>
-<p>[Beispielbild.png]</p>
+<p>Große Bekanntheit erlangten Signed Distance Functions durch die Demo-Szene und moderne Shader-Programmierung. Da sich komplexe Geometrie direkt im Shader beschreiben lässt, können beeindruckende Szenen mit vergleichsweise wenig Programmcode erzeugt werden. Besonders bei sogenannten 4k- oder 64k-Intros, bei denen die gesamte Anwendung nur wenige Kilobyte groß sein darf, bieten SDFs erhebliche Vorteile gegenüber gespeicherter Polygongeometrie. Darüber hinaus kommen SDFs häufig in Shader-Plattformen wie ShaderToy zum Einsatz, um prozedurale Szenen vollständig auf der GPU zu erzeugen.</p>
+<p>Das folgende Video zeigt eine Demo aus der 4K-Kategorie der Demoszene. Dieses Werk des Künstlers „reptile“ basiert auf einer lediglich 4 kB großen kompilierten ausführbaren Datei. Um trotz der extremen Größenbeschränkung komplexe 3D-Szenen zu erzeugen, werden keine vorgefertigten Modelle oder Texturen gespeichert. Stattdessen werden Geometrien mithilfe mathematischer Funktionen – unter anderem Signed Distance Functions – prozedural zur Laufzeit erzeugt und per Ray Marching gerendert.</p>
+<div style="position: relative; padding-bottom: 56.25%; height: 0;">
+<p><iframe src="https://www.youtube.com/embed/roZ-Cgxe9bU" style="position:absolute; top:0; left:0; width:100%; height:100%;" frameborder="0" allowfullscreen=""> </iframe></p>
+</div>
+<p>Quelle: https://www.youtube.com/watch?v=roZ-Cgxe9bU</p>
 </section>
-<section id="forschung-und-moderne-anwendungen" class="level2">
-<h2 class="anchored" data-anchor-id="forschung-und-moderne-anwendungen">Forschung und moderne Anwendungen</h2>
-<p>Auch in aktuellen Forschungsgebieten spielen Distanzfunktionen eine wichtige Rolle. Sie werden unter anderem für Kollisionsabfragen, Robotik, 3D-Rekonstruktion und Verfahren des Neural Renderings eingesetzt. Insbesondere die Repräsentation von Geometrie durch Distanzfelder hat in den letzten Jahren neue Ansätze zur Erfassung und Rekonstruktion realer Szenen ermöglicht.</p>
-<p>[Beispielbild.png]</p>
+<section id="weitere-beispiele-für-moderne-anwendungen-von-sdfs-in-industrie-und-forschung" class="level2">
+<h2 class="anchored" data-anchor-id="weitere-beispiele-für-moderne-anwendungen-von-sdfs-in-industrie-und-forschung">Weitere Beispiele für moderne Anwendungen von SDFs in Industrie und Forschung</h2>
+<ul>
+<li>Mesh Distance Fields (Unreal Engine): Distanzfelder ermöglichen effiziente Berechnung von Ambient Occlusion, weichen Schatten und Global Illumination</li>
+<li>3D-Rekonstruktion: TSDFs und moderne Neural-SDF-Verfahren rekonstruieren hochauflösende 3D-Modelle aus Tiefen- oder Bilddaten.</li>
+<li>Robotik: Distanzfelder unterstützen Kollisionsabfragen und Bewegungsplanung, indem sie den Abstand zu Hindernissen effizient bereitstellen.</li>
+<li>Schrift- und UI-Rendering: SDF- und MSDF-Fonts ermöglichen scharfe, beliebig skalierbare Schrift sowie Icons und UI-Elemente.</li>
+</ul>
+<div id="fig-csg" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-csg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../assets/images/mesh-distance-field-example.png" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-csg-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;2: Verwendung von Mesh Distance Fields in Unreal Engine 5
+</figcaption>
+</figure>
+</div>
+<p>Quelle: https://dev.epicgames.com/documentation/unreal-engine/mesh-distance-fields-in-unreal-engine</p>
 </section>
 <section id="einordnung" class="level2">
 <h2 class="anchored" data-anchor-id="einordnung">Einordnung</h2>
