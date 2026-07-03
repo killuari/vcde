@@ -71,9 +71,9 @@
         for (var i = 0; i < count; i++) {
             var btn = document.getElementById(prefix + i);
             if (!btn) continue;
-            btn.style.background = i === active ? '#4a90d9' : '#f0f0f0';
-            btn.style.color = i === active ? '#fff' : '#333';
-            btn.style.borderColor = i === active ? '#4a90d9' : '#bbb';
+            btn.style.background = i === active ? '#4a90d9' : '#1b1f27';
+            btn.style.color = i === active ? '#fff' : '#d3d9e2';
+            btn.style.borderColor = i === active ? '#4a90d9' : '#3a4250';
         }
     }
 

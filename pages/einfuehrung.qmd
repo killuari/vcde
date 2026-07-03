@@ -1,6 +1,9 @@
 ---
 title: "Einführung in das Thema"
-author: "Tobias Jäkel"
+author:
+  - "Tobias Jäkel"
+  - "Moritz Potthoff"
+  - "Luis Kahles"
 ---
 
 # Motivation
@@ -23,7 +26,11 @@ Darüber hinaus beschreibt ein Polygonnetz ausschließlich die Oberfläche eines
 
 Um einige dieser Einschränkungen zu umgehen, wurden verschiedene alternative Methoden zur Beschreibung von Geometrie entwickelt. Dazu zählen unter anderem Voxeldarstellungen, Punktwolken sowie implizite Oberflächen. Im Gegensatz zu Polygonnetzen wird die Geometrie hierbei nicht zwangsläufig durch eine Menge von Dreiecken beschrieben.
 
+::: {.callout-note}
+## Was ist eine Signed Distance Function?
+
 Signed Distance Functions (SDFs) gehören zu den impliziten Geometrierepräsentationen. Anstatt die Oberfläche eines Objekts direkt zu speichern, wird eine Funktion definiert, die jedem Punkt im Raum einen signierten Abstand zur nächstgelegenen Oberfläche zuordnet. Die eigentliche Geometrie ergibt sich somit indirekt aus dieser Funktion.
+:::
 
 Da bei diesem Ansatz keine expliziten Dreiecke vorhanden sind, können klassische Rasterisierungsverfahren nicht unmittelbar angewendet werden. Stattdessen kommen häufig Ray-Marching-Verfahren zum Einsatz. Dabei werden Strahlen schrittweise durch die Szene verfolgt, bis eine Oberfläche gefunden wird. Die in der Signed Distance Function enthaltenen Distanzinformationen ermöglichen dabei eine effiziente Bestimmung der nächsten Schrittweite.
 
@@ -39,20 +46,37 @@ Ein häufiges Einsatzgebiet von Signed Distance Functions ist die prozedurale Er
 <div class="demo-wide">
 <iframe
   src="../assets/demos/prozedurale-landschaft/index.html"
-  height="610"
+  height="500"
   scrolling="yes"
   title="Prozedurale Landschaft">
 </iframe>
 </div>
 ```
 
+## Unendliche Wiederholung von Objekten
+
+Ein besonders eindrucksvolles Beispiel prozeduraler Geometrie ist die Domain-Repetition mit `mod()`: Ein einzelnes SDF-Objekt wird durch eine Faltung des Koordinatenraums unendlich oft wiederholt, ohne Mehraufwand zur Laufzeit [@quilez_distfunctions]. In der folgenden Demo fliegt die Kamera automatisch durch das Feld; Farben, Schatten und Ambient Occlusion werden prozedural berechnet.
+
+```{=html}
+<div class="demo-wide">
+<iframe
+  src="../assets/demos/unendliche-repetition/index.html"
+  height="470"
+  scrolling="no"
+  title="Unendliche Repetition">
+</iframe>
+</div>
+```
+
 ## Constructive Solid Geometry
 
-Signed Distance Functions eignen sich besonders gut für Constructive Solid Geometry (CSG). Dabei werden komplexe Objekte aus einfachen Grundkörpern wie Kugeln, Würfeln oder Zylindern zusammengesetzt. Operationen wie Vereinigung, Schnittmenge oder Differenz können direkt auf den zugrunde liegenden Distanzfunktionen formuliert werden. Dies ermöglicht eine flexible und oft sehr elegante Modellierung komplexer Geometrien. Dies ermöglicht eine flexible und elegante Modellierung komplexer Geometrien, ohne dass Polygonnetze aufwendig miteinander verschmolzen oder neu trianguliert werden müssen.
+Signed Distance Functions eignen sich besonders gut für Constructive Solid Geometry (CSG). Dabei werden komplexe Objekte aus einfachen Grundkörpern wie Kugeln, Würfeln oder Zylindern zusammengesetzt. Operationen wie Vereinigung, Schnittmenge oder Differenz können direkt auf den zugrunde liegenden Distanzfunktionen formuliert werden. Dies ermöglicht eine flexible und elegante Modellierung komplexer Geometrien, ohne dass Polygonnetze aufwendig miteinander verschmolzen oder neu trianguliert werden müssen.
 
 ![Constructive Solid Geometry mit SDFs](../assets/images/csg-example.png){#fig-csg width="30%"}
 
-Quelle: https://en.wikipedia.org/wiki/Constructive_solid_geometry
+::: {.column-margin}
+**Quelle:** <https://en.wikipedia.org/wiki/Constructive_solid_geometry>
+:::
 
 ## Fraktale und mathematische Strukturen
 
@@ -62,7 +86,7 @@ Ein weiterer Anwendungsbereich ist die Darstellung mathematisch definierter Obje
 <div class="demo-wide">
 <iframe
   src="../assets/demos/menger-schwamm/index.html"
-  height="580"
+  height="470"
   scrolling="no"
   title="Menger-Schwamm">
 </iframe>
@@ -73,7 +97,7 @@ Ein weiterer Anwendungsbereich ist die Darstellung mathematisch definierter Obje
 
 Große Bekanntheit erlangten Signed Distance Functions durch die Demo-Szene und moderne Shader-Programmierung. Da sich komplexe Geometrie direkt im Shader beschreiben lässt, können beeindruckende Szenen mit vergleichsweise wenig Programmcode erzeugt werden. Besonders bei sogenannten 4k- oder 64k-Intros, bei denen die gesamte Anwendung nur wenige Kilobyte groß sein darf, bieten SDFs erhebliche Vorteile gegenüber gespeicherter Polygongeometrie. Darüber hinaus kommen SDFs häufig in Shader-Plattformen wie ShaderToy zum Einsatz, um prozedurale Szenen vollständig auf der GPU zu erzeugen.
 
-Das folgende Video zeigt eine Demo aus der 4K-Kategorie der Demoszene. Dieses Werk des Künstlers „reptile“ basiert auf einer lediglich 4 kB großen kompilierten ausführbaren Datei. Um trotz der extremen Größenbeschränkung komplexe 3D-Szenen zu erzeugen, werden keine vorgefertigten Modelle oder Texturen gespeichert. Stattdessen werden Geometrien mithilfe mathematischer Funktionen – unter anderem Signed Distance Functions – prozedural zur Laufzeit erzeugt und per Ray Marching gerendert.
+Das folgende Video zeigt eine Demo aus der 4K-Kategorie der Demoszene. Dieses Werk des Künstlers „reptile“ basiert auf einer lediglich 4 kB großen kompilierten ausführbaren Datei. Um trotz der extremen Größenbeschränkung komplexe 3D-Szenen zu erzeugen, werden keine vorgefertigten Modelle oder Texturen gespeichert. Stattdessen werden Geometrien mithilfe mathematischer Funktionen - unter anderem Signed Distance Functions - prozedural zur Laufzeit erzeugt und per Ray Marching gerendert.
 
 <div style="position: relative; padding-bottom: 56.25%; height: 0;">
   <iframe
@@ -85,18 +109,53 @@ Das folgende Video zeigt eine Demo aus der 4K-Kategorie der Demoszene. Dieses We
 </div>
 
 
-Quelle: https://www.youtube.com/watch?v=roZ-Cgxe9bU
+::: {.column-margin}
+**Quelle:** <https://www.youtube.com/watch?v=roZ-Cgxe9bU>
+:::
 
 ## Weitere Beispiele für moderne Anwendungen von SDFs in Industrie und Forschung
 
-- Mesh Distance Fields (Unreal Engine): Distanzfelder ermöglichen effiziente Berechnung von Ambient Occlusion, weichen Schatten und Global Illumination
-- 3D-Rekonstruktion: TSDFs und moderne Neural-SDF-Verfahren rekonstruieren hochauflösende 3D-Modelle aus Tiefen- oder Bilddaten.
-- Robotik: Distanzfelder unterstützen Kollisionsabfragen und Bewegungsplanung, indem sie den Abstand zu Hindernissen effizient bereitstellen.
-- Schrift- und UI-Rendering: SDF- und MSDF-Fonts ermöglichen scharfe, beliebig skalierbare Schrift sowie Icons und UI-Elemente.
+::: {.grid}
 
-![Verwendung von Mesh Distance Fields in Unreal Engine 5](../assets/images/mesh-distance-field-example.png){#fig-csg width="70%"}
+::: {.g-col-12 .g-col-md-6}
+::: {.feature-card}
+**Mesh Distance Fields (Unreal Engine)**
 
-Quelle: https://dev.epicgames.com/documentation/unreal-engine/mesh-distance-fields-in-unreal-engine
+Distanzfelder ermöglichen effiziente Berechnung von Ambient Occlusion, weichen Schatten und Global Illumination
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6}
+::: {.feature-card}
+**3D-Rekonstruktion**
+
+TSDFs und moderne Neural-SDF-Verfahren rekonstruieren hochauflösende 3D-Modelle aus Tiefen- oder Bilddaten.
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6}
+::: {.feature-card}
+**Robotik**
+
+Distanzfelder unterstützen Kollisionsabfragen und Bewegungsplanung, indem sie den Abstand zu Hindernissen effizient bereitstellen.
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6}
+::: {.feature-card}
+**Schrift- und UI-Rendering**
+
+SDF- und MSDF-Fonts ermöglichen scharfe, beliebig skalierbare Schrift sowie Icons und UI-Elemente.
+:::
+:::
+
+:::
+
+![Verwendung von Mesh Distance Fields in Unreal Engine 5](../assets/images/mesh-distance-field-example.png){#fig-sdf-industrie width="70%"}
+
+::: {.column-margin}
+**Quelle:** <https://dev.epicgames.com/documentation/unreal-engine/mesh-distance-fields-in-unreal-engine>
+:::
 
 ## Einordnung
 

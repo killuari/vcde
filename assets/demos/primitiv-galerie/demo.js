@@ -127,9 +127,9 @@
         for (var i = 0; i < 6; i++) {
             var btn = document.getElementById('btn-shape-' + i);
             var active = i === idx;
-            btn.style.background = active ? '#4a90d9' : '#f0f0f0';
-            btn.style.color = active ? '#fff' : '#333';
-            btn.style.borderColor = active ? '#4a90d9' : '#bbb';
+            btn.style.background = active ? '#4a90d9' : '#1b1f27';
+            btn.style.color = active ? '#fff' : '#d3d9e2';
+            btn.style.borderColor = active ? '#4a90d9' : '#3a4250';
         }
 
         // sdBox (1) and sdOctahedron (5) have 47-char code lines - widen panel slightly

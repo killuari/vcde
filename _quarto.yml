@@ -14,8 +14,10 @@ bibliography: references.bib
 
 format:
   html:
+    theme:
+      - darkly
+      - theme-dark.scss
     css: styles.css
-    theme: default
     toc: true
     toc-depth: 2
     lang: de

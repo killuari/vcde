@@ -1,52 +1,99 @@
-# Interaktives Website-Template
-Dieses Repository dient als technische Grundlage für die Erstellung Ihrer Webseite. 
-Die Vorlage integriert Quarto zur Dokumenterstellung, Python für computergestützte Analysen 
-sowie beispielhaft Babylon.js für die Einbindung interaktiver 3D-Visualisierungen.
+# SDF Rendering via Ray Marching
 
-## Konfigurationsschritte (Setup)
-Um eine eigene Arbeitsumgebung auf Basis dieser Vorlage zu erstellen, führen Sie bitte die folgenden Schritte strikt in der angegebenen Reihenfolge aus:
+Eine interaktive Lern-Website zu **Signed Distance Functions (SDFs)** und **Sphere Tracing / Ray Marching**, erstellt mit [Quarto](https://quarto.org). Die Seite verbindet erklärenden Text mit selbst geschriebenen WebGL2-Demos, die direkt im Browser laufen.
 
-- **Repository forken**
-Betätigen Sie die Schaltfläche "Fork" in der oberen rechten Ecke der GitHub-Oberfläche. Hierdurch wird eine identische Kopie des Projekts in Ihren persönlichen GitHub-Account übertragen.
+Projekt im Rahmen des Moduls **Visual Computing** von Luis Kahles, Tobias Jäkel und Moritz Potthoff.
 
-- **Konfiguration der Workflow-Berechtigungen**
-Standardmäßig sind Schreibzugriffe für automatisierte Prozesse in Forks deaktiviert. Zur Aktivierung der Website-Erstellung müssen Sie folgende Anpassungen vornehmen:
+## Über das Projekt
 
-  - Navigieren Sie zu Settings > Actions > General.
-    
-  - Suchen Sie den Abschnitt Workflow permissions.
+Klassische Computergrafik beschreibt 3D-Objekte durch polygonale Netze. Diese Website zeigt eine Alternative: implizite Geometrie über Signed Distance Functions, die per Ray Marching gerendert wird. Zu jedem Konzept gibt es eine interaktive Demo, die das Verfahren live im Browser veranschaulicht.
 
-  - Aktivieren Sie die Option "Read and write permissions" und bestätigen Sie mit Save.
+Die Demos sind in **rohem WebGL2 mit GLSL-Shadern** geschrieben (kein three.js, Babylon.js o. Ä.). Jede Demo liegt als eigenständige Seite unter `assets/demos/` und wird per `<iframe>` in die Kapitel eingebettet.
 
-  - Wechseln Sie zum Reiter Actions und bestätigen Sie die Aktivierung der Workflows durch Klick auf "I understand my workflows, go ahead and enable them".
+## Inhalt
 
-- **Aktivierung von GitHub Pages**
-- 
-  - Navigieren Sie zu Settings > Pages.
+Die Website besteht aus sechs Kapiteln (Navigationsleiste oben):
 
-  - Wählen Sie unter dem Punkt "Build and deployment" bei Branch den Branch gh-pages aus.
+- **Einführung** - Motivation, Grenzen polygonaler Netze und typische Anwendungsgebiete von SDFs
+- **Theorie** - Definition von SDFs, die Kugel als Beispiel, Primitive, der Ray-Marching-Algorithmus, Shading und Beleuchtung
+- **Verwandte Methoden** - Vergleich mit Rasterisierung und Ray Tracing, CSG gegenüber klassischem CAD
+- **CSG** - Constructive Solid Geometry mit SDFs (Vereinigung, Schnittmenge, Differenz, glatte Übergänge)
+- **Grenzen & Artefakte** - Schrittlimit und Abstandsschwelle beim Sphere Tracing
+- **Demos** - Galerie aller interaktiven Demos an einem Ort
 
-  - Bestätigen Sie die Auswahl mit Save.
-(Hinweis: Der Branch gh-pages wird erst nach dem ersten erfolgreichen Durchlauf der GitHub Action generiert, oder muss manuell erstellt werden).
+## Technologie-Stack
 
-## Workflow für Bearbeitung und Deployment
-Sämtliche Änderungen an der Datei index.qmd führen nach einem Push zum Repository automatisch zur Ausführung der CI/CD-Pipeline:
+- **[Quarto](https://quarto.org)** - erzeugt die statische Website aus den `.qmd`-Dateien
+- **WebGL2 + GLSL** - die interaktiven Demos (`index.html` + `demo.js` + `shader.frag` je Demo), ohne externe 3D-Bibliotheken
+- **SCSS** - dark-first Theme (akademisches Dunkelblau) mit Umschalter auf ein helles Theme
+- **Python + [uv](https://docs.astral.sh/uv/)** - optional, nur für eine Jupyter-Umgebung; für das reine Rendern der aktuellen Seiten wird Python **nicht** benötigt
 
-- Python-Umgebung: Quarto führt enthaltene Code-Segmente aus und generiert die entsprechenden Abbildungen.
+## Voraussetzungen
 
-- Rendering: Die Markdown-Inhalte werden in ein statisches HTML-Dokument transformiert.
+- **Quarto CLI** (Version 1.4 oder neuer): siehe [Get Started](https://quarto.org/docs/get-started/). Prüfen mit:
+  ```bash
+  quarto --version
+  ```
+- Ein moderner Browser mit WebGL2-Unterstützung für die Demos.
+- **Optional:** Python 3.13 und [uv](https://docs.astral.sh/uv/), falls die Jupyter-Umgebung genutzt werden soll.
 
-- Deployment: Die aktualisierte Website wird unter folgendem URL-Schema bereitgestellt: https://<ihr-username>.github.io/<repo-name>/
+## Installation und lokale Vorschau
 
-## Richtlinien zur Quarto-Syntax:
-- Mathematische Formeln: Verwenden Sie die LaTeX-Notation, z. B. $E = mc^2$.
+1. Repository klonen:
+   ```bash
+   git clone <repository-url>
+   cd vcde
+   ```
 
-- Python-Berechnungen: Code-Blöcke müssen zwingend mit ```{python} eingeleitet werden.
+2. Website mit Live-Vorschau starten:
+   ```bash
+   quarto preview
+   ```
+   `quarto preview` startet einen lokalen Webserver, öffnet die Seite im Browser und lädt sie bei jeder Änderung an einer `.qmd`-, `.scss`- oder Demo-Datei automatisch neu. Ideal zum Entwickeln.
 
-- HTML/3D-Inhalte: Die Integration von Babylon.js-Skripten erfolgt innerhalb von ```{=html} Blöcken.
+3. Alternativ die fertige Website statisch bauen:
+   ```bash
+   quarto render
+   ```
+   `quarto render` erzeugt das komplette HTML in den Ausgabeordner `_site/`. Diesen Ordner kann man direkt ausliefern oder z. B. über `_site/index.html` lokal öffnen.
 
-## Fehleranalyse (Troubleshooting)
-- Fehlende Python-Grafiken: Überprüfen Sie das Protokoll unter dem Reiter "Actions" auf etwaige Installationsfehler der Bibliotheken matplotlib oder numpy.
+> **Hinweis:** Die Startseite leitet automatisch auf das Kapitel **Einführung** weiter. Das ist so gewollt.
 
-- Inaktiver 3D-Canvas: Sollte die 3D-Umgebung nicht geladen werden, untersuchen Sie die Browser-Konsole (Taste F12) auf einen 404 (Not Found) Fehler. Dies deutet zumeist auf eine fehlerhafte Syntax im Verweis auf das Babylon.js-Framework hin.
+Ein Python-Setup ist für Vorschau und Rendern nicht erforderlich. Wer die optionale Jupyter-Umgebung möchte, richtet sie mit `uv sync` ein.
 
+## Projektstruktur
+
+```
+vcde/
+├── _quarto.yml            # Quarto-Projektkonfiguration (Navigation, Theme, Layout)
+├── theme-dark.scss        # dark-first Theme (Standard, akademisches Dunkelblau)
+├── theme-light.scss       # helles Theme (über den Umschalter erreichbar)
+├── styles.css             # zusätzliche, theme-unabhängige Layout-Regeln
+├── references.bib         # Literaturverzeichnis (BibTeX)
+├── pages/                 # die sechs Kapitel als .qmd-Dateien
+│   ├── einfuehrung.qmd
+│   ├── theorie.qmd
+│   ├── verwandte-methoden.qmd
+│   ├── csg.qmd
+│   ├── grenzen-artefakte.qmd
+│   └── demos.qmd
+└── assets/
+    ├── demos/             # interaktive WebGL2-Demos (je ein Ordner pro Demo)
+    └── images/            # statische Abbildungen
+```
+
+## Deployment
+
+Die Website wird automatisch über **GitHub Actions** veröffentlicht (`.github/workflows/publish.yml`). Bei jedem Push auf den `main`-Branch wird die Seite gerendert und auf den Branch `gh-pages` publiziert, von dem GitHub Pages die Seite ausliefert.
+
+Einmalige Einrichtung im geforkten Repository:
+
+1. **Settings > Actions > General**: unter *Workflow permissions* die Option *Read and write permissions* aktivieren und speichern.
+2. Im Reiter **Actions** die Workflows aktivieren.
+3. **Settings > Pages**: unter *Build and deployment* als Branch `gh-pages` auswählen und speichern.
+
+Der Branch `gh-pages` entsteht erst nach dem ersten erfolgreichen Durchlauf der GitHub Action. Die Seite ist anschließend unter `https://<username>.github.io/<repository-name>/` erreichbar.
+
+## Lizenz
+
+Siehe [LICENSE](LICENSE).

@@ -1,12 +1,19 @@
 ---
 title: "Grenzen & Artefakte"
-author: "Luis Kahles"
+author:
+  - "Luis Kahles"
+  - "Tobias Jäkel"
+  - "Moritz Potthoff"
 ---
+
+::: {.callout-important}
+## Wann Sphere Tracing versagt
 
 Sphere Tracing basiert auf der Annahme, dass die SDF korrekt ist und jeder Schritt sicher ist [@hart1996].
 Wenn diese Voraussetzungen verletzt sind - durch ein zu knappes Schrittbudget oder eine zu grob
 gewaehlte Abbruchschwelle - entstehen typische Artefakte.
 Die beiden Demos zeigen diese Probleme interaktiv.
+:::
 
 ::: {.panel-tabset}
 
@@ -21,7 +28,7 @@ aufwaendige Bereiche (z. B. die Bodenebene bei flachem Auftreffwinkel) ungerende
 <div class="demo-wide">
 <iframe
   src="../assets/demos/schrittlimit/index.html"
-  height="620"
+  height="580"
   scrolling="no"
   title="Schrittlimit">
 </iframe>
@@ -41,7 +48,7 @@ verschmelzen.
 <div class="demo-wide">
 <iframe
   src="../assets/demos/abstandsschwelle/index.html"
-  height="620"
+  height="600"
   scrolling="no"
   title="Abstandsschwelle">
 </iframe>

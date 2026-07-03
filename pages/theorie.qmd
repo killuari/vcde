@@ -1,6 +1,9 @@
 ---
 title: "Theoretischer Hintergrund & Methoden"
-author: "Tobias Jäkel"
+author:
+  - "Tobias Jäkel"
+  - "Moritz Potthoff"
+  - "Luis Kahles"
 ---
 
 # Signed Distance Functions
@@ -11,13 +14,15 @@ Eine Signed Distance Function (SDF) beschreibt die Geometrie eines Objekts über
 
 Der Begriff signed bedeutet, dass dieser Abstand mit einem Vorzeichen versehen wird. Dadurch lässt sich nicht nur bestimmen, wie weit ein Punkt von einem Objekt entfernt ist, sondern auch, ob er sich innerhalb oder außerhalb des Objekts befindet.
 
+::: {.callout-note}
+## Vorzeichenkonvention
+
 Für einen beliebigen Punkt $p$ gilt:
 
-$f(p) < 0$: Der Punkt befindet sich innerhalb des Objekts.
-
-$f(p) = 0$: Der Punkt liegt auf der Oberfläche.
-
-$f(p) > 0$: Der Punkt befindet sich außerhalb des Objekts.
+- $f(p) < 0$: Der Punkt befindet sich innerhalb des Objekts.
+- $f(p) = 0$: Der Punkt liegt auf der Oberfläche.
+- $f(p) > 0$: Der Punkt befindet sich außerhalb des Objekts.
+:::
 
 Die Oberfläche eines Objekts entspricht somit genau der Menge aller Punkte, für die die Funktion den Wert Null annimmt.
 
@@ -64,11 +69,11 @@ Primitive SDFs bilden die Grundlage für die Modellierung komplexerer Szenen. Ä
 
 Die folgende Abbildung zeigt einige typische Primitive sowie ihre jeweiligen Signed Distance Functions [@quilez_distfunctions].
 
-<iframe class="demo-embed" src="../assets/demos/sdf-heatmap/index.html" height="510"></iframe>
+<iframe class="demo-embed" src="../assets/demos/sdf-heatmap/index.html" height="500"></iframe>
 
 Die folgende 3D-Demo rendert dieselben Primitive per Ray Marching direkt im Browser. Form und Parameter lassen sich interaktiv anpassen.
 
-<iframe class="demo-embed" src="../assets/demos/primitiv-galerie/index.html" height="620"></iframe>
+<iframe class="demo-embed" src="../assets/demos/primitiv-galerie/index.html" height="560"></iframe>
 
 # Ray Marching
 
@@ -84,7 +89,11 @@ Der entscheidende Vorteil einer Signed Distance Function besteht darin, dass sie
 
 Betrachtet man einen beliebigen Punkt entlang eines Strahls, so kann die Signed Distance Function direkt ausgewertet werden. Das Ergebnis gibt an, wie weit die nächste Oberfläche entfernt ist.
 
+::: {.callout-tip}
+## Adaptive Schrittweite
+
 Diese Information kann genutzt werden, um sich entlang des Strahls schrittweise auf die Oberfläche zuzubewegen. Anstatt feste Schrittweiten zu verwenden, wird die aktuell berechnete Distanz als neue Schrittweite gewählt. Dadurch kann sich der Strahl in leeren Bereichen der Szene schnell fortbewegen, während die Schritte in der Nähe einer Oberfläche automatisch kleiner werden.
+:::
 
 ## Der Ray-Marching-Algorithmus
 
@@ -106,11 +115,11 @@ Die folgende Visualisierung verdeutlicht dieses Vorgehen. Die Schrittweite entsp
 
 ## Animierte Schritte
 
-<iframe class="demo-embed" src="../assets/demos/ray-marching-visualisierer/index.html" height="570"></iframe>
+<iframe class="demo-embed" src="../assets/demos/ray-marching-visualisierer/index.html" height="500"></iframe>
 
 ## Parametrische Steuerung
 
-<iframe class="demo-embed" src="../assets/demos/embedded/raymarch-demo.html" height="480"></iframe>
+<iframe class="demo-embed" src="../assets/demos/embedded/raymarch-demo.html" height="440"></iframe>
 
 :::
 
@@ -201,7 +210,7 @@ Im Gegensatz zu klassischen Schatten hängt Ambient Occlusion also nicht von ein
 
 Die folgende Demo demonstriert Phong-Beleuchtung mit hartem Schatten und optionaler Ambient Occlusion. Einzelne Beleuchtungskomponenten lassen sich ein- und ausschalten; Lichtquelle und Blocker-Objekt sind frei positionierbar.
 
-<iframe class="demo-embed" src="../assets/demos/beleuchtung-schatten/index.html" height="730"></iframe>
+<iframe class="demo-embed" src="../assets/demos/beleuchtung-schatten/index.html" height="660"></iframe>
 
 # Quellenverzeichnis {.unnumbered}
 

@@ -1,0 +1,93 @@
+/*-- scss:defaults --*/
+
+// Grundfarben
+$body-bg:                #0d0e12;   // neutrales Fast-Schwarz
+$body-color:             #c7cbd2;
+$headings-color:         #f1f1f3;
+
+// Akzente (nur Links / aktive Elemente, nicht der Hintergrund)
+$primary:                #38bdf8;
+$secondary:              #868d97;
+$link-color:             #56c5f2;
+$link-hover-color:       #93d8f8;
+
+// Flaechen und Linien
+$border-color:           #22262f;
+$card-bg:                #14171c;
+$card-border-color:      #262b34;
+$card-cap-bg:            #181c22;
+$table-border-color:     #262b34;
+
+// Code
+$code-color:             #a5d6ff;
+$code-bg:                #14171c;
+$code-block-bg:          #0f1116;
+
+// Typografie und Radien
+$font-size-root:         17px;
+$line-height-base:       1.7;
+$headings-font-weight:   650;
+$border-radius:          0.5rem;
+
+/*-- scss:rules --*/
+
+// ---- Navbar: dunkler als der Body, feine Trennlinie ----
+.navbar {
+  background-color: #08090c !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.45);
+}
+.navbar .navbar-brand-container {
+  border-right: 1px solid rgba(255, 255, 255, 0.14);
+}
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+  background: rgba(255, 255, 255, 0.08);
+}
+.navbar .nav-link.active {
+  background: rgba(56, 189, 248, 0.16);
+  color: #7dd3fc !important;
+  font-weight: 650;
+}
+
+// ---- Ueberschriften mit dezentem Akzent ----
+h1, h2 { letter-spacing: -0.01em; }
+h2 {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+  padding-bottom: 0.3rem;
+}
+
+// ---- Demo-iframes: Rahmen und Schatten passend zum Theme ----
+.demo-embed,
+.demo-wide iframe {
+  border: 1px solid #262b34;
+  background: #0d0e12;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+}
+
+// ---- Feature-Karten (fuer Anwendungs- und Beispiel-Raster) ----
+.feature-card {
+  background: linear-gradient(180deg, #14171c 0%, #0f1116 100%);
+  border: 1px solid #262b34;
+  border-radius: 0.6rem;
+  padding: 1.1rem 1.25rem;
+  height: 100%;
+}
+.feature-card > :first-child { margin-top: 0; }
+.feature-card > :last-child { margin-bottom: 0; }
+.feature-card h4,
+.feature-card h5,
+.feature-card strong:first-child { color: #7dd3fc; }
+
+// ---- Karten-Raster: Luft nach unten, damit der Folgetext nicht klebt ----
+.grid { margin-block: 0.5rem 1.75rem; }
+
+// ---- Tabellen: Kopfzeile hervorheben ----
+.table > thead { background: #181c22; }
+
+// ---- Callouts: abgerundet, dunkle Textflaeche ----
+.callout { border-radius: 0.5rem; }
+.callout.callout-style-default > .callout-body { background: #12141a; }
+
+// ---- Randnotizen dezent ----
+.column-margin { color: #9aa3b0; }
