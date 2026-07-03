@@ -12,7 +12,7 @@ float sdBox(vec3 p, vec3 b) {
     return length(max(d, 0.0)) + min(max(d.x, max(d.y, d.z)), 0.0);
 }
 
-// Menger-Schwamm
+// Menger-Schwamm (Fraktal, Aufbau nach Quilez)
 // Jede Iteration subtrahiert per max() eine Kreuzform (CSG-Differenz).
 // r = abs(1 - 3*|mod(p*s,2)-1|) markiert die mittleren 1/3-Zellen jeder Achse.
 
@@ -88,7 +88,7 @@ float softShadow(vec3 ro, vec3 rd, float mint, float maxt, float k) {
     return clamp(res, 0.0, 1.0);
 }
 
-// Ambient Occlusion
+// Ambient Occlusion (Quilez)
 
 float calcAO(vec3 pos, vec3 nor) {
     float occ = 0.0, sca = 1.0;

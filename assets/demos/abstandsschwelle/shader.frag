@@ -23,6 +23,7 @@ vec3 calcNormal(vec3 p) {
     ));
 }
 
+// Sphere Tracing (Hart 1996)
 float rayMarch(vec3 ro, vec3 rd) {
     float t = 0.0;
     for (int i = 0; i < 150; i++) {

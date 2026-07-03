@@ -5,7 +5,7 @@ uniform vec2 u_cam_pos; // Kamera XZ-Position (vom JS gesteuert)
 uniform float u_detail; // 0=grob 1=mittel 2=fein
 uniform float u_fog; // Nebeldichte (0..0.08)
 
-// Value Noise + FBM
+// Value Noise + FBM (Fractional Brownian Motion, nach Quilez / Hoskins-Hash)
 float hash2(vec2 p) {
     p = fract(p * vec2(127.1, 311.7));
     p += dot(p, p + 19.19);
@@ -57,7 +57,7 @@ vec3 calcNormal(vec3 p) {
     ));
 }
 
-// Terrain Ray Marching
+// Terrain Ray Marching (Verfahren nach Quilez)
 // Terrain-SDF ist nur approximativ (Gradient ≠ 1 bei Steigungen).
 // Strategie: grobe Schritte bis zur Überquerung, dann Bisektions-Verfeinerung.
 
@@ -88,6 +88,7 @@ float rayMarchTerrain(vec3 ro, vec3 rd) {
     return -1.0;
 }
 
+// Soft Shadows (Quilez)
 float softShadow(vec3 ro, vec3 rd, float mint, float maxt, float k) {
     float res = 1.0;
     float t = mint;
@@ -166,7 +167,7 @@ void main() {
 
         col = base * (amb * ao + diff * shad * 0.82);
 
-        // Atmosphärischer Nebel (exponential)
+        // Atmosphärischer Nebel (exponential, nach Quilez)
         float fogAmt = 1.0 - exp(-t * u_fog);
         col = mix(col, sky, fogAmt);
     }

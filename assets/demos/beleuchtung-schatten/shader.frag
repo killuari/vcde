@@ -13,10 +13,12 @@ uniform float u_shadows;
 uniform float u_specular;
 uniform float u_ao;
 
+// Kugel-SDF
 float sdSphere(vec3 p, float r) {
     return length(p) - r;
 }
 
+// Box-SDF (Quilez)
 float sdBox(vec3 p, vec3 b) {
     vec3 q = abs(p) - b;
     return length(max(q, 0.0)) + min(max(q.x, max(q.y, q.z)), 0.0);
@@ -53,6 +55,7 @@ vec3 calcNormal(vec3 p) {
     ));
 }
 
+// Sphere Tracing (Hart 1996)
 float rayMarch(vec3 ro, vec3 rd) {
     float t = 0.0;
     for (int i = 0; i < 100; i++) {
@@ -64,6 +67,7 @@ float rayMarch(vec3 ro, vec3 rd) {
     return -1.0;
 }
 
+// Harte Schatten per Schattenstrahl (Quilez)
 float hardShadow(vec3 ro, vec3 rd, float maxt) {
     float t = 0.02;
     for (int i = 0; i < 64; i++) {
@@ -75,6 +79,7 @@ float hardShadow(vec3 ro, vec3 rd, float maxt) {
     return 1.0;
 }
 
+// Ambient Occlusion (Quilez)
 float ambientOcclusion(vec3 pos, vec3 nor) {
     float occ = 0.0;
     float sca = 1.0;

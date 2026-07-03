@@ -1,6 +1,6 @@
 # SDF Rendering via Ray Marching
 
-Eine interaktive Lern-Website zu **Signed Distance Functions (SDFs)** und **Sphere Tracing / Ray Marching**, erstellt mit [Quarto](https://quarto.org). Die Seite verbindet erklärenden Text mit selbst geschriebenen WebGL2-Demos, die direkt im Browser laufen.
+Eine interaktive Lern-Website zu **Signed Distance Functions (SDFs)** und **Sphere Tracing / Ray Marching**, erstellt mit [Quarto](https://quarto.org). Die Seite verbindet erklärenden Text mit selbst geschriebenen Demos (GLSL-Shader und 2D-Canvas), die direkt im Browser laufen.
 
 Projekt im Rahmen des Moduls **Visual Computing** von Luis Kahles, Tobias Jäkel und Moritz Potthoff.
 
@@ -8,7 +8,7 @@ Projekt im Rahmen des Moduls **Visual Computing** von Luis Kahles, Tobias Jäkel
 
 Klassische Computergrafik beschreibt 3D-Objekte durch polygonale Netze. Diese Website zeigt eine Alternative: implizite Geometrie über Signed Distance Functions, die per Ray Marching gerendert wird. Zu jedem Konzept gibt es eine interaktive Demo, die das Verfahren live im Browser veranschaulicht.
 
-Die Demos sind in **rohem WebGL2 mit GLSL-Shadern** geschrieben (kein three.js, Babylon.js o. Ä.). Jede Demo liegt als eigenständige Seite unter `assets/demos/` und wird per `<iframe>` in die Kapitel eingebettet.
+Die Shader-Demos sind in **GLSL** (Fragment-Shader, GLSL ES 1.00) geschrieben und werden über die kleine Bibliothek **[glslCanvas](https://github.com/patriciogonzalezvivo/glslCanvas)** (WebGL1, per CDN eingebunden) gerendert. Die didaktischen 2D-Visualisierungen laufen in reinem JavaScript auf dem **HTML5-2D-Canvas**. Eine 3D-Engine wie three.js oder Babylon.js kommt nicht zum Einsatz. Jede Demo liegt als eigenständige Seite unter `assets/demos/` und wird per `<iframe>` in die Kapitel eingebettet.
 
 ## Inhalt
 
@@ -24,8 +24,8 @@ Die Website besteht aus sechs Kapiteln (Navigationsleiste oben):
 ## Technologie-Stack
 
 - **[Quarto](https://quarto.org)** - erzeugt die statische Website aus den `.qmd`-Dateien
-- **WebGL2 + GLSL** - die interaktiven Demos (`index.html` + `demo.js` + `shader.frag` je Demo), ohne externe 3D-Bibliotheken
-- **SCSS** - dark Theme
+- **GLSL + [glslCanvas](https://github.com/patriciogonzalezvivo/glslCanvas)** (WebGL1, per CDN) für die Shader-Demos und **HTML5-2D-Canvas** für die 2D-Visualisierungen (`index.html` + `demo.js` + `shader.frag` je Demo); keine 3D-Engine
+- **SCSS** - dunkles Theme (neutrales Dunkel) in `theme-dark.scss`
 - **Python + [uv](https://docs.astral.sh/uv/)** - optional, nur für eine Jupyter-Umgebung; für das reine Rendern der aktuellen Seiten wird Python **nicht** benötigt
 
 ## Voraussetzungen
@@ -34,7 +34,7 @@ Die Website besteht aus sechs Kapiteln (Navigationsleiste oben):
   ```bash
   quarto --version
   ```
-- Ein moderner Browser mit WebGL2-Unterstützung für die Demos.
+- Ein moderner Browser mit WebGL-Unterstützung für die Demos (die Shader-Demos laden glslCanvas per CDN, benötigen beim ersten Aufruf also eine Internetverbindung).
 - **Optional:** Python 3.13 und [uv](https://docs.astral.sh/uv/), falls die Jupyter-Umgebung genutzt werden soll.
 
 ## Installation und lokale Vorschau
@@ -66,8 +66,7 @@ Ein Python-Setup ist für Vorschau und Rendern nicht erforderlich. Wer die optio
 ```
 vcde/
 ├── _quarto.yml            # Quarto-Projektkonfiguration (Navigation, Theme, Layout)
-├── theme-dark.scss        # dark-first Theme (Standard, akademisches Dunkelblau)
-├── theme-light.scss       # helles Theme (über den Umschalter erreichbar)
+├── theme-dark.scss        # dunkles Theme der Website
 ├── styles.css             # zusätzliche, theme-unabhängige Layout-Regeln
 ├── references.bib         # Literaturverzeichnis (BibTeX)
 ├── pages/                 # die sechs Kapitel als .qmd-Dateien
@@ -78,7 +77,8 @@ vcde/
 │   ├── grenzen-artefakte.qmd
 │   └── demos.qmd
 └── assets/
-    ├── demos/             # interaktive WebGL2-Demos (je ein Ordner pro Demo)
+    ├── demos/             # interaktive Demos (GLSL/glslCanvas + 2D-Canvas)
+    │   └── demo-dark.css  # gemeinsames dunkles Theme der Demos
     └── images/            # statische Abbildungen
 ```
 
@@ -93,6 +93,17 @@ Einmalige Einrichtung im geforkten Repository:
 3. **Settings > Pages**: unter *Build and deployment* als Branch `gh-pages` auswählen und speichern.
 
 Der Branch `gh-pages` entsteht erst nach dem ersten erfolgreichen Durchlauf der GitHub Action. Die Seite ist anschließend unter `https://<username>.github.io/<repository-name>/` erreichbar.
+
+## Quellen
+
+Die interaktiven Demos setzen etablierte Techniken der Echtzeit-Grafik um. Die wichtigsten Quellen:
+
+- **Inigo Quilez** ([iquilezles.org](https://iquilezles.org)) - Distance Functions, Soft Shadows, Ambient Occlusion, Smooth Minimum, Fractional Brownian Motion (FBM) und Ray Marching.
+- **John C. Hart (1996)** - *Sphere Tracing: A Geometric Method for the Antialiased Ray Tracing of Implicit Surfaces*.
+- **Jamie Wong** - *Ray Marching and Signed Distance Functions*.
+- Vorlesungsmaterial **Visual Computing**.
+
+Die vollständigen Literaturangaben stehen in [`references.bib`](references.bib) und im Quellenverzeichnis am Ende jeder Kapitelseite.
 
 ## Lizenz
 

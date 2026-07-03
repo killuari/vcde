@@ -69,7 +69,7 @@ Primitive SDFs bilden die Grundlage für die Modellierung komplexerer Szenen. Ä
 
 Die folgende Abbildung zeigt einige typische Primitive sowie ihre jeweiligen Signed Distance Functions [@quilez_distfunctions].
 
-<iframe class="demo-embed" src="../assets/demos/sdf-heatmap/index.html" height="500"></iframe>
+<iframe class="demo-embed" src="../assets/demos/sdf-heatmap/index.html" height="620"></iframe>
 
 Die folgende 3D-Demo rendert dieselben Primitive per Ray Marching direkt im Browser. Form und Parameter lassen sich interaktiv anpassen.
 

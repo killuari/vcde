@@ -32,10 +32,21 @@
         'f(<b>p</b>) = |p<sub>x</sub>| + |p<sub>y</sub>| &minus; s',
     ];
 
+    // Was die Symbole der Formel bedeuten (pro Form)
+    const paramHTML = [
+        '<b>p</b> Abfragepunkt &middot; &#x2016;<b>p</b>&#x2016; Abstand zum Zentrum &middot; <b>r</b> Radius',
+        '<b>b</b> Halbmaße (halbe Breite/Höhe) &middot; <b>q</b> Abstand zu den Kanten',
+        '<b>R</b> Außenradius (Ringmitte) &middot; <b>r</b> Rohrradius (Dicke)',
+        '<b>h</b> halbe Achsenlänge &middot; <b>r</b> Radius &middot; <b>a</b> auf die Achse projizierter Punkt',
+        '<b>r</b> Radius &middot; <b>h</b> halbe Höhe',
+        '<b>s</b> Größe (halbe Diagonale der Raute)',
+    ];
+
     let shapeIdx = 0;
     let p1 = 80, p2 = 60;
     let showIso = false;
 
+    // 2D-SDF-Primitive (2D distance functions nach Quilez)
     function sdCircle(px, py, cx, cy, r) {
         return Math.sqrt((px - cx) ** 2 + (py - cy) ** 2) - r;
     }
@@ -155,6 +166,7 @@
 
         // Update formula
         document.getElementById('formula-display').innerHTML = formulaHTML[idx];
+        document.getElementById('param-display').innerHTML = paramHTML[idx];
 
         render();
     };
