@@ -7,6 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Luis Kahles">
+<meta name="author" content="Tobias Jäkel">
+<meta name="author" content="Moritz Potthoff">
 
 <title>Grenzen &amp; Artefakte – SDF Rendering via Ray Marching</title>
 <style>
@@ -59,10 +61,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-ba499602e970795321e448e63a866844.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-bd5db4896e68836a4b948e437ca3e2a1.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -169,9 +171,11 @@ div.csl-indent {
 <div class="quarto-title-meta">
 
     <div>
-    <div class="quarto-title-meta-heading">Autor:in</div>
+    <div class="quarto-title-meta-heading">Autor:innen</div>
     <div class="quarto-title-meta-contents">
              <p>Luis Kahles </p>
+             <p>Tobias Jäkel </p>
+             <p>Moritz Potthoff </p>
           </div>
   </div>
     
@@ -184,21 +188,33 @@ div.csl-indent {
 </header>
 
 
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Wichtig</span>Wann Sphere Tracing versagt
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Sphere Tracing basiert auf der Annahme, dass die SDF korrekt ist und jeder Schritt sicher ist <span class="citation" data-cites="hart1996">(<a href="#ref-hart1996" role="doc-biblioref">Hart 1996</a>)</span>. Wenn diese Voraussetzungen verletzt sind - durch ein zu knappes Schrittbudget oder eine zu grob gewaehlte Abbruchschwelle - entstehen typische Artefakte. Die beiden Demos zeigen diese Probleme interaktiv.</p>
+</div>
+</div>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Schrittlimit</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Abstandsschwelle</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <p>Sphere Tracing muss fuer jeden Pixel iterativ naeherkommen. Ein festes Schrittlimit <code>MAX_STEPS</code> begrenzt den Rechenaufwand, laesst aber weit entfernte oder geometrisch aufwaendige Bereiche (z. B. die Bodenebene bei flachem Auftreffwinkel) ungerendert. -&gt; <a href="../pages/theorie.html#der-ray-marching-algorithmus">Der Ray-Marching-Algorithmus</a></p>
 <div class="demo-wide">
-<iframe src="../assets/demos/schrittlimit/index.html" height="620" scrolling="no" title="Schrittlimit">
+<iframe src="../assets/demos/schrittlimit/index.html" height="580" scrolling="no" title="Schrittlimit">
 </iframe>
 </div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <p>Der Ray-Marching-Loop bricht ab, sobald <code>d &lt; epsilon</code>. Dieser Schwellenwert ist notwendig, um Konvergenzprobleme zu vermeiden - bestimmt aber zugleich, wie weit der Strahl noch von der echten Oberflaeche entfernt ist, wenn er stoppt. Zu gross gewaehltes Epsilon laesst Objekte aufgeblaest wirken; nahe beieinander liegende Oberflaechen koennen optisch verschmelzen. -&gt; <a href="../pages/theorie.html#der-ray-marching-algorithmus">Der Ray-Marching-Algorithmus</a></p>
 <div class="demo-wide">
-<iframe src="../assets/demos/abstandsschwelle/index.html" height="620" scrolling="no" title="Abstandsschwelle">
+<iframe src="../assets/demos/abstandsschwelle/index.html" height="600" scrolling="no" title="Abstandsschwelle">
 </iframe>
 </div>
 </div>
