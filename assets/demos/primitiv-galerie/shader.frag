@@ -6,6 +6,7 @@ uniform float u_shape;
 uniform float u_param1;
 uniform float u_param2;
 
+// SDF-Primitive (Distanzfunktionen nach Quilez, iquilezles.org)
 float sdSphere(vec3 p, float r) {
     return length(p) - r;
 }

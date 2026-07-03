@@ -23,6 +23,7 @@ vec3 calcNormal(vec3 p) {
     ));
 }
 
+// Sphere Tracing (Hart 1996)
 // Gibt t >= 0 bei Treffer, -1.0 bei Flucht, -2.0 bei Schrittlimit.
 float rayMarch(vec3 ro, vec3 rd) {
     float t = 0.0;

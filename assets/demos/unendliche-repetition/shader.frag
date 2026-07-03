@@ -23,7 +23,7 @@ float sdCapsule(vec3 p, float h, float r) {
     return length(p) - r;
 }
 
-// Hash / Zellfarbe
+// Hash / Zellfarbe (Hash nach Quilez)
 
 float hash(vec3 p) {
     p = fract(p * vec3(127.1, 311.7, 74.7));
@@ -31,6 +31,7 @@ float hash(vec3 p) {
     return fract(p.x * p.y * p.z);
 }
 
+// Cosine-Palette (Quilez)
 vec3 palette(vec3 id) {
     float h = hash(id) * 6.2832;
     return 0.62 + 0.34 * vec3(cos(h), cos(h + 2.094), cos(h + 4.189));
@@ -44,7 +45,7 @@ float objSDF(vec3 q) {
 }
 
 float map(vec3 p) {
-    // Domain-Repetition: mod() faltet den gesamten Raum auf eine Zelle
+    // Domain-Repetition: mod() faltet den gesamten Raum auf eine Zelle (Quilez)
     vec3 q = mod(p + 0.5 * u_spacing, u_spacing) - 0.5 * u_spacing;
     return objSDF(q);
 }
@@ -74,6 +75,7 @@ float rayMarch(vec3 ro, vec3 rd) {
     return -1.0;
 }
 
+// Soft Shadows (Quilez)
 float softShadow(vec3 ro, vec3 rd, float mint, float maxt, float k) {
     float res = 1.0;
     float t = mint;
@@ -87,6 +89,7 @@ float softShadow(vec3 ro, vec3 rd, float mint, float maxt, float k) {
     return clamp(res, 0.0, 1.0);
 }
 
+// Ambient Occlusion (Quilez)
 float calcAO(vec3 pos, vec3 nor) {
     float occ = 0.0, sca = 1.0;
     for (int i = 0; i < 5; i++) {
@@ -132,7 +135,7 @@ void main() {
         col = base * (0.10 * ao + diff * shad * 0.85) + base * rim;
         col += vec3(1.0) * spec * shad;
 
-        // Exponential-Fog
+        // Exponential-Fog (nach Quilez)
         col = mix(vec3(0.04, 0.05, 0.10), col, exp(-t * 0.044));
     }
 
