@@ -35,9 +35,9 @@
         for (var i = 0; i < count; i++) {
             var btn = document.getElementById(prefix + i);
             if (!btn) continue;
-            btn.style.background = i === active ? '#4a90d9' : '#f0f0f0';
-            btn.style.color = i === active ? '#fff' : '#333';
-            btn.style.borderColor = i === active ? '#4a90d9' : '#bbb';
+            btn.style.background = i === active ? '#4a90d9' : '#1b1f27';
+            btn.style.color = i === active ? '#fff' : '#d3d9e2';
+            btn.style.borderColor = i === active ? '#4a90d9' : '#3a4250';
         }
     }
 
@@ -51,9 +51,9 @@
         u[key] = u[key] > 0.5 ? 0.0 : 1.0;
         var btn = document.getElementById(btnId);
         var active = u[key] > 0.5;
-        btn.style.background = active ? '#4a90d9' : '#f0f0f0';
-        btn.style.color = active ? '#fff' : '#333';
-        btn.style.borderColor = active ? '#4a90d9' : '#bbb';
+        btn.style.background = active ? '#4a90d9' : '#1b1f27';
+        btn.style.color = active ? '#fff' : '#d3d9e2';
+        btn.style.borderColor = active ? '#4a90d9' : '#3a4250';
         sandbox.setUniform(key, u[key]);
     };
 

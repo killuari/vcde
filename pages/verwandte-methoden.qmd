@@ -1,6 +1,9 @@
 ---
 title: "Verwandte Methoden"
-author: "Moritz Potthoff"
+author:
+  - "Moritz Potthoff"
+  - "Luis Kahles"
+  - "Tobias Jäkel"
 ---
 
 In diesem Kapitel wird beschrieben, wie sich Ray Marching mit SDFs von klassischen Rendering-Methoden unterscheidet. Außerdem wird erklärt, warum geometrische Verknüpfungen (CSG) mit SDFs einfacher und stabiler umzusetzen sind als mit klassischen 3D-Modellen.

@@ -1,6 +1,9 @@
 ---
 title: "Interaktive SDF-Rendering Demos"
-author: "Luis Kahles"
+author:
+  - "Luis Kahles"
+  - "Tobias Jäkel"
+  - "Moritz Potthoff"
 ---
 
 ## Konzept-Visualisierungen
@@ -32,7 +35,7 @@ Signed Distance Functions für sechs 2D-Primitive. Innenbereich (formspezifische
 <div class="demo-wide">
 <iframe
   src="../assets/demos/sdf-heatmap/index.html"
-  height="510"
+  height="500"
   scrolling="no"
   title="SDF-Distanzfeld">
 </iframe>
@@ -47,7 +50,7 @@ Schrittweise Visualisierung des Sphere-Tracing-Algorithmus. Die gestrichelten Kr
 <div class="demo-wide">
 <iframe
   src="../assets/demos/ray-marching-visualisierer/index.html"
-  height="570"
+  height="500"
   scrolling="no"
   title="Ray-Marching Schritte">
 </iframe>
@@ -62,7 +65,7 @@ Parametrische Steuerung von Schrittweite und Szene. → [Der Ray-Marching-Algori
 <div class="demo-wide">
 <iframe
   src="../assets/demos/embedded/raymarch-demo.html"
-  height="480"
+  height="440"
   scrolling="no"
   title="Ray-Marching Parametrisch">
 </iframe>
@@ -85,7 +88,7 @@ Sechs klassische SDF-Primitive nach Inigo Quilez - Kugel, Box, Torus, Kapsel, Zy
 <div class="demo-wide">
 <iframe
   src="../assets/demos/primitiv-galerie/index.html"
-  height="620"
+  height="560"
   scrolling="no"
   title="Primitiv-Galerie">
 </iframe>
@@ -100,7 +103,7 @@ Phong-Shading mit hartem Schatten und optionaler Ambient Occlusion. Lichtquelle 
 <div class="demo-wide">
 <iframe
   src="../assets/demos/beleuchtung-schatten/index.html"
-  height="720"
+  height="660"
   scrolling="no"
   title="Beleuchtung und Schatten">
 </iframe>
@@ -115,7 +118,7 @@ Domain-Repetition mit `mod()`: Ein einzelnes SDF-Objekt wird durch eine Faltung 
 <div class="demo-wide">
 <iframe
   src="../assets/demos/unendliche-repetition/index.html"
-  height="560"
+  height="470"
   scrolling="no"
   title="Unendliche Repetition">
 </iframe>
@@ -130,7 +133,7 @@ Eine vollständig prozedurale Berglandschaft - kein einziges Polygon. Die Geomet
 <div class="demo-wide">
 <iframe
   src="../assets/demos/prozedurale-landschaft/index.html"
-  height="610"
+  height="500"
   scrolling="yes"
   title="Prozedurale Landschaft">
 </iframe>
@@ -145,7 +148,7 @@ Iteriertes CSG: Ein Würfel wird durch dreifaches Subtrahieren von Kreuzformen z
 <div class="demo-wide">
 <iframe
   src="../assets/demos/menger-schwamm/index.html"
-  height="560"
+  height="470"
   scrolling="no"
   title="Menger-Schwamm">
 </iframe>
@@ -160,7 +163,7 @@ Einstellbares `MAX_STEPS`-Limit macht sichtbar, wie weit entfernte Geometrie und
 <div class="demo-wide">
 <iframe
   src="../assets/demos/schrittlimit/index.html"
-  height="620"
+  height="580"
   scrolling="no"
   title="Schrittlimit">
 </iframe>
@@ -175,7 +178,7 @@ Einstellbarer Treffschwellenwert `epsilon` zeigt, wie zu gross gewaehlte Werte O
 <div class="demo-wide">
 <iframe
   src="../assets/demos/abstandsschwelle/index.html"
-  height="620"
+  height="600"
   scrolling="no"
   title="Abstandsschwelle">
 </iframe>
@@ -192,7 +195,7 @@ Constructive Solid Geometry: Vereinigung, Schnittmenge und Differenz zweier SDF-
 <div class="demo-wide">
 <iframe
   src="../assets/demos/csg-live/index.html"
-  height="980"
+  height="880"
   scrolling="no"
   title="CSG Live Demo">
 </iframe>

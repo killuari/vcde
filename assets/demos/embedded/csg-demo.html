@@ -19,8 +19,8 @@
   }
 
   canvas {
-    border: 1px solid #ccc;
-    background: #fafafa;
+    border: 1px solid #262b34;
+    background: #0d1117;
   }
 
   .controls {
@@ -40,11 +40,13 @@
   .formula {
     margin-top: 18px;
     padding: 10px;
-    background: #f2f2f2;
+    background: #0f1116;
+    color: #e6edf3;
     border-radius: 6px;
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   }
 </style>
+  <link rel="stylesheet" href="../demo-dark.css">
 </head>
 
 <body>
@@ -130,9 +132,9 @@ function drawGridSDF(centerA, centerB, radiusA, radiusB, operation) {
       const d = sceneSDF(p, centerA, centerB, radiusA, radiusB, operation);
 
       if (d < 0) {
-        ctx.fillStyle = "rgba(25, 118, 210, 0.28)";
+        ctx.fillStyle = "rgba(56, 132, 220, 0.45)";
       } else {
-        const intensity = Math.max(0, 245 - Math.min(d * 2, 120));
+        const intensity = Math.max(16, 52 - Math.min(d * 0.9, 36));
         ctx.fillStyle = `rgb(${intensity}, ${intensity}, ${intensity})`;
       }
 
@@ -144,7 +146,7 @@ function drawGridSDF(centerA, centerB, radiusA, radiusB, operation) {
 function drawZeroLevelSet(centerA, centerB, radiusA, radiusB, operation) {
   const cellSize = 2;
 
-  ctx.fillStyle = "#111";
+  ctx.fillStyle = "#e6edf3";
 
   for (let y = 0; y < canvas.height; y += cellSize) {
     for (let x = 0; x < canvas.width; x += cellSize) {

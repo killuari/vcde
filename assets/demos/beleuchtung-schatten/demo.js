@@ -43,9 +43,9 @@
         state[key] = !state[key];
         var btn = document.getElementById('btn-' + key);
         var active = state[key];
-        btn.style.background = active ? '#4a90d9' : '#f0f0f0';
-        btn.style.color = active ? '#fff' : '#333';
-        btn.style.borderColor = active ? '#4a90d9' : '#bbb';
+        btn.style.background = active ? '#4a90d9' : '#1b1f27';
+        btn.style.color = active ? '#fff' : '#d3d9e2';
+        btn.style.borderColor = active ? '#4a90d9' : '#3a4250';
 
         u.u_shadows = state.shadow ? 1.0 : 0.0;
         u.u_specular = state.specular ? 1.0 : 0.0;
@@ -64,9 +64,9 @@
         [0, 1].forEach(function (i) {
             var btn = document.getElementById('btn-bshape-' + i);
             var active = i === shape;
-            btn.style.background = active ? '#4a90d9' : '#f0f0f0';
-            btn.style.color = active ? '#fff' : '#333';
-            btn.style.borderColor = active ? '#4a90d9' : '#bbb';
+            btn.style.background = active ? '#4a90d9' : '#1b1f27';
+            btn.style.color = active ? '#fff' : '#d3d9e2';
+            btn.style.borderColor = active ? '#4a90d9' : '#3a4250';
         });
     };
 

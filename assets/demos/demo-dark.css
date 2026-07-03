@@ -1,0 +1,32 @@
+/* Gemeinsames Dark-Theme fuer alle eingebetteten Demos.
+   Wird per <link> in jede Demo-Seite eingebunden und sorgt fuer
+   einen dunklen, neutralen Hintergrund (passend zur Website) mit
+   gut lesbarem hellem Text. Die Akzentfarbe (#4a90d9) und die
+   dunklen Code-Panels (#0d1117 / #e6edf3) bleiben unveraendert. */
+
+:root { color-scheme: dark; }
+
+html, body {
+  background: #0d0e12 !important;
+  color: #c7cbd2 !important;
+}
+
+/* Per <style> gesetzte Klassen-Labels */
+.ctrl-label { color: #c3c9d2 !important; }
+.hint { background: #161a22 !important; color: #aab2bd !important; }
+
+/* Inline gesetzte, zu dunkle Label- und Wertefarben lesbar machen */
+[style*="color:#888"], [style*="color: #888"],
+[style*="color:#666"], [style*="color: #666"],
+[style*="color:#555"], [style*="color: #555"],
+[style*="color:#444"], [style*="color: #444"] { color: #9aa3b0 !important; }
+[style*="color:#222"], [style*="color: #222"] { color: #e6edf3 !important; }
+
+/* Formularelemente dunkel */
+select,
+input[type="text"],
+input[type="number"] {
+  background: #161a22 !important;
+  color: #d3d9e2 !important;
+  border: 1px solid #3a4250 !important;
+}

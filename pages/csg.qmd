@@ -1,6 +1,9 @@
 ---
 title: "Constructive Solid Geometry"
-author: "Moritz Potthoff"
+author:
+  - "Moritz Potthoff"
+  - "Luis Kahles"
+  - "Tobias Jäkel"
 ---
 
 ## Constructive Solid Geometry mit SDFs
@@ -23,7 +26,7 @@ Angenommen, $d_1(\mathbf{p})$ ist die Distanz zur ersten Form und $d_2(\mathbf{p
 * Bei der **Difference** wird das zweite Objekt aus dem ersten herausgeschnitten. Durch $-d_2$ wird innen und außen der zweiten Form vertauscht.
 :::
 
-<iframe class="demo-embed" src="../assets/demos/embedded/csg-demo.html" height="650"></iframe>
+<iframe class="demo-embed" src="../assets/demos/embedded/csg-demo.html" height="500"></iframe>
 
 Für mehr als zwei Objekte wird dieselbe Operation wiederholt. In der Demo beginnt die Szene mit dem ersten Objekt und kombiniert dann nacheinander die weiteren aktiven Objekte:
 
@@ -65,7 +68,7 @@ Die Demo zeigt eine kleine SDF-Szene aus mehreren Primitiven. Links ist das Erge
 <div class="demo-wide">
 <iframe
   src="../assets/demos/csg-live/index.html"
-  height="930"
+  height="880"
   scrolling="no"
   title="CSG Live Demo">
 </iframe>

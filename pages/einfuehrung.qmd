@@ -1,6 +1,9 @@
 ---
 title: "Einführung in das Thema"
-author: "Tobias Jäkel"
+author:
+  - "Tobias Jäkel"
+  - "Moritz Potthoff"
+  - "Luis Kahles"
 ---
 
 # Motivation
@@ -43,7 +46,7 @@ Ein häufiges Einsatzgebiet von Signed Distance Functions ist die prozedurale Er
 <div class="demo-wide">
 <iframe
   src="../assets/demos/prozedurale-landschaft/index.html"
-  height="610"
+  height="500"
   scrolling="yes"
   title="Prozedurale Landschaft">
 </iframe>
@@ -58,7 +61,7 @@ Ein besonders eindrucksvolles Beispiel prozeduraler Geometrie ist die Domain-Rep
 <div class="demo-wide">
 <iframe
   src="../assets/demos/unendliche-repetition/index.html"
-  height="560"
+  height="470"
   scrolling="no"
   title="Unendliche Repetition">
 </iframe>
@@ -83,7 +86,7 @@ Ein weiterer Anwendungsbereich ist die Darstellung mathematisch definierter Obje
 <div class="demo-wide">
 <iframe
   src="../assets/demos/menger-schwamm/index.html"
-  height="580"
+  height="470"
   scrolling="no"
   title="Menger-Schwamm">
 </iframe>
